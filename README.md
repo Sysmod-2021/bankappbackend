@@ -1,4 +1,4 @@
-# bankappbackend
+# Bank App Backend
 Backend for banking application - sysmod 2021
 
 Currently working on backend:
@@ -10,3 +10,7 @@ Currently working on backend:
 - Ihar Suvorau
 - Worraanong (jtm)
 - Ramil Huseynov
+
+## Event storming
+
+The link to the board with the event storming and user stories: https://miro.com/app/board/o9J_lmCMwDc=/
