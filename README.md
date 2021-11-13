@@ -13,4 +13,4 @@ Currently working on backend:
 
 ## Event storming
 
-The link to the board with the event storming and user stories: https://miro.com/app/board/o9J_lmCMwDc=/
+The link to the board with the event storming and user stories: https://miro.com/app/board/o9J_lk2Oh94=/
