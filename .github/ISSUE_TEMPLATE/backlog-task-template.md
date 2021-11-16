@@ -1,3 +1,11 @@
+name: Backlog task template
+about: Backlog task template
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 # [Backlog Task : #id]
 
 __Notice: Keep a personal log of your hours worked and progress on which tasks.__
