@@ -24,7 +24,8 @@ class Bank {
 }
 
 class User {
-    id: Int
+    bank: Bank
+    id: String
     firstName: String
     lastName: String
     email: String
@@ -43,7 +44,8 @@ class Administrator {
 }
 
 class Account {
-    id: Int
+    bank: Bank
+    id: String
     userId: Int
     currency: Enum
     balance: Float
@@ -53,7 +55,7 @@ class Account {
 }
 
 class Transaction {
-    id: Int
+    id: String
     sourceAccountId: Int
     destinationAccountId: Int
     currency: Enum
@@ -69,7 +71,8 @@ class Transaction {
 }
 
 class Trace {
-    id: Int
+    bank: Bank
+    id: String
     transactionId: Int
     userId: Int
     timestamp: Datetime
@@ -78,8 +81,8 @@ class Trace {
 class Datastore {
     filename: String
 
-    bool saveBank(Bank)
-    bool loadBank(filename: String)
+    void saveBank(Bank)
+    Bank loadBank(filename: String)
 }
 
 Bank o-- Customer
