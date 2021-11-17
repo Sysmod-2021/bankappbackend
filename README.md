@@ -3,7 +3,7 @@ Backend for banking application - sysmod 2021
 
 Currently working on backend:
 
-- God's kenny
+- God's kenny (kehinde ogundeyi)
 - Zhaosi Qu
 - Jonas Berx
 - Iryna Halenok
