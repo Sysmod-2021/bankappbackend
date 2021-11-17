@@ -45,18 +45,18 @@ class Administrator {
 class Account {
     bank: Bank
     id: String
-    userId: Int
+    user: User
     currency: Enum
     balance: Float
 
-    User getUser()
     Transaction[] getTransactions()
 }
 
 class Transaction {
+    bank: Bank
     id: String
-    sourceAccountId: Int
-    destinationAccountId: Int
+    source: Account
+    destination: Account
     currency: Enum
     amount: Float
     description: String
@@ -64,16 +64,14 @@ class Transaction {
     rejectionDescription: String
     timestamp: Datetime
 
-    Account getSource()
-    Account getDestination()
     Trace[] getTraces()
 }
 
 class Trace {
     bank: Bank
     id: String
-    transactionId: Int
-    userId: Int
+    transaction: Transaction
+    user: User
     timestamp: Datetime
 }
 
