@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1168px" height="312px" viewBox="0 0 1168 312" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>Untitled</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="components" transform="translate(1.000000, 1.000000)">
+            <g id="Group" transform="translate(919.000000, 7.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="99.2" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(919.000000, 21.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="248" height="290"></rect>
+            </g>
+            <g id="Group" transform="translate(912.000000, 15.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="248" height="289"></rect>
+            </g>
+            <g id="Group" transform="translate(912.000000, 15.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 248 0 248 289 0 289"></polygon>
+            </g>
+            <g id="Group" transform="translate(912.000000, 0.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="99.2" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(912.000000, 0.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 99.2 0 99.2 15 0 15"></polygon>
+            </g>
+            <g id="Group" transform="translate(912.000000, 14.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="248" height="290"></rect>
+            </g>
+            <g id="Group" transform="translate(912.000000, 14.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 248 0 248 290 0 290"></polygon>
+            </g>
+            <g id="Group" transform="translate(1002.000000, 3.000000)" stroke="#000000">
+                <path d="M1.2,0 L1.2,4" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(1000.000000, 7.000000)" stroke="#000000">
+                <polyline id="Path" points="0.2 4 0.2 0 6.2 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(1000.000000, 7.000000)" stroke="#000000">
+                <polyline id="Path" points="6.2 4 6.2 0 0.2 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(1007.000000, 22.000000)" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                <g id="Datastore">
+                    <text>
+                        <tspan x="0.819580078" y="12.5">Datastore</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(679.000000, 151.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="34.2363281" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(679.000000, 165.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="85.5908203" height="25"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 159.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="85.5908203" height="24"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 159.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 85.5908203 0 85.5908203 24 0 24"></polygon>
+            </g>
+            <g id="Group" transform="translate(672.000000, 144.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="34.2363281" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 144.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 34.2363281 0 34.2363281 15 0 15"></polygon>
+            </g>
+            <g id="Group" transform="translate(672.000000, 158.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="85.5908203" height="25"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 158.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 85.5908203 0 85.5908203 25 0 25"></polygon>
+            </g>
+            <g id="Group" transform="translate(697.000000, 147.000000)" stroke="#000000">
+                <path d="M1.23632812,0 L1.23632812,4" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(695.000000, 151.000000)" stroke="#000000">
+                <polyline id="Path" points="0.236328125 4 0.236328125 0 6.23632812 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(695.000000, 151.000000)" stroke="#000000">
+                <polyline id="Path" points="6.23632812 4 6.23632812 0 0.236328125 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(697.000000, 166.000000)" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                <g id="Users">
+                    <text>
+                        <tspan x="0.821777344" y="12.5">Users</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(679.000000, 79.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="34.2363281" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(679.000000, 93.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="85.5908203" height="25"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 87.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="85.5908203" height="24"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 87.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 85.5908203 0 85.5908203 24 0 24"></polygon>
+            </g>
+            <g id="Group" transform="translate(672.000000, 72.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="34.2363281" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 72.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 34.2363281 0 34.2363281 15 0 15"></polygon>
+            </g>
+            <g id="Group" transform="translate(672.000000, 86.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="85.5908203" height="25"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 86.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 85.5908203 0 85.5908203 25 0 25"></polygon>
+            </g>
+            <g id="Group" transform="translate(697.000000, 75.000000)" stroke="#000000">
+                <path d="M1.23632812,0 L1.23632812,4" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(695.000000, 79.000000)" stroke="#000000">
+                <polyline id="Path" points="0.236328125 4 0.236328125 0 6.23632812 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(695.000000, 79.000000)" stroke="#000000">
+                <polyline id="Path" points="6.23632812 4 6.23632812 0 0.236328125 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(688.000000, 94.000000)" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                <g id="Accounts">
+                    <text>
+                        <tspan x="0.0590820313" y="12.5">Accounts</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(679.000000, 223.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="35.6785156" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(679.000000, 237.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="89.1962891" height="25"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 231.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="89.1962891" height="24"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 231.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 89.1962891 0 89.1962891 24 0 24"></polygon>
+            </g>
+            <g id="Group" transform="translate(672.000000, 216.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="35.6785156" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 216.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 35.6785156 0 35.6785156 15 0 15"></polygon>
+            </g>
+            <g id="Group" transform="translate(672.000000, 230.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="89.1962891" height="25"></rect>
+            </g>
+            <g id="Group" transform="translate(672.000000, 230.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 89.1962891 0 89.1962891 25 0 25"></polygon>
+            </g>
+            <g id="Group" transform="translate(699.000000, 219.000000)" stroke="#000000">
+                <path d="M0.678515625,0 L0.678515625,4" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(696.000000, 223.000000)" stroke="#000000">
+                <polyline id="Path" points="0.678515625 4 0.678515625 0 6.67851563 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(696.000000, 223.000000)" stroke="#000000">
+                <polyline id="Path" points="6.67851563 4 6.67851563 0 0.678515625 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(679.000000, 238.000000)" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                <g id="Transactions">
+                    <text>
+                        <tspan x="0.629394531" y="12.5">Transactions</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(335.000000, 7.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="99.2" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(335.000000, 21.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="248" height="290"></rect>
+            </g>
+            <g id="Group" transform="translate(328.000000, 15.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="248" height="289"></rect>
+            </g>
+            <g id="Group" transform="translate(328.000000, 15.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 248 0 248 289 0 289"></polygon>
+            </g>
+            <g id="Group" transform="translate(328.000000, 0.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="99.2" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(328.000000, 0.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 99.2 0 99.2 15 0 15"></polygon>
+            </g>
+            <g id="Group" transform="translate(328.000000, 14.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="248" height="290"></rect>
+            </g>
+            <g id="Group" transform="translate(328.000000, 14.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 248 0 248 290 0 290"></polygon>
+            </g>
+            <g id="Group" transform="translate(418.000000, 3.000000)" stroke="#000000">
+                <path d="M1.2,0 L1.2,4" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(416.000000, 7.000000)" stroke="#000000">
+                <polyline id="Path" points="0.2 4 0.2 0 6.2 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(416.000000, 7.000000)" stroke="#000000">
+                <polyline id="Path" points="6.2 4 6.2 0 0.2 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(418.000000, 22.000000)" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                <g id="Web-server">
+                    <text>
+                        <tspan x="0.887451172" y="12.5">Web server</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(973.000000, 87.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(966.000000, 80.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(966.000000, 80.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 151.183594 0 151.183594 44 0 44"></polygon>
+            </g>
+            <g id="Group" transform="translate(956.000000, 87.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(956.000000, 87.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(956.000000, 107.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(956.000000, 107.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(999.000000, 87.000000)">
+                <g>
+                    <text id="Accounts-store" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                        <tspan x="4.59912109" y="12.5">Accounts store</tspan>
+                    </text>
+                    <path d="M94.9072266,12.5 L0.276367188,12.5" id="Path" stroke="#000000"></path>
+                </g>
+            </g>
+            <g id="Group" transform="translate(973.000000, 159.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(966.000000, 152.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(966.000000, 152.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 151.183594 0 151.183594 44 0 44"></polygon>
+            </g>
+            <g id="Group" transform="translate(956.000000, 159.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(956.000000, 159.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(956.000000, 179.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(956.000000, 179.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(1010.000000, 159.000000)">
+                <g>
+                    <text id="Users-store" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                        <tspan x="3.36181641" y="12.5">Users store</tspan>
+                    </text>
+                    <path d="M72.3608398,12.5 L0.822753906,12.5" id="Path" stroke="#000000"></path>
+                </g>
+            </g>
+            <g id="Group" transform="translate(973.000000, 231.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(966.000000, 224.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(966.000000, 224.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 151.183594 0 151.183594 44 0 44"></polygon>
+            </g>
+            <g id="Group" transform="translate(956.000000, 231.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(956.000000, 231.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(956.000000, 251.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(956.000000, 251.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(988.000000, 231.000000)">
+                <g>
+                    <text id="Transactions-store" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                        <tspan x="5.36669922" y="12.5">Transactions store</tspan>
+                    </text>
+                    <path d="M116.390381,12.5 L0.793212891,12.5" id="Path" stroke="#000000"></path>
+                </g>
+            </g>
+            <g id="Group" transform="translate(905.000000, 160.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="14" height="14"></rect>
+            </g>
+            <g id="Group" transform="translate(905.000000, 160.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 14 0 14 14 0 14"></polygon>
+            </g>
+            <g id="Group" transform="translate(870.000000, 135.000000)" fill="#000000" font-family="ArialMT, Arial" font-size="13" font-weight="normal">
+                <g id="Store">
+                    <text>
+                        <tspan x="0.964111328" y="12">Store</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(920.000000, 125.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M72,0 L0,38" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(920.000000, 154.000000)" stroke="#000000">
+                <polyline id="Path" points="7.022886 0.533650592 0 9 10.9525434 7.97931723"></polyline>
+            </g>
+            <g id="Group" transform="translate(920.000000, 172.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M80,51 L0,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(920.000000, 172.000000)" stroke="#000000">
+                <polyline id="Path" points="10.832301 1.91344059 0 0 6.30658668 9.01260031"></polyline>
+            </g>
+            <g id="Group" transform="translate(920.000000, 167.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M35,2 L0,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(920.000000, 163.000000)" stroke="#000000">
+                <polyline id="Path" points="10.3862754 0.377116613 0 4 9.90597115 8.78244033"></polyline>
+            </g>
+            <g id="Group" transform="translate(759.000000, 108.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M0,0 L145,56" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(893.000000, 156.000000)" stroke="#000000">
+                <polyline id="Path" points="0.00320479732 8.26550945 11 8 3.03634801 0.411835076"></polyline>
+            </g>
+            <g id="Group" transform="translate(759.000000, 164.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M0,0 L145,3" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(893.000000, 162.000000)" stroke="#000000">
+                <polyline id="Path" points="0.752424735 8.99839983 11 5 0.926574407 0.581165672"></polyline>
+            </g>
+            <g id="Group" transform="translate(762.000000, 170.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M0,49 L142,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(893.000000, 169.000000)" stroke="#000000">
+                <polyline id="Path" points="2.76632811 8.29428867 11 1 0.02007379 0.33575575"></polyline>
+            </g>
+            <g id="Group" transform="translate(382.000000, 223.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="157.683594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(375.000000, 216.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="157.683594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(375.000000, 216.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 157.683594 0 157.683594 44 0 44"></polygon>
+            </g>
+            <g id="Group" transform="translate(365.000000, 223.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(365.000000, 223.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(365.000000, 243.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(365.000000, 243.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(389.000000, 223.000000)">
+                <g>
+                    <text id="Transactions-endpoint" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                        <tspan x="6.12719727" y="12.5">Transactions endpoint</tspan>
+                    </text>
+                    <path d="M139.183594,12.5 L0.5,12.5" id="Path" stroke="#000000"></path>
+                </g>
+            </g>
+            <g id="Group" transform="translate(385.000000, 79.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(378.000000, 72.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(378.000000, 72.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 151.183594 0 151.183594 44 0 44"></polygon>
+            </g>
+            <g id="Group" transform="translate(368.000000, 79.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(368.000000, 79.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(368.000000, 99.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(368.000000, 99.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(399.000000, 79.000000)">
+                <g>
+                    <text id="Accounts-endpoint" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                        <tspan x="6.10961914" y="12.5">Accounts endpoint</tspan>
+                    </text>
+                    <path d="M118.450439,12.5 L0.733154297,12.5" id="Path" stroke="#000000"></path>
+                </g>
+            </g>
+            <g id="Group" transform="translate(385.000000, 151.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(378.000000, 144.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="151.183594" height="44"></rect>
+            </g>
+            <g id="Group" transform="translate(378.000000, 144.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 151.183594 0 151.183594 44 0 44"></polygon>
+            </g>
+            <g id="Group" transform="translate(368.000000, 151.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(368.000000, 151.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(368.000000, 171.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="20" height="10"></rect>
+            </g>
+            <g id="Group" transform="translate(368.000000, 171.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 20 0 20 10 0 10"></polygon>
+            </g>
+            <g id="Group" transform="translate(411.000000, 151.000000)">
+                <g>
+                    <text id="Users-endpoint" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                        <tspan x="3.87231445" y="12.5">Users endpoint</tspan>
+                    </text>
+                    <path d="M94.9040527,12.5 L0.279541016,12.5" id="Path" stroke="#000000"></path>
+                </g>
+            </g>
+            <g id="Group" transform="translate(569.000000, 152.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="14" height="14"></rect>
+            </g>
+            <g id="Group" transform="translate(569.000000, 152.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 14 0 14 14 0 14"></polygon>
+            </g>
+            <g id="Group" transform="translate(583.000000, 136.000000)" fill="#000000" font-family="ArialMT, Arial" font-size="13" font-weight="normal">
+                <g id="Bank">
+                    <text>
+                        <tspan x="0.684570312" y="12">Bank</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(493.000000, 117.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M0,0 L75,38" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(557.000000, 146.000000)" stroke="#000000">
+                <polyline id="Path" points="0.0319766248 8.1618692 11 9 3.83708427 0.651788322"></polyline>
+            </g>
+            <g id="Group" transform="translate(530.000000, 159.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M0,3 L38,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(557.000000, 155.000000)" stroke="#000000">
+                <polyline id="Path" points="1.20014776 8.99628823 11 4 0.537548739 0.603367312"></polyline>
+            </g>
+            <g id="Group" transform="translate(485.000000, 164.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M0,51 L83,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(557.000000, 164.000000)" stroke="#000000">
+                <polyline id="Path" points="4.54507951 8.90696365 11 0 0.137507553 1.73385635"></polyline>
+            </g>
+            <g id="Group" transform="translate(584.000000, 112.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M87,0 L0,43" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(584.000000, 146.000000)" stroke="#000000">
+                <polyline id="Path" points="7.24543712 0.72330737 0 9 10.9758032 8.27079224"></polyline>
+            </g>
+            <g id="Group" transform="translate(584.000000, 159.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M87,3 L0,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(584.000000, 155.000000)" stroke="#000000">
+                <polyline id="Path" points="10.3017078 0.143211604 0 4 10.0115687 8.5572462"></polyline>
+            </g>
+            <g id="Group" transform="translate(584.000000, 163.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M95,52 L0,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(584.000000, 163.000000)" stroke="#000000">
+                <polyline id="Path" points="10.9357662 1.18702034 0 0 6.89340432 8.57210458"></polyline>
+            </g>
+            <g id="Group" transform="translate(7.000000, 135.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="73.6" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(7.000000, 149.000000)" fill="#C0C0C0" fill-rule="nonzero" opacity="0.2">
+                <rect id="Rectangle" x="0" y="0" width="184" height="50"></rect>
+            </g>
+            <g id="Group" transform="translate(0.000000, 143.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="184" height="49"></rect>
+            </g>
+            <g id="Group" transform="translate(0.000000, 143.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 184 0 184 49 0 49"></polygon>
+            </g>
+            <g id="Group" transform="translate(0.000000, 128.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="73.6" height="15"></rect>
+            </g>
+            <g id="Group" transform="translate(0.000000, 128.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 73.6 0 73.6 15 0 15"></polygon>
+            </g>
+            <g id="Group" transform="translate(0.000000, 142.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="184" height="50"></rect>
+            </g>
+            <g id="Group" transform="translate(0.000000, 142.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 184 0 184 50 0 50"></polygon>
+            </g>
+            <g id="Group" transform="translate(65.000000, 131.000000)" stroke="#000000">
+                <path d="M0.6,0 L0.6,4" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(62.000000, 135.000000)" stroke="#000000">
+                <polyline id="Path" points="0.6 4 0.6 0 6.6 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(62.000000, 135.000000)" stroke="#000000">
+                <polyline id="Path" points="6.6 4 6.6 0 0.6 0"></polyline>
+            </g>
+            <g id="Group" transform="translate(37.000000, 150.000000)" fill="#000000" font-family="Arial-BoldMT, Arial" font-size="13" font-weight="bold">
+                <g id="JS-web-application">
+                    <text>
+                        <tspan x="0.800537109" y="12.5">JS web application</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(321.000000, 152.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <rect id="Rectangle" x="0" y="0" width="14" height="14"></rect>
+            </g>
+            <g id="Group" transform="translate(321.000000, 152.000000)" stroke="#000000">
+                <polygon id="Path" points="0 0 14 0 14 14 0 14"></polygon>
+            </g>
+            <g id="Group" transform="translate(262.000000, 135.000000)" fill="#000000" font-family="ArialMT, Arial" font-size="13" font-weight="normal">
+                <g id="HTTP-API">
+                    <text>
+                        <tspan x="0.246826172" y="12">HTTP API</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="Group" transform="translate(185.000000, 159.000000)" stroke="#000000" stroke-dasharray="3">
+                <path d="M0,1 L135,0" id="Path"></path>
+            </g>
+            <g id="Group" transform="translate(309.000000, 154.000000)" stroke="#000000">
+                <polyline id="Path" points="0.8687847 9.28467928 11 5 0.806423185 0.865874735"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>

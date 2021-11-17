@@ -1,0 +1,97 @@
+@startuml
+
+title Back-end - Class Diagram
+
+class Bank {
+    customers: Customer[]
+    admins: Administrator[]
+    transactions: Transaction[]
+    accounts: Account[]
+    traces: Trace[]
+    
+    Customer createCustomer(...)
+    Customer[] getCustomers()
+    Customer updateCustomer(Customer)
+    void setCustomers(Customer[])
+    
+    Administrator createAdministrator(...)
+    Administrator[] getAdministrators()
+    void setAdministrators(Administrator[])
+    
+    Account createAndAssignAccount(...)
+    
+    User authenticate(email: String, password: String)
+}
+
+class User {
+    id: Int
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+    
+    Transaction createTransaction(...)
+}
+
+class Customer {
+    personalCode: String
+    status: Enum
+}
+
+class Administrator {
+    void revokeTransaction(Transaction)
+}
+
+class Account {
+    id: Int
+    userId: Int
+    currency: Enum
+    balance: Float
+
+    User getUser()
+    Transaction[] getTransactions()
+}
+
+class Transaction {
+    id: Int
+    sourceAccountId: Int
+    destinationAccountId: Int
+    currency: Enum
+    amount: Float
+    description: String
+    status: Enum
+    rejectionDescription: String
+    timestamp: Datetime
+
+    Account getSource()
+    Account getDestination()
+    Trace[] getTraces()
+}
+
+class Trace {
+    id: Int
+    transactionId: Int
+    userId: Int
+    timestamp: Datetime
+}
+
+class Datastore {
+    filename: String
+
+    bool saveBank(Bank)
+    bool loadBank(filename: String)
+}
+
+Bank o-- Customer
+Bank o-- Administrator
+Bank o-- Transaction
+Bank o-- Account
+Bank o-- Trace
+User <|-- Customer
+User <|-- Administrator
+User "1" -- "1" Account
+Transaction "n" -- "2" Account
+Transaction "1" -- "n" Trace
+User "1" -- "n" Trace
+
+@enduml
