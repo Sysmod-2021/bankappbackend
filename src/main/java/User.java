@@ -16,4 +16,8 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public Bank getBank() {
+        return this.bank;
+    }
 }

@@ -2,10 +2,14 @@ import java.util.UUID;
 
 public class Account {
     private final Bank bank;  // allows us to access the bank functionality, gives access to all the data
-    private final String id;
-    private final Customer customer;
-    private final Currency currency;
+    private String id;
+    private Customer customer;
+    private Currency currency;
     private Float balance;
+
+    public Account(Bank bank) {
+        this.bank = bank;
+    }
 
     public Account(Bank bank, Customer customer, Currency currency, Float balance) {
         this.id = UUID.randomUUID().toString();
@@ -13,5 +17,23 @@ public class Account {
         this.customer = customer;
         this.currency = currency;
         this.balance = balance;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public Account setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public Float getBalance() {
+        return this.balance;
+    }
+
+    public Account setBalance(Float newBalance) {
+        this.balance = newBalance;
+        return this;
     }
 }

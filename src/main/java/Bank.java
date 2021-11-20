@@ -15,4 +15,32 @@ public class Bank {
         this.accounts = new ArrayList<>();
         this.traces = new ArrayList<>();
     }
+
+    public List<Customer> getCustomers()
+    {
+       return this.customers;
+    }
+
+    public List<Account> getAccounts() {
+        return this.accounts;
+    }
+
+    public Bank addTrace(Trace trace) {
+        traces.add(trace);
+        return this;
+    }
+
+    public Bank addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+        return this;
+    }
+
+    public Account getBankAccountById(String id) {
+        Account acc = this.getAccounts().stream()
+            .filter(account -> id.equals(account.getId()))
+            .findFirst()
+            .orElse(null);
+        
+        return acc;
+    }
 }
