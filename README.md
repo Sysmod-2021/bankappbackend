@@ -1,6 +1,11 @@
 # Bank App Backend
 Backend for banking application - sysmod 2021
 
+The product spec, containing the narrative, functional and non functional requirements, scenarios and use cases are described in the following document:
+
+[OPEN DEMO BANK PRODUCT SPEC](https://docs.google.com/document/d/1AjevAXSdgcHC6yfwMc1QbsvFRuz3pfRowHIOu4XMXEU/edit?usp=sharing)
+
+
 Currently working on backend:
 
 - God's kenny (kehinde ogundeyi)
