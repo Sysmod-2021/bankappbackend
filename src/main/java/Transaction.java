@@ -1,13 +1,13 @@
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
-import java.util.Currency;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Transaction {
     public enum Status {
         REVOKED,
-        EXECUTED
+        EXECUTED,
+        ABORTED
     }
 
     public static final String PROPERTY_SOURCE = "source";
@@ -35,7 +35,7 @@ public class Transaction {
         this.id = UUID.randomUUID().toString();
         this.timestamp = LocalDateTime.now();
         this.rejectionDescription = "";
-        this.status = Status.EXECUTED;
+        // this.status = Status.EXECUTED;
 
         this.bank = bank;
         this.source = source;
@@ -163,5 +163,50 @@ public class Transaction {
             return true;
         }
         return false;
+    }
+
+    public Transaction execute() {
+        Account sender = this.getBank().getBankAccountById(this.source.getId());
+        
+        if (sender == null) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Source account is invalid"; 
+            return this;
+        }
+        else {
+            this.source = sender;
+        }
+
+        Account receiver = this.getBank().getBankAccountById(this.destination.getId());
+
+        if (receiver == null) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Destination account is invalid"; 
+            return this;
+        }
+        else {
+            this.destination = sender;
+        }
+
+        // TODO: add transaction to both sender and receiver transaction logs 
+
+        float sourceBalance = this.source.getBalance();
+        if (sourceBalance < this.amount) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Not enough money on the source account"; 
+            return this;
+        }
+
+        //TODO: currency validation - ?
+
+        float newSourceBalance = this.source.getBalance() - amount;
+        this.source.setBalance(newSourceBalance);
+
+        float newDestBalance = this.destination.getBalance() + amount;
+        this.source.setBalance(newDestBalance);
+
+        this.status = Status.EXECUTED;
+
+        return this;
     }
 }
