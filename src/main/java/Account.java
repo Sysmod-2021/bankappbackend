@@ -22,6 +22,7 @@ public class Account {
 
     public Account(Bank bank) {
         this.bank = bank;
+        this.id = UUID.randomUUID().toString();
     }
 
     public Account(Bank bank, Customer customer, Currency currency, Float balance) {
