@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.UUID;
 
 public class Transaction {
@@ -14,8 +15,8 @@ public class Transaction {
     private final Currency currency;
     private final Float amount;
     private final String description;
-    private final Status status;
-    private final String rejectionDescription;
+    private Status status;
+    private String rejectionDescription;
     private final LocalDateTime timestamp;
 
     public Transaction(Bank bank, Account source, Account destination, Currency currency, Float amount, String description) {
@@ -30,5 +31,53 @@ public class Transaction {
         this.currency = currency;
         this.amount = amount;
         this.description = description;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Account getSource() {
+        return source;
+    }
+
+    public Account getDestination() {
+        return destination;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public String getRejectionDescription() {
+        return rejectionDescription;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setRejectionDescription(String rejDescription) {
+        this.rejectionDescription = rejDescription;
+    }
+
+    public void setStatus(Status s) {
+        this.status = s;
     }
 }
