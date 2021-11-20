@@ -31,18 +31,26 @@ public class Transaction {
     private String rejectionDescription;
     private final LocalDateTime timestamp;
 
+    public Transaction(Bank b) {
+        // Default constructor - set initial finals and rest is set after.
+        this.bank = b;
+        this.id = UUID.randomUUID().toString();
+        this.timestamp = LocalDateTime.now();
+    }
+
     public Transaction(Bank bank, Account source, Account destination, Currency currency, Float amount, String description) {
         this.id = UUID.randomUUID().toString();
         this.timestamp = LocalDateTime.now();
         this.rejectionDescription = "";
-        // this.status = Status.EXECUTED;
-
         this.bank = bank;
-        this.source = source;
-        this.destination = destination;
-        this.currency = currency;
-        this.amount = amount;
-        this.description = description;
+
+        setSource(source);
+        setDestination(destination);
+        setCurrency(currency);
+        setAmount(amount);
+        setDescription(description);
+
+        // Status of transaction is defined after parsing of previous parameters.
     }
 
     public Bank getBank() {
@@ -166,7 +174,7 @@ public class Transaction {
     }
 
     public Transaction execute() {
-        Account sender = this.getBank().getBankAccountById(this.source.getId());
+        Account sender = getBank().getBankAccountById(this.source.getId());
         
         if (sender == null) {
             this.status = Status.ABORTED;
@@ -177,7 +185,7 @@ public class Transaction {
             this.source = sender;
         }
 
-        Account receiver = this.getBank().getBankAccountById(this.destination.getId());
+        Account receiver = getBank().getBankAccountById(this.destination.getId());
 
         if (receiver == null) {
             this.status = Status.ABORTED;
@@ -188,16 +196,15 @@ public class Transaction {
             this.destination = sender;
         }
 
-        // TODO: add transaction to both sender and receiver transaction logs 
-
         float sourceBalance = this.source.getBalance();
         if (sourceBalance < this.amount) {
             this.status = Status.ABORTED;
             this.rejectionDescription = "Not enough money on the source account"; 
             return this;
         }
-
         //TODO: currency validation - ?
+
+
 
         float newSourceBalance = this.source.getBalance() - amount;
         this.source.setBalance(newSourceBalance);
@@ -206,6 +213,9 @@ public class Transaction {
         this.source.setBalance(newDestBalance);
 
         this.status = Status.EXECUTED;
+        // Only after everything is executed we will add the transaction to the account transaction list.
+        sender.addSentTransaction(this);
+        receiver.addReceivedTransaction(this);
 
         return this;
     }

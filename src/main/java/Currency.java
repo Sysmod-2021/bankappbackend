@@ -1,4 +1,5 @@
 public enum Currency {
     EUR,
-    USD
+    USD,
+    COP // Colombian pesos because: because.
 }
