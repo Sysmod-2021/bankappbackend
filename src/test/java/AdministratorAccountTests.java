@@ -60,7 +60,7 @@ public class AdministratorAccountTests {
 //	Then the bank admin can create an account for the customer
 //	And gives the customer his password
 	@Test
-	public void shouldRegistersSuccessfully_WhenAdminIsLoggedIn() {
+	public void shouldRegistersCustomerSuccessfully_WhenAdminIsLoggedIn() {
 		// Arrange
 		Bank bank = new Bank();
 		Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
