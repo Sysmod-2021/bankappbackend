@@ -1,4 +1,4 @@
-import org.fulib.FulibTools;
+//import org.fulib.FulibTools;
 import org.junit.Test;
 
 public class BankTests {
@@ -9,7 +9,7 @@ public class BankTests {
         // TODO: add an admin
         // TODO: add some transactions
 
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/bank_objects.svg", bank);
+//        FulibTools.objectDiagrams().dumpSVG("docs/objects/bank_objects.svg", bank);
     }
 }
 
