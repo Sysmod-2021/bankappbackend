@@ -1,6 +1,5 @@
 import java.beans.PropertyChangeSupport;
 import java.util.*;
-import java.util.Currency;
 
 public class Account {
 

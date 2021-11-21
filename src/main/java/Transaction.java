@@ -202,9 +202,13 @@ public class Transaction {
             this.rejectionDescription = "Not enough money on the source account"; 
             return this;
         }
-        //TODO: currency validation - ?
-
-
+        
+        // Currency validation
+        if (this.currency != this.destination.getCurrency() || this.currency != this.source.getCurrency()) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Currency mismatch detected"; 
+            return this;
+        }
 
         float newSourceBalance = this.source.getBalance() - amount;
         this.source.setBalance(newSourceBalance);
