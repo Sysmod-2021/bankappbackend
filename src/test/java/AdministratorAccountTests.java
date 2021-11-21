@@ -1,4 +1,5 @@
 import java.util.Currency;
+import org.fulib.FulibTools;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -25,6 +26,8 @@ public class AdministratorAccountTests {
 		// - administrator account not added to Bank administrator list
 		// - getAdmins() not implemented
 		// - login not implemented
+		
+		FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s1.svg", admin);
 	}
 	
 //	Scenario 2: Administrator registers himself unsuccessfully
@@ -49,6 +52,8 @@ public class AdministratorAccountTests {
 		// - administrator account not added to Bank administrator list
 		// - getAdmins() not implemented
 		// - validate email not implemented
+		
+		FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s2.svg", bank);
 	}
 	
 //	Scenario 3: Administrator registers a customer
@@ -77,6 +82,8 @@ public class AdministratorAccountTests {
 		// - login not implemented
 		// - administrator account not added to Bank administrator list
 		// - validated administrator is the one created an account not implement
+		
+		FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s3.svg", customerBankAccount);
 	}
 	
 }
