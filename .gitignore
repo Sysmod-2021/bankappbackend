@@ -27,3 +27,5 @@ hs_err_pid*
 .DS_Store
 build
 /bin/
+.classpath
+.project
