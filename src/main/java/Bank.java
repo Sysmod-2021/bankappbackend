@@ -68,4 +68,8 @@ public class Bank {
         
         return account;
     }
+
+	public List<Administrator> getAdmins() {
+		return this.admins;
+	}
 }
