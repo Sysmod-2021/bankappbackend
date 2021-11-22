@@ -2,7 +2,6 @@ import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 public class Account {
-
     public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_OWNER = "owner";
     public static final String PROPERTY_CURRENCY = "currency";
@@ -12,7 +11,7 @@ public class Account {
     private String id;
     private Customer customer;
     private Currency currency;
-    private Float balance;
+    private Double balance;
     // TODO do we keep 2 separate lists or 2 separate maps? (map increases performance but overview might be scuffed)
     private Map<String, Transaction> sent;
     private Map<String, Transaction> received;
@@ -24,7 +23,7 @@ public class Account {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Account(Bank bank, Customer customer, Currency currency, Float balance) {
+    public Account(Bank bank, Customer customer, Currency currency, Double balance) {
         this.id = UUID.randomUUID().toString();
         this.bank = bank;
         this.customer = customer;
@@ -56,15 +55,15 @@ public class Account {
         return this;
     }
 
-    public Float getBalance() {
+    public Double getBalance() {
         return this.balance;
     }
 
-    public Account setBalance(Float newBalance) {
+    public Account setBalance(Double newBalance) {
         if (Objects.equals(newBalance, this.balance)) {
             return this;
         }
-        final Float oldBalance = this.balance;
+        final Double oldBalance = this.balance;
         this.balance = newBalance;
         this.firePropertyChange(PROPERTY_BALANCE, oldBalance, balance);
         return this;
