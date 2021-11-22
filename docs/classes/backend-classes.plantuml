@@ -11,19 +11,21 @@ class Bank {
     accounts: Account[]
     traces: Trace[]
     bankAccount: Account
+
+    Bank getInstance() // Singleton pattern
     
-    Customer createCustomer(...)
+    Customer createCustomer(...) // Factory pattern
     Customer[] getCustomers()
     Customer updateCustomer(Customer)
     void setCustomers(Customer[])
     
-    Administrator createAdministrator(...)
+    Administrator createAdministrator(...) // Factory pattern
     Administrator[] getAdministrators()
     void setAdministrators(Administrator[])
     
     User authenticate(email: String, password: String)
 
-    Transaction createTransaction(...)
+    Transaction createTransaction(...) // Factory pattern
     void revokeTransaction(Administrator, Transaction)
 }
 
@@ -83,6 +85,7 @@ class Trace {
 class Datastore {
     filename: String
 
+    Datastore getInstance() // Singleton pattern
     void saveBank(Bank)
     Bank loadBank(filename: String)
 }
