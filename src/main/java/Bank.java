@@ -8,7 +8,7 @@ public class Bank {
     private final List<Account> accounts;
     private final Map<String,Account> accountsMap;
     private final List<Trace> traces;
-    private final Account bankAccount;
+    private final Account theBanksAccount;
 
     public Bank() {
         this.customers = new ArrayList<>();
@@ -21,13 +21,13 @@ public class Bank {
         this.customerMap = new HashMap<>();
         this.accountsMap = new HashMap<>();
 
-        bankAccount = new Account(this);
-        bankAccount.setBalance(69420.00F);
+        theBanksAccount = new Account(this);
+        theBanksAccount.setBalance(69420.00F);
 
     }
 
     public Account getBankAccount() {
-        return this.bankAccount;
+        return this.theBanksAccount;
     }
 
     public List<Customer> getCustomers()

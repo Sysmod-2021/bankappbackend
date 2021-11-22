@@ -7,19 +7,42 @@ public class Administrator extends User {
 
     public void createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Float amount, String description) {
         // TODO Are we using map or list? Currently both are written.
-        // Get account from customer list
-        Account sender = getBank().getBankAccountById(senderAccountId);
-//        Account sender = new Account(this.getBank())
-//            .setId(senderAccountId);
+        // Setup fake account at this point, senderAccountId / receiverAccountId could be invalid
+        // Validation happens during the execution
+        Account sender = new Account(this.getBank())
+            .setId(senderAccountId);
 
-        Account receiver = getBank().getBankAccountById(receiverAccountId);
-//        Account receiver = new Account(this.getBank())
-//            .setId(receiverAccountId);
+        Account receiver = new Account(this.getBank())
+            .setId(receiverAccountId);
         
-        // default currency for now
-        Currency currency = Currency.EUR;
-        Transaction transaction = new Transaction(this.getBank(), sender, receiver, currency, amount, description)
-            .execute();
+        performTransaction(sender, receiver, amount, description);
+    }
+
+    public void createTransactionToBank (String senderAccountId, Float amount, String description) {
+        // Setup fake account at this point, senderAccountId could be invalid
+        // Validation happens during the execution
+        Account sender = new Account(this.getBank())
+            .setId(senderAccountId);
+
+        Account receiver = getBank().getBankAccount();
+
+        performTransaction(sender, receiver, amount, description);
+    }
+
+    public void createTransactionFromBank (String receiverAccountId, Float amount, String description) {
+        // Setup fake account at this point, senderAccountId could be invalid
+        // Validation happens during the execution
+        Account receiver = new Account(this.getBank())
+            .setId(receiverAccountId);
+
+        Account sender = getBank().getBankAccount();
+
+        performTransaction(sender, receiver, amount, description);
+    }
+
+    private void performTransaction(Account sender, Account receiver, Float amount, String description) {
+        Transaction transaction = new Transaction(this.getBank(), sender, receiver, Currency.EUR, amount, description)
+        .execute();
         if (!transaction.getStatus().equals(Transaction.Status.ABORTED)) {
             // Check if the status is aborted. if it's not then we add the transaction to the list.
             getBank().addTransaction(transaction);
