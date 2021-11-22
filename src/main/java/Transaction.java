@@ -53,6 +53,20 @@ public class Transaction {
         // Status of transaction is defined after parsing of previous parameters.
     }
 
+    // For seed transaction
+    public Transaction(Bank bank, Account destination, Currency currency, Double amount, String description) {
+        this.id = UUID.randomUUID().toString();
+        this.timestamp = LocalDateTime.now();
+        this.rejectionDescription = "";
+        this.bank = bank;
+
+        setSource(null);
+        setDestination(destination);
+        setCurrency(currency);
+        setAmount(amount);
+        setDescription(description);
+    }
+
     public Bank getBank() {
         return bank;
     }
@@ -219,6 +233,38 @@ public class Transaction {
         this.status = Status.EXECUTED;
         // Only after everything is executed we will add the transaction to the account transaction list.
         sender.addSentTransaction(this);
+        receiver.addReceivedTransaction(this);
+
+        return this;
+    }
+
+    public Transaction seed() {
+        this.source = null;
+
+        Account receiver = getBank().getBankAccountById(this.destination.getId());
+
+        if (receiver == null) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Destination account is invalid";
+            return this;
+        }
+        else {
+            this.destination = receiver;
+        }
+
+        // Currency validation
+        if (this.currency != this.destination.getCurrency()) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Currency mismatch detected";
+            return this;
+        }
+
+        Double newDestBalance = this.destination.getBalance() + amount;
+        this.destination.setBalance(newDestBalance);
+
+        this.status = Status.EXECUTED;
+
+        // Only after everything is executed we will add the transaction to the account transaction list.
         receiver.addReceivedTransaction(this);
 
         return this;
