@@ -3,11 +3,14 @@
 title Back-end - Class Diagram
 
 class Bank {
+    id: String
+
     customers: Customer[]
     admins: Administrator[]
     transactions: Transaction[]
     accounts: Account[]
     traces: Trace[]
+    bankAccount: Account
     
     Customer createCustomer(...)
     Customer[] getCustomers()
@@ -18,9 +21,10 @@ class Bank {
     Administrator[] getAdministrators()
     void setAdministrators(Administrator[])
     
-    Account createAndAssignAccount(...)
-    
     User authenticate(email: String, password: String)
+
+    Transaction createTransaction(...)
+    void revokeTransaction(Administrator, Transaction)
 }
 
 class User {
@@ -30,16 +34,14 @@ class User {
     lastName: String
     email: String
     password: String
-    
-    Transaction createTransaction(...)
+
+    Boolean validate()
 }
 
 class Customer {
-    personalCode: String
 }
 
 class Administrator {
-    void revokeTransaction(Transaction)
 }
 
 class Account {
@@ -64,14 +66,17 @@ class Transaction {
     rejectionDescription: String
     timestamp: Datetime
 
+    void execute()
+    Boolean validate()
     Trace[] getTraces()
 }
 
 class Trace {
-    bank: Bank
     id: String
-    transaction: Transaction
-    user: User
+    bankId: Bank
+    transactionId: String
+    transactionStatus: Enum
+    userId: String
     timestamp: Datetime
 }
 
