@@ -1,4 +1,3 @@
-import java.util.Currency;
 import org.fulib.FulibTools;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -21,11 +20,10 @@ public class CustomerAccountTests {
 		// Arrange
 		Bank bank = new Bank();
 		Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-		Currency eur = Currency.getInstance("EUR");
-		Float balance = 100f;
+		Double balance = 100.0;
 		
 		//Act
-		Account customerBankAccount  = new Account(bank, customer, eur, balance);
+		Account customerBankAccount  = new Account(bank, customer, Currency.EUR, balance);
 		
 		//Assert
 		assertEquals(balance, bank.getAccounts().get(0).getBalance());

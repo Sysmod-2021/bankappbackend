@@ -39,8 +39,8 @@ public class TransactionTests {
     @Test
     public void shouldInitiateMoneyTransferSuccessfully() {
         Bank bank = new Bank();
-        Float balance = 100f;
-        Float amount = 25f;
+        Double balance = 100.0;
+        Double amount = 25.0;
         java.util.Currency eur = java.util.Currency.getInstance("EUR");
 
         Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
@@ -78,14 +78,13 @@ public class TransactionTests {
     @Test
     public void shouldTransferMoneySuccessfully() {
         Bank bank = new Bank();
-        Float balance = 100f;
-        Float amount = 25f;
-        java.util.Currency eur = java.util.Currency.getInstance("EUR");
+        Double balance = 100.0;
+        Double amount = 25.0;
 
         Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account sourceBankAccount = new Account(bank, customer, eur, balance);
+        Account sourceBankAccount = new Account(bank, customer, Currency.EUR, balance);
         Customer beneficiary = new Customer(bank, "Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002");
-        Account destinationBankAccount = new Account(bank, beneficiary, eur, 0f);
+        Account destinationBankAccount = new Account(bank, beneficiary, Currency.EUR, 0.0);
 
         Transaction transfer = new Transaction(bank, sourceBankAccount, destinationBankAccount, Currency.EUR, amount, TRANS_DESC);
         transfer.execute();
@@ -116,14 +115,13 @@ public class TransactionTests {
     public void shouldTransferMoneyUnsuccessfully_WhenBeneficiaryNotExists() {
         Bank bank = new Bank();
         Bank internationalBank = new Bank();
-        Float balance = 100f;
-        Float amount = 25f;
-        java.util.Currency eur = java.util.Currency.getInstance("EUR");
+        Double balance = 100.0;
+        Double amount = 25.0;
 
         Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account sourceBankAccount = new Account(bank, customer, eur, balance);
+        Account sourceBankAccount = new Account(bank, customer, Currency.EUR, balance);
         Customer beneficiary = new Customer(internationalBank, "Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002");
-        Account destinationBankAccount = new Account(bank, beneficiary, eur, 0f);
+        Account destinationBankAccount = new Account(bank, beneficiary, Currency.EUR, 0.0);
 
         Transaction transfer = new Transaction(bank, sourceBankAccount, destinationBankAccount, Currency.EUR, amount, TRANS_DESC);
         transfer.execute();
@@ -155,14 +153,13 @@ public class TransactionTests {
     public void shouldChargeCustomerFeeSuccessfully() {
         Bank bank = new Bank();
         Account bankAccount = bank.getBankAccount();
-        Float bankBalance = bankAccount.getBalance();
+        Double bankBalance = bankAccount.getBalance();
 
-        Float balance = 100f;
-        Float fee = 10f;
-        java.util.Currency eur = java.util.Currency.getInstance("EUR");
+        Double balance = 100.0;
+        Double fee = 10.0;
 
         Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account customerBankAccount = new Account(bank, customer, eur, balance);
+        Account customerBankAccount = new Account(bank, customer, Currency.EUR, balance);
 
 
         Transaction transfer = new Transaction(bank, customerBankAccount, bankAccount, Currency.EUR, fee, "Fee");
@@ -196,14 +193,13 @@ public class TransactionTests {
     public void shouldChargeCustomerFeeSuccessfully_WhenBalanceNotEnough() {
         Bank bank = new Bank();
         Account bankAccount = bank.getBankAccount();
-        Float bankBalance = bankAccount.getBalance();
+        Double bankBalance = bankAccount.getBalance();
 
-        Float balance = 10f;
-        Float fee = 50f;
-        java.util.Currency eur = java.util.Currency.getInstance("EUR");
+        Double balance = 10.0;
+        Double fee = 50.0;
 
         Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account customerBankAccount = new Account(bank, customer, eur, balance);
+        Account customerBankAccount = new Account(bank, customer, Currency.EUR, balance);
 
         Transaction transfer = new Transaction(bank, customerBankAccount, bankAccount, Currency.EUR, fee, "Expensive fee");
         transfer.execute();
@@ -239,15 +235,14 @@ public class TransactionTests {
         // Arrange
         Bank bank = new Bank();
 
-        Float balanceOfCustomer = 200f;
-        Float balanceOfBeneficiary = 300f;
-        Float amount = 50f;
-        java.util.Currency eur = java.util.Currency.getInstance("EUR");
+        Double balanceOfCustomer = 200.0;
+        Double balanceOfBeneficiary = 300.0;
+        Double amount = 50.0;
 
         Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account sourceBankAccount = new Account(bank, customer, eur, balanceOfCustomer);
+        Account sourceBankAccount = new Account(bank, customer, Currency.EUR, balanceOfCustomer);
         Customer beneficiary = new Customer(bank, "Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002");
-        Account destinationBankAccount = new Account(bank, beneficiary, eur, balanceOfBeneficiary);
+        Account destinationBankAccount = new Account(bank, beneficiary, Currency.EUR, balanceOfBeneficiary);
 
         Transaction transferMade = new Transaction(bank, sourceBankAccount, destinationBankAccount, Currency.EUR, amount, TRANS_DESC);
         transferMade.execute();
@@ -289,12 +284,11 @@ public class TransactionTests {
     public void shouldCreateSeedTransactionSuccessfully() {
         Bank bank = new Bank();
 
-        Float balance = 10f;
-        Float amount = 250f;
-        java.util.Currency eur = java.util.Currency.getInstance("EUR");
+        Double balance = 10.0;
+        Double amount = 250.0;
 
         Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account customerBankAccount = new Account(bank, customer, eur, balance);
+        Account customerBankAccount = new Account(bank, customer, Currency.EUR, balance);
 
         Transaction deposit = new Transaction(bank, null, customerBankAccount, Currency.EUR, amount, "Salary");
         deposit.execute();

@@ -5,7 +5,7 @@ public class Administrator extends User {
         super(bank, firstName, lastName, email, password);
     }
 
-    public void createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Float amount, String description) {
+    public void createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) {
         // TODO Are we using map or list? Currently both are written.
         // Setup fake account at this point, senderAccountId / receiverAccountId could be invalid
         // Validation happens during the execution
@@ -18,7 +18,7 @@ public class Administrator extends User {
         performTransaction(sender, receiver, amount, description);
     }
 
-    public void createTransactionToBank (String senderAccountId, Float amount, String description) {
+    public void createTransactionToBank (String senderAccountId, Double amount, String description) {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account sender = new Account(this.getBank())
@@ -29,7 +29,7 @@ public class Administrator extends User {
         performTransaction(sender, receiver, amount, description);
     }
 
-    public void createTransactionFromBank (String receiverAccountId, Float amount, String description) {
+    public void createTransactionFromBank (String receiverAccountId, Double amount, String description) {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account receiver = new Account(this.getBank())
@@ -40,7 +40,7 @@ public class Administrator extends User {
         performTransaction(sender, receiver, amount, description);
     }
 
-    private void performTransaction(Account sender, Account receiver, Float amount, String description) {
+    private void performTransaction(Account sender, Account receiver, Double amount, String description) {
         Transaction transaction = new Transaction(this.getBank(), sender, receiver, Currency.EUR, amount, description)
         .execute();
         if (!transaction.getStatus().equals(Transaction.Status.ABORTED)) {

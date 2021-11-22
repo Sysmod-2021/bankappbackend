@@ -51,7 +51,7 @@ class Account {
     id: String
     user: User
     currency: Enum
-    balance: Float
+    balance: Double
 
     Transaction[] getTransactions()
 }
@@ -62,7 +62,7 @@ class Transaction {
     source: Account
     destination: Account
     currency: Enum
-    amount: Float
+    amount: Double
     description: String
     status: Enum
     rejectionDescription: String

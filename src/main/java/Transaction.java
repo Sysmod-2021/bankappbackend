@@ -25,7 +25,7 @@ public class Transaction {
     private Account source;
     private Account destination;
     private Currency currency;
-    private Float amount;
+    private Double amount;
     private String description;
     private Status status;
     private String rejectionDescription;
@@ -38,7 +38,7 @@ public class Transaction {
         this.timestamp = LocalDateTime.now();
     }
 
-    public Transaction(Bank bank, Account source, Account destination, Currency currency, Float amount, String description) {
+    public Transaction(Bank bank, Account source, Account destination, Currency currency, Double amount, String description) {
         this.id = UUID.randomUUID().toString();
         this.timestamp = LocalDateTime.now();
         this.rejectionDescription = "";
@@ -103,15 +103,15 @@ public class Transaction {
         return this;
     }
 
-    public Float getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public Transaction setAmount(Float amount) {
+    public Transaction setAmount(Double amount) {
         if (Objects.equals(amount, this.amount)) {
             return this;
         }
-        final Float oldAmount = this.amount;
+        final Double oldAmount = this.amount;
         this.amount = amount;
         this.firePropertyChange(PROPERTY_AMOUNT, oldAmount, amount);
         return this;
@@ -196,7 +196,7 @@ public class Transaction {
             this.destination = sender;
         }
 
-        float sourceBalance = this.source.getBalance();
+        Double sourceBalance = this.source.getBalance();
         if (sourceBalance < this.amount) {
             this.status = Status.ABORTED;
             this.rejectionDescription = "Not enough money on the source account"; 
@@ -210,10 +210,10 @@ public class Transaction {
             return this;
         }
 
-        float newSourceBalance = this.source.getBalance() - amount;
+        Double newSourceBalance = this.source.getBalance() - amount;
         this.source.setBalance(newSourceBalance);
 
-        float newDestBalance = this.destination.getBalance() + amount;
+        Double newDestBalance = this.destination.getBalance() + amount;
         this.source.setBalance(newDestBalance);
 
         this.status = Status.EXECUTED;
