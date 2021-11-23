@@ -21,6 +21,9 @@ public class Account {
     public Account(Bank bank) {
         this.bank = bank;
         this.id = UUID.randomUUID().toString();
+        this.currency = Currency.EUR;
+        this.sent = new HashMap<>();
+        this.received = new HashMap<>();
     }
 
     public Account(Bank bank, Customer customer, Currency currency, Double balance) {

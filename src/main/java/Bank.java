@@ -23,8 +23,13 @@ public class Bank {
 
         theBanksAccount = new Account(this);
         theBanksAccount.setBalance(69420.00);
+        accounts.add(theBanksAccount);
+        accountsMap.put(theBanksAccount.getId(), theBanksAccount);
 
     }
+
+    public List<Trace> getTraces() {
+        return this.traces;}
 
     public Account getBankAccount() {
         return this.theBanksAccount;

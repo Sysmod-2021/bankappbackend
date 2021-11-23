@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 public class Administrator extends User {
     public Administrator(Bank bank, String firstName, String lastName, String email, String password) {
         super(bank, firstName, lastName, email, password);
+        bank.getAdmins().add(this);
     }
 
     public void createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) {
