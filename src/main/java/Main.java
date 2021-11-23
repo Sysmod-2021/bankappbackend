@@ -8,6 +8,6 @@ public class Main {
         System.out.println(bank.getTraces());
         System.out.println(bank.getBankAccount().getBalance());
 
-//        WebConnector.run(bank);
+        WebConnector.run(bank);
     }
 }
