@@ -40,6 +40,16 @@ public class Administrator extends User {
         performTransaction(sender, receiver, amount, description);
     }
 
+    public Transaction createSeedTransactionToCustomer(String receiverAccountId, Double amount, Currency currency, String description) {
+        Account receiver = this.getBank().getBankAccountById(receiverAccountId);
+        return performSeedTransaction(receiver, amount, currency, description);
+    }
+
+    public Transaction createSeedTransactionToBank(Double amount, Currency currency, String description) {
+        Account receiver = getBank().getBankAccount();
+        return performSeedTransaction(receiver, amount, currency, description);
+    }
+
     private void performTransaction(Account sender, Account receiver, Double amount, String description) {
         Transaction transaction = new Transaction(this.getBank(), sender, receiver, Currency.EUR, amount, description)
         .execute();
@@ -50,5 +60,19 @@ public class Administrator extends User {
 
         Trace trace = new Trace(this.getBank(), transaction, this, LocalDateTime.now());
         this.getBank().addTrace(trace);
+    }
+
+    private Transaction performSeedTransaction(Account receiver, Double amount, Currency currency, String description) {
+        Transaction transaction = new Transaction(this.getBank(), receiver, currency, amount, description)
+                .seed();
+
+        if (!transaction.getStatus().equals(Transaction.Status.ABORTED)) {
+            getBank().addTransaction(transaction);
+        }
+
+        Trace trace = new Trace(this.getBank(), transaction, this, LocalDateTime.now());
+        this.getBank().addTrace(trace);
+
+        return transaction;
     }
 }

@@ -22,7 +22,7 @@ public class Bank {
         this.accountsMap = new HashMap<>();
 
         theBanksAccount = new Account(this);
-        theBanksAccount.setBalance(69420.00F);
+        theBanksAccount.setBalance(69420.00);
 
     }
 
