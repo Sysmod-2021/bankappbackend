@@ -24,6 +24,7 @@ public class Account {
         this.currency = Currency.EUR;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
+
     }
 
     public Account(Bank bank, Customer customer, Currency currency, Double balance) {
