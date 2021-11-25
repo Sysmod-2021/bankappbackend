@@ -188,7 +188,7 @@ public class Transaction {
     }
 
     public Transaction execute() {
-        Account sender = getBank().getBankAccountById(this.source.getId());
+        Account sender = getBank().getAccountById(this.source.getId());
         
         if (sender == null) {
             this.status = Status.ABORTED;
@@ -199,7 +199,7 @@ public class Transaction {
             this.source = sender;
         }
 
-        Account receiver = getBank().getBankAccountById(this.destination.getId());
+        Account receiver = getBank().getAccountById(this.destination.getId());
 
         if (receiver == null) {
             this.status = Status.ABORTED;
@@ -241,7 +241,7 @@ public class Transaction {
     public Transaction seed() {
         this.source = null;
 
-        Account receiver = getBank().getBankAccountById(this.destination.getId());
+        Account receiver = getBank().getAccountById(this.destination.getId());
 
         if (receiver == null) {
             this.status = Status.ABORTED;

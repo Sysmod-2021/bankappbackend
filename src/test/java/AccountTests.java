@@ -12,7 +12,7 @@ public class AccountTests {
     static final String ADMIN_EMAIL = "admin@bank.ee";
 
     @Test
-    public void testCreateAdministrator() {
+    public void testCreateAdministrator() throws Bank.AdministratorExistsException {
         Bank bank = new Bank();
         Administrator admin = bank.createAdministrator("Admin", "Alice", ADMIN_EMAIL, "secure_p@ssw0|2d"); // NOTE: Factory pattern
         assertEquals(ADMIN_EMAIL, bank.getAdministrators().get(0).getEmail());
@@ -21,25 +21,24 @@ public class AccountTests {
     }
 
     @Test
-    public void testCreateAdministratorFailure() {
+    public void testCreateAdministratorFailure() throws Bank.AdministratorExistsException {
         Bank bank = new Bank();
         Administrator admin1 = bank.createAdministrator("Alice", "Brown", ADMIN_EMAIL, "secure_p@ssw0|2d");
-        assertThrows(Bank.InvalidUserException.class, () -> {
-            Administrator admin2 = bank.createAdministrator("Alice", "Peterson", ADMIN_EMAIL, "I-forgot");
+        assertThrows(Bank.AdministratorExistsException.class, () -> {
+            bank.createAdministrator("Alice", "Peterson", ADMIN_EMAIL, "I-forgot");
         });
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s2.svg", bank);
     }
 
     @Test
-    public void testCreateCustomer() {
+    public void testCreateCustomer() throws Bank.CustomerExistsException, Bank.AccountExistsException {
         Bank bank = new Bank();
         Double initial_balance = 100.0;
         // NOTE: Factory pattern
-        // bank.createCustomer creates a customer and an account, if balance or currency aren't provided,
-        // default values are chosen then
+        // bank.createCustomer creates a customer and an account
         Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", initial_balance, Currency.EUR);
-        assertEquals("john@doe.ee", bank.getCustomersByEmail("john@doe.ee").getEmail());
+        assertEquals("john@doe.ee", bank.getCustomerByEmail("john@doe.ee").getEmail());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s3.svg", bank);
     }
