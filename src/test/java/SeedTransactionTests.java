@@ -19,16 +19,13 @@ public class SeedTransactionTests {
     //  And         enters a valid receiving account and amount
     //  Then        the corresponding account receives the amount
     //  And         the transaction is traced
-
     @Test
-    public void testCreateSeedTransaction() {
+    public void testCreateSeedTransaction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException {
         Bank bank = new Bank();
         Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
-        Customer customer = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002", 0.0, Currency.EUR);
+        Customer customer = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
         Account destinationBankAccount = new Account(bank, customer, Currency.EUR, 0.0);
-
         Transaction transfer = admin.createSeedTransactionToCustomer(destinationBankAccount.getId(), 30.0, Currency.EUR, TRANS_DESC);
-
         assertEquals(30.0, destinationBankAccount.getBalance(), 0.0);
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/seed_transfer_1.svg", transfer);
@@ -43,12 +40,12 @@ public class SeedTransactionTests {
     //  And         nothing changed
 
     @Test
-    public void testCreateSeedTransactionFailure() {
+    public void testCreateSeedTransactionFailure() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException {
         Bank bank = new Bank();
         Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
 
         Bank otherBank = new Bank();
-        Customer customer = otherBank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002", 0.0, Currency.EUR);
+        Customer customer = otherBank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
         Account destinationBankAccount = new Account(otherBank, customer, Currency.EUR, 0.0);
 
         Transaction transfer = admin.createSeedTransactionToCustomer(destinationBankAccount.getId(), 30.0, Currency.EUR, TRANS_DESC);

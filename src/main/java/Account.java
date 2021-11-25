@@ -24,7 +24,6 @@ public class Account {
         this.currency = Currency.EUR;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
-
     }
 
     public Account(Bank bank, Customer customer, Currency currency, Double balance) {
@@ -106,10 +105,8 @@ public class Account {
         return this;
     }
 
-    public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue)
-    {
-        if (this.listeners != null)
-        {
+    public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        if (this.listeners != null) {
             this.listeners.firePropertyChange(propertyName, oldValue, newValue);
             return true;
         }

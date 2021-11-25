@@ -3,7 +3,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class User {
-
     public static final String PROPERTY_FNAME = "fname";
     public static final String PROPERTY_LNAME = "lname";
     public static final String PROPERTY_EMAIL = "email";
