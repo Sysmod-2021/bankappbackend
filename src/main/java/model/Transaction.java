@@ -1,4 +1,7 @@
+package model;
+
 import java.beans.PropertyChangeSupport;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -9,7 +12,7 @@ public class Transaction {
         EXECUTED,
         ABORTED
     }
-
+    public static final String PROPERTY_ID = "transaction_id";
     public static final String PROPERTY_SOURCE = "source";
     public static final String PROPERTY_DESTINATION = "destination";
     public static final String PROPERTY_STATUS = "status";
@@ -17,11 +20,12 @@ public class Transaction {
     public static final String PROPERTY_DESCRIPTION = "description";
     public static final String PROPERTY_REJ_DESCRIPTION = "rej_description";
     public static final String PROPERTY_CURRENCY = "currency";
+    public static final String PROPERTY_TIMESTAMP = "timestamp";
 
     protected PropertyChangeSupport listeners;
 
     private final Bank bank;
-    private final String id;
+    private String id;
     private Account source;
     private Account destination;
     private Currency currency;
@@ -29,7 +33,7 @@ public class Transaction {
     private String description;
     private Status status;
     private String rejectionDescription;
-    private final LocalDateTime timestamp;
+    private LocalDateTime timestamp;
 
     public Transaction(Bank b) {
         // Default constructor - set initial finals and rest is set after.
@@ -52,6 +56,19 @@ public class Transaction {
 
         // Status of transaction is defined after parsing of previous parameters.
     }
+    // For load from datastore
+    public Transaction(Bank b, String id, Account source, Account dest, Currency c, Double amount, String desc, Status status, String rej_desc, LocalDateTime time) {
+        this.bank = b;
+        setId(id);
+        setSource(source);
+        setDestination(dest);
+        setCurrency(c);
+        setAmount(amount);
+        setDescription(desc);
+        setRejectionDescription(rej_desc);
+        setStatus(status);
+        setTime(time);
+    }
 
     // For seed transaction
     public Transaction(Bank bank, Account destination, Currency currency, Double amount, String description) {
@@ -65,6 +82,26 @@ public class Transaction {
         setCurrency(currency);
         setAmount(amount);
         setDescription(description);
+    }
+
+    public Transaction setTime(LocalDateTime time) {
+        if (Objects.equals(time, this.timestamp)) {
+            return this;
+        }
+        final Account oldSource = this.source;
+        this.timestamp = time;
+        this.firePropertyChange(PROPERTY_TIMESTAMP, oldSource, timestamp);
+        return this;
+    }
+
+    public Transaction setId(String id) {
+        if (Objects.equals(id, this.id)) {
+            return this;
+        }
+        final Account oldSource = this.source;
+        this.id = id;
+        this.firePropertyChange(PROPERTY_ID, oldSource, id);
+        return this;
     }
 
     public Bank getBank() {
@@ -217,10 +254,10 @@ public class Transaction {
             return this;
         }
         
-        // Currency validation
+        // model.Currency validation
         if (this.currency != this.destination.getCurrency() || this.currency != this.source.getCurrency()) {
             this.status = Status.ABORTED;
-            this.rejectionDescription = "Currency mismatch detected"; 
+            this.rejectionDescription = "model.Currency mismatch detected";
             return this;
         }
 
@@ -252,10 +289,10 @@ public class Transaction {
             this.destination = receiver;
         }
 
-        // Currency validation
+        // model.Currency validation
         if (this.currency != this.destination.getCurrency()) {
             this.status = Status.ABORTED;
-            this.rejectionDescription = "Currency mismatch detected";
+            this.rejectionDescription = "model.Currency mismatch detected";
             return this;
         }
 
@@ -269,4 +306,12 @@ public class Transaction {
 
         return this;
     }
+
+    public String saveToString() {
+        String out = "";
+        out += getId() + "," + getSource().getId() + "," + getDestination().getId() + "," + getCurrency() + "," +
+                getAmount() + "," + getDescription() + "," + getStatus() + "," + getRejectionDescription() + "," + getTimestamp().toString();
+        return out;
+    }
+
 }

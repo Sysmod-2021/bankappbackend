@@ -1,10 +1,11 @@
+import model.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 import org.fulib.FulibTools;
 
-// Full Bank specification is available at
+// Full model.Bank specification is available at
 // https://docs.google.com/document/d/1AjevAXSdgcHC6yfwMc1QbsvFRuz3pfRowHIOu4XMXEU/edit#
 
 public class TransactionTests {
@@ -12,7 +13,7 @@ public class TransactionTests {
     static final String TRANS_DESC = "Ref: concert ticket";
     static final String REJECTION_DESC = "Destination account is invalid";
 
-    // FR #2. Transaction creation
+    // FR #2. model.Transaction creation
     @Test
     public void testCreateTransaction() {
         Bank bank = new Bank();
@@ -26,14 +27,14 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/tranfermoney_objects.svg", transfer);
     }
 
-    //	Scenario 1: Customer A initiates money transfer to a friend (Customer B)
-    //	Given Customer A is registered in the system
+    //	Scenario 1: model.Customer A initiates money transfer to a friend (model.Customer B)
+    //	Given model.Customer A is registered in the system
     //	And his user account is approved
     //	And a bank account has been assigned to his user accounts
-    //	And Customer A is logged in
-    //	Then Customer A can create a new transaction
+    //	And model.Customer A is logged in
+    //	Then model.Customer A can create a new transaction
     //	And can specify the beneficiary
-    //	And can specify the amount of money to be transferred from Customer A to Customer B
+    //	And can specify the amount of money to be transferred from model.Customer A to model.Customer B
     //	And can specify the description of the transaction
     //	And can confirm the transaction
     @Test
@@ -59,22 +60,22 @@ public class TransactionTests {
 
         // FAIL
         // - login not implemented
-        // - Transaction confirm() not implemented
+        // - model.Transaction confirm() not implemented
 
-        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s1.svg", transfer);
     }
 
 
-    //	Scenario 2: Customer A transfers money to a friend (Customer B) successfully
-    //	Given Customer A is registered and has a bank account
+    //	Scenario 2: model.Customer A transfers money to a friend (model.Customer B) successfully
+    //	Given model.Customer A is registered and has a bank account
     //	And he created a transaction and confirmed it
-    //	And Customer B is registered and has a bank account
+    //	And model.Customer B is registered and has a bank account
     //	Then the transaction is executed
-    //	And money has been charged from the Customer's A bank account
-    //	And the Customer' B bank account balanced has been increased accordingly
-    //	And the Customer B now can see the updated balance on his profile page
+    //	And money has been charged from the model.Customer's A bank account
+    //	And the model.Customer' B bank account balanced has been increased accordingly
+    //	And the model.Customer B now can see the updated balance on his profile page
     @Test
     public void shouldTransferMoneySuccessfully() {
         Bank bank = new Bank();
@@ -95,22 +96,22 @@ public class TransactionTests {
 
         // FAIL
         // - login not implemented
-        // - Bank accounts not add to the Bank
+        // - model.Bank accounts not add to the model.Bank
         // - Transfer fail; sender = null
         // - profile page not implemented
 
-        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s2.svg", transfer);
     }
 
 
-    //	Scenario 3: Customer A transfers money to a friend (Customer B) unsuccessfully
-    //	Given Customer A is registered and has a bank account
+    //	Scenario 3: model.Customer A transfers money to a friend (model.Customer B) unsuccessfully
+    //	Given model.Customer A is registered and has a bank account
     //	And he created a transaction
-    //	And Customer B has not been found in the bank system
+    //	And model.Customer B has not been found in the bank system
     //	Then the transaction is rejected
-    //	And Customer A can see the status of the transaction on a page with transactions in his user profile
+    //	And model.Customer A can see the status of the transaction on a page with transactions in his user profile
     @Test
     public void shouldTransferMoneyUnsuccessfully_WhenBeneficiaryNotExists() {
         Bank bank = new Bank();
@@ -130,11 +131,11 @@ public class TransactionTests {
         // assertEquals("REJECTED", ""); transaction's status on his profile page
 
         // FAIL
-        // - Bank accounts not add to the Bank
+        // - model.Bank accounts not add to the model.Bank
         // - Transfer fail; sender = null
         // - profile page not implemented
 
-        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
         // [!] Transfer cannot make between different bank?
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s3.svg", transfer);
@@ -171,11 +172,11 @@ public class TransactionTests {
 
         // FAIL
         // - login not implemented
-        // - Bank accounts not add to the Bank
+        // - model.Bank accounts not add to the model.Bank
         // - Transfer fail; sender = null
 
         // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s4.svg", transfer);
     }
@@ -210,11 +211,11 @@ public class TransactionTests {
 
         // FAIL
         // - login not implemented
-        // - Bank accounts not add to the Bank
+        // - model.Bank accounts not add to the model.Bank
         // - Transfer fail; sender = null
 
         // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s5.svg", transfer);
     }
@@ -259,13 +260,13 @@ public class TransactionTests {
 
         // FAIL
         // - login not implemented
-        // - Bank accounts not add to the Bank
+        // - model.Bank accounts not add to the model.Bank
         // - Transfer fail; sender = null
         // - rovoke not implemented
         // - trace is not create automatically
 
         // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s6.svg", bank);
     }
@@ -298,11 +299,11 @@ public class TransactionTests {
 
         // FAIL
         // - login not implemented
-        // - Bank accounts not add to the Bank
+        // - model.Bank accounts not add to the model.Bank
         // - Transfer fail; sender = null
 
         // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s7.svg", deposit);
     }

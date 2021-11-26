@@ -1,3 +1,4 @@
+import model.*;
 import org.fulib.FulibTools;
 import org.junit.Test;
 
@@ -5,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 // FR #4. Seed transaction creation
 //
-// Full Bank specification is available at
+// Full model.Bank specification is available at
 // https://docs.google.com/document/d/1AjevAXSdgcHC6yfwMc1QbsvFRuz3pfRowHIOu4XMXEU/edit#
 
 public class SeedTransactionTests {

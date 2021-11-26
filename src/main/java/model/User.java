@@ -1,3 +1,5 @@
+package model;
+
 import java.beans.PropertyChangeSupport;
 import java.util.Objects;
 import java.util.UUID;
