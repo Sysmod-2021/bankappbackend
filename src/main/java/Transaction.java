@@ -67,6 +67,20 @@ public class Transaction {
         setDescription(description);
     }
 
+    // shallow copy constructor
+    public Transaction(Transaction transaction) {
+        this.bank = transaction.bank;
+        this.id = transaction.id;
+        this.source = transaction.source;
+        this.destination = transaction.destination;
+        this.currency = transaction.currency;
+        this.amount = transaction.amount;
+        this.description = transaction.description;
+        this.status = transaction.status;
+        this.rejectionDescription = transaction.rejectionDescription;
+        this.timestamp = transaction.timestamp;
+    }
+
     public Bank getBank() {
         return bank;
     }
@@ -228,8 +242,8 @@ public class Transaction {
 
         this.status = Status.EXECUTED;
         // Only after everything is executed we will add the transaction to the account transaction list.
-        sender.addSentTransaction(this);
-        receiver.addReceivedTransaction(this);
+        this.source.addSentTransaction(this);
+        this.destination.addReceivedTransaction(this);
 
         return this;
     }
@@ -260,7 +274,20 @@ public class Transaction {
         this.status = Status.EXECUTED;
 
         // Only after everything is executed we will add the transaction to the account transaction list.
-        receiver.addReceivedTransaction(this);
+        this.destination.addReceivedTransaction(this);
+
+        return this;
+    }
+
+    public Transaction revoke(String reason) {
+        Double newSourceBalance = this.source.getBalance() + amount;
+        this.source.setBalance(newSourceBalance);
+
+        Double newDestBalance = this.destination.getBalance() - amount;
+        this.destination.setBalance(newDestBalance);
+
+        this.status = Status.REVOKED;
+        this.rejectionDescription = reason;
 
         return this;
     }

@@ -12,7 +12,6 @@ public class Account {
     private Customer customer;
     private Currency currency;
     private Double balance;
-    // TODO do we keep 2 separate lists or 2 separate maps? (map increases performance but overview might be scuffed)
     private Map<String, Transaction> sent;
     private Map<String, Transaction> received;
 

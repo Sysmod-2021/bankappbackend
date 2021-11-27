@@ -3,6 +3,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
+import java.util.*;
+
 import org.fulib.FulibTools;
 
 // Full Bank specification is available at
@@ -12,6 +14,7 @@ public class TransactionTests {
     static final String BENEFICIARY_NAME = "Bob Jackson";
     static final String TRANS_DESC = "Ref: concert ticket";
     static final String REJECTION_DESC = "Destination account is invalid";
+    static final String REVOKE_DESC = "Made a mistake in the sent amount";
 
     // FR #2. Transaction creation
     @Test
@@ -155,7 +158,6 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_5.svg", transfer);
     }
 
-    // TODO: not implemented yet
     //	Scenario 6: A bank administrator revokes a transaction
     //	Given an existing and logged in customer has created a transaction
     //	And the transaction has been successfully executed
@@ -164,37 +166,36 @@ public class TransactionTests {
     //	And money are withdrawn from the receiver's bank account
     //	And money are returned to the sender
     //	And an additional trace about revoked account is created
-//    @Test
-//    public void shouldRevokeTransactionSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
-//        Bank bank = new Bank();
-//        Double balanceOfCustomer = 200.0;
-//        Double balanceOfBeneficiary = 300.0;
-//        Double amount = 50.0;
-//
-//        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
-//        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
-//        Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
-//        transfer.execute();
-//
-//        // transferMade.Revoke(); <- Some method like this
-//
-//        // Assert
-//        assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
-//        assertEquals(balanceOfBeneficiary, beneficiary.getAccount().getBalance(), 0.0);
-//        // trace
-//
-//        // FAIL
-//        // - login not implemented
-//        // - Bank accounts not add to the Bank
-//        // - Transfer fail; sender = null
-//        // - rovoke not implemented
-//        // - trace is not create automatically
-//
-//        // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-//        // [!] Currency as Enum in Transaction, mismatch type with java.util.Currency in Account
-//
-//        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_6.svg", bank);
-//    }
+   @Test
+   public void shouldRevokeTransactionSuccessfully() throws Exception {
+        // Arrange
+        Bank bank = new Bank();
+        bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
+
+        Double balanceOfCustomer = 200.0;
+        Double balanceOfBeneficiary = 300.0;
+        Double amount = 50.0;
+
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
+        Transaction transaction = bank.getAdministrator().createTransactionTwoCustomers(
+            customer.getAccount().getId(),
+            beneficiary.getAccount().getId(),
+            amount, TRANS_DESC);
+        
+        // Act
+        bank.getAdministrator().revokeTransaction(transaction.getId(), REVOKE_DESC);
+
+        // Assert
+        assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
+        assertEquals(balanceOfBeneficiary, beneficiary.getAccount().getBalance(), 0.0);
+
+        List<Trace> traces = bank.getTraces();
+        assertEquals(2, traces.size());
+        // TODO: add detailed asserts for verifying the traces correctness
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_6.svg", bank);
+   }
 
     //	Scenario 7: Seed transaction is created by a bank administrator
     //	Given a bank admin exists and logged in
@@ -220,7 +221,3 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_7.svg", deposit);
     }
 }
-
-	
-
-
