@@ -19,7 +19,7 @@ public class CustomerAccountTests {
 		
 		// Arrange
 		Bank bank = new Bank();
-		Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
+		Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234");
 		Double balance = 100.0;
 		
 		//Act
