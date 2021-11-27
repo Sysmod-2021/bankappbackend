@@ -1,6 +1,7 @@
 # Bank App Backend
 
 ![Build & Test](https://github.com/Sysmod-2021/bankappbackend/actions/workflows/gradle.yml/badge.svg)
+
 Backend for banking application - sysmod 2021
 
 The product spec, containing the narrative, functional and non functional requirements, scenarios and use cases are described in the following document:
