@@ -1,5 +1,5 @@
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
         Administrator a = new Administrator(bank, "admin", "admin", "a@min.ee", "t");
         System.out.println(bank.getBankAccount().getBalance());

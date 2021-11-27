@@ -177,25 +177,22 @@ public class Transaction {
         return timestamp;
     }
 
-    public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue)
-    {
-        if (this.listeners != null)
-        {
+    public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        if (this.listeners != null) {
             this.listeners.firePropertyChange(propertyName, oldValue, newValue);
             return true;
         }
         return false;
     }
 
-    public Transaction execute() {
+    public Transaction execute() throws Bank.AccountDoesNotExistException {
         Account sender = getBank().getAccountById(this.source.getId());
-        
+
         if (sender == null) {
             this.status = Status.ABORTED;
-            this.rejectionDescription = "Source account is invalid"; 
+            this.rejectionDescription = "Source account is invalid";
             return this;
-        }
-        else {
+        } else {
             this.source = sender;
         }
 
@@ -203,24 +200,23 @@ public class Transaction {
 
         if (receiver == null) {
             this.status = Status.ABORTED;
-            this.rejectionDescription = "Destination account is invalid"; 
+            this.rejectionDescription = "Destination account is invalid";
             return this;
-        }
-        else {
-            this.destination = sender;
+        } else {
+            this.destination = receiver;
         }
 
         Double sourceBalance = this.source.getBalance();
         if (sourceBalance < this.amount) {
             this.status = Status.ABORTED;
-            this.rejectionDescription = "Not enough money on the source account"; 
+            this.rejectionDescription = "Not enough money on the source account";
             return this;
         }
-        
+
         // Currency validation
         if (this.currency != this.destination.getCurrency() || this.currency != this.source.getCurrency()) {
             this.status = Status.ABORTED;
-            this.rejectionDescription = "Currency mismatch detected"; 
+            this.rejectionDescription = "Currency mismatch detected";
             return this;
         }
 
@@ -228,7 +224,7 @@ public class Transaction {
         this.source.setBalance(newSourceBalance);
 
         Double newDestBalance = this.destination.getBalance() + amount;
-        this.source.setBalance(newDestBalance);
+        this.destination.setBalance(newDestBalance);
 
         this.status = Status.EXECUTED;
         // Only after everything is executed we will add the transaction to the account transaction list.
@@ -238,17 +234,16 @@ public class Transaction {
         return this;
     }
 
-    public Transaction seed() {
+    public Transaction seed() throws Bank.AccountDoesNotExistException {
         this.source = null;
 
-        Account receiver = getBank().getAccountById(this.destination.getId());
+        Account receiver = getBank().getAccountById(getDestination().getId());
 
         if (receiver == null) {
             this.status = Status.ABORTED;
             this.rejectionDescription = "Destination account is invalid";
             return this;
-        }
-        else {
+        } else {
             this.destination = receiver;
         }
 

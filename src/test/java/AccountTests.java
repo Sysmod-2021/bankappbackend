@@ -17,7 +17,7 @@ public class AccountTests {
         Administrator admin = bank.createAdministrator("Admin", "Alice", ADMIN_EMAIL, "secure_p@ssw0|2d"); // NOTE: Factory pattern
         assertEquals(ADMIN_EMAIL, bank.getAdministrators().get(0).getEmail());
 
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s1.svg", bank);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_1.svg", bank);
     }
 
     @Test
@@ -28,7 +28,7 @@ public class AccountTests {
             bank.createAdministrator("Alice", "Peterson", ADMIN_EMAIL, "I-forgot");
         });
 
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s2.svg", bank);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_2.svg", bank);
     }
 
     @Test
@@ -40,6 +40,6 @@ public class AccountTests {
         Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", initial_balance, Currency.EUR);
         assertEquals("john@doe.ee", bank.getCustomerByEmail("john@doe.ee").getEmail());
 
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/admin_s3.svg", bank);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_3.svg", bank);
     }
 }

@@ -11,6 +11,12 @@ public class Bank {
         }
     }
 
+    public static class AccountDoesNotExistException extends Exception {
+        public AccountDoesNotExistException(String message) {
+            super(message);
+        }
+    }
+
     public static class CustomerExistsException extends Exception {
         public CustomerExistsException(String message) {
             super(message);
@@ -167,13 +173,20 @@ public class Bank {
 
     // Account management
 
-    public Account getAccountById(String id) {
-        return this.getAccountsMap().get(id);
+    public Account getAccountById(String id) throws AccountDoesNotExistException {
+        Account account = this.getAccountsMap().get(id);
+        if (account == null) {
+            throw new AccountDoesNotExistException("Account does not exist: " + id);
+        }
+        return account;
     }
 
     public Account getAccountByEmail(String email) {
         return getAccounts().stream()
-                .filter(account -> account.getOwner().getEmail().equals(email))
+                .filter(account -> {
+                    Customer customer = account.getOwner();
+                    return customer != null && customer.getEmail().equals(email); // the bank's account can have nil owner
+                })
                 .findFirst()
                 .orElse(null);
     }
