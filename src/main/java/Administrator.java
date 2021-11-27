@@ -1,3 +1,5 @@
+import exceptions.TransactionExceptions;
+
 public class Administrator extends User {
     public Administrator(Bank bank, String firstName, String lastName, String email, String password) {
         super(bank, firstName, lastName, email, password);
@@ -54,7 +56,7 @@ public class Administrator extends User {
         return transaction;
     }
 
-    public void revokeTransaction(String transactionId, String reason) throws Bank.TransactionDoesNotExistException {
+    public void revokeTransaction(String transactionId, String reason) throws Bank.TransactionDoesNotExistException, TransactionExceptions.TransactionCanNotBeRevoked {
         Transaction revokedTransaction = getBank().getTransactionById(transactionId);
         getBank().revokeTransaction(this, revokedTransaction, reason);
     }

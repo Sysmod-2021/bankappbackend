@@ -2,6 +2,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import exceptions.TransactionExceptions;
+
 public class Bank {
     // Exceptions
 
@@ -188,7 +190,7 @@ public class Bank {
         return transaction;
     }
 
-    void revokeTransaction(Administrator administrator, Transaction transaction, String reason) {
+    void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws TransactionExceptions.TransactionCanNotBeRevoked {
         Transaction revokedTransaction = transaction.revoke(reason);
         this.createTrace(revokedTransaction, administrator);
     }
