@@ -1,11 +1,9 @@
-import java.time.LocalDateTime;
-
 public class Administrator extends User {
     public Administrator(Bank bank, String firstName, String lastName, String email, String password) {
         super(bank, firstName, lastName, email, password);
     }
 
-    public void createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
         // TODO Are we using map or list? Currently both are written.
         // Setup fake account at this point, senderAccountId / receiverAccountId could be invalid
         // Validation happens during the execution
@@ -15,10 +13,10 @@ public class Administrator extends User {
         Account receiver = new Account(this.getBank())
             .setId(receiverAccountId);
         
-        performTransaction(sender, receiver, amount, description);
+        return performTransaction(sender, receiver, amount, description);
     }
 
-    public void createTransactionToBank (String senderAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createTransactionToBank (String senderAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account sender = new Account(this.getBank())
@@ -26,10 +24,10 @@ public class Administrator extends User {
 
         Account receiver = getBank().getBankAccount();
 
-        performTransaction(sender, receiver, amount, description);
+        return performTransaction(sender, receiver, amount, description);
     }
 
-    public void createTransactionFromBank (String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createTransactionFromBank (String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account receiver = new Account(this.getBank())
@@ -37,7 +35,7 @@ public class Administrator extends User {
 
         Account sender = getBank().getBankAccount();
 
-        performTransaction(sender, receiver, amount, description);
+        return performTransaction(sender, receiver, amount, description);
     }
 
     public Transaction createSeedTransactionToCustomer(String receiverAccountId, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
@@ -50,10 +48,15 @@ public class Administrator extends User {
         return performSeedTransaction(receiver, amount, currency, description);
     }
 
-    private void performTransaction(Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException {
-        Transaction transaction = getBank().createTransaction(sender, receiver, Currency.EUR, amount, description);
-        transaction.execute();
+    private Transaction performTransaction(Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException {
+        Transaction transaction = getBank().createTransaction(sender, receiver, Currency.EUR, amount, description).execute();
         getBank().createTrace(transaction, this);
+        return transaction;
+    }
+
+    public void revokeTransaction(String transactionId, String reason) throws Bank.TransactionDoesNotExistException {
+        Transaction revokedTransaction = getBank().getTransactionById(transactionId);
+        getBank().revokeTransaction(this, revokedTransaction, reason);
     }
 
     private Transaction performSeedTransaction(Account receiver, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {

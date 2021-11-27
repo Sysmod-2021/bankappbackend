@@ -35,6 +35,12 @@ public class Bank {
         }
     }
 
+    public static class TransactionDoesNotExistException extends Exception {
+        public TransactionDoesNotExistException(String message) {
+            super(message);
+        }
+    }
+
     // Main in-memory storage of all the bank-related information
     private final List<Customer> customers;
     private final List<Administrator> administrators;
@@ -159,6 +165,20 @@ public class Bank {
                 .collect(Collectors.toList());
     }
 
+    public Transaction getTransactionById(String transactionId) throws TransactionDoesNotExistException {
+        Transaction existingTransaction;
+        try {
+            existingTransaction = transactions.stream()
+                                    .filter(transaction -> transaction.getId().equals(transactionId))
+                                    .collect(Collectors.toList())
+                                    .get(0);
+        } catch (Exception exception) {
+            throw new TransactionDoesNotExistException("Transaction" + transactionId + "does not exist in the bank");
+        }
+
+        return existingTransaction;
+    }
+
     Transaction createTransaction(Account source, Account destination, Currency currency, Double amount, String description) {
         Transaction transaction = new Transaction(this, source, destination, currency, amount, description);
         try {
@@ -168,7 +188,9 @@ public class Bank {
         return transaction;
     }
 
-    void revokeTransaction(Administrator administrator, Transaction transaction) {
+    void revokeTransaction(Administrator administrator, Transaction transaction, String reason) {
+        Transaction revokedTransaction = transaction.revoke(reason);
+        this.createTrace(revokedTransaction, administrator);
     }
 
     // Account management
@@ -226,7 +248,7 @@ public class Bank {
     }
 
     public Trace createTrace(Transaction transaction, User user) {
-        Trace trace = new Trace(this, transaction, user, LocalDateTime.now());
+        Trace trace = new Trace(this, new Transaction(transaction), user, LocalDateTime.now());
         addTrace(trace);
         return trace;
     }
