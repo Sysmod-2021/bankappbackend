@@ -24,7 +24,7 @@ public class TransactionTests {
         Transaction transfer = bank.createTransaction(customer1.getAccount(), customer2.getAccount(), Currency.EUR, 25.5, TRANS_DESC);
         transfer.execute();
 
-        assertEquals(customer2.getAccount().getBalance(), 25.0, 0.0);
+        assertEquals(customer2.getAccount().getBalance(), 25.5, 0.0);
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/tranfermoney_objects.svg", transfer);
     }
