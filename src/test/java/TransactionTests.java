@@ -24,6 +24,8 @@ public class TransactionTests {
         Transaction transfer = bank.createTransaction(customer1.getAccount(), customer2.getAccount(), Currency.EUR, 25.5, TRANS_DESC);
         transfer.execute();
 
+        assertEquals(customer2.getAccount().getBalance(), 25.0, 0.0);
+
         FulibTools.objectDiagrams().dumpSVG("docs/objects/tranfermoney_objects.svg", transfer);
     }
 
@@ -47,7 +49,7 @@ public class TransactionTests {
         Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.USD);
         Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.USD, amount, TRANS_DESC);
 
-        var beneficiaryAcc = transfer.getDestination().getOwner();
+        Customer beneficiaryAcc = transfer.getDestination().getOwner();
         assertEquals(BENEFICIARY_NAME, beneficiaryAcc.getFirstName() + " " + beneficiaryAcc.getLastName());
         assertEquals(25f, transfer.getAmount(), 0f);
         assertEquals(TRANS_DESC, transfer.getDescription());
