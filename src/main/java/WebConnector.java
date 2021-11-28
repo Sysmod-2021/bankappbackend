@@ -27,6 +27,34 @@ public class WebConnector {
             }
         });
 
+        // Administrator freeze account
+        post("/accounts/:accountId/frozen", (request, response) -> {
+            try {
+                String accountId = request.params(":accountId");
+                root.getAdministrator().setAccountStatus(accountId, "FROZEN");
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+
+        // Administrator activate account
+        post("/accounts/:accountId/active", (request, response) -> {
+            try {
+                String accountId = request.params(":accountId");
+                root.getAdministrator().setAccountStatus(accountId, "ACTIVE");
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+
         after((req, res) -> {
             res.type("application/json");
         });

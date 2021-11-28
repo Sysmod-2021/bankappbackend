@@ -6,12 +6,14 @@ public class Account {
     public static final String PROPERTY_OWNER = "owner";
     public static final String PROPERTY_CURRENCY = "currency";
     public static final String PROPERTY_BALANCE = "balance";
+    public static final String PROPERTY_STATUS = "status";
 
     private final Bank bank;  // allows us to access the bank functionality, gives access to all the data
     private String id;
     private Customer customer;
     private Currency currency;
     private Double balance;
+    private String status;
     private Map<String, Transaction> sent;
     private Map<String, Transaction> received;
 
@@ -21,6 +23,7 @@ public class Account {
         this.bank = bank;
         this.id = UUID.randomUUID().toString();
         this.currency = Currency.EUR;
+        this.status = "ACTIVE";
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
     }
@@ -31,6 +34,7 @@ public class Account {
         this.customer = customer;
         this.currency = currency;
         this.balance = balance;
+        this.status = "ACTIVE";
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
     }
@@ -101,6 +105,20 @@ public class Account {
         final Currency oldCurrency = this.currency;
         this.currency = newCurrency;
         this.firePropertyChange(PROPERTY_CURRENCY, oldCurrency, currency);
+        return this;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public Account setStatus(String newStatus) {
+        if (Objects.equals(newStatus, this.status)) {
+            return this;
+        }
+        final String oldStatus = this.status;
+        this.status = newStatus;
+        this.firePropertyChange(PROPERTY_STATUS, oldStatus, status);
         return this;
     }
 

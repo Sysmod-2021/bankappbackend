@@ -61,6 +61,11 @@ public class Administrator extends User {
         getBank().revokeTransaction(this, revokedTransaction, reason);
     }
 
+    public void setAccountStatus(String accountId, String status) throws Bank.AccountDoesNotExistException {
+        Account customerAccount = getBank().getAccountById(accountId);
+        customerAccount.setStatus(status);
+    }
+
     private Transaction performSeedTransaction(Account receiver, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
         Transaction transaction = getBank().createTransaction(null, receiver, currency, amount, description).seed();
         getBank().createTrace(transaction, this);
