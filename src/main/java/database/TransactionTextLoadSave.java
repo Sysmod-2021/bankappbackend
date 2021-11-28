@@ -28,36 +28,8 @@ public class TransactionTextLoadSave extends LoadSaveTemplate{
     }
 
     @Override
-    public HashMap<String, Transaction> loadWithMap(Bank bank) {
-        File toRead = new File(getPath());
-        try {
-            Scanner sc = new Scanner(toRead);
-            while (sc.hasNextLine()) {
-                Scanner lineScanner = new Scanner(sc.nextLine().trim());
-                lineScanner.useDelimiter(",");
-                String transActionId = lineScanner.next();
-                Account sourceId = bank.getAccountsMap().get(lineScanner.next());
-                Account receiverId = bank.getAccountsMap().get(lineScanner.next());
-                Currency currency = model.Currency.valueOf(lineScanner.next());
-                Double amount = Double.parseDouble(lineScanner.next());
-                String description = lineScanner.next();
-                Transaction.Status status = Transaction.Status.valueOf(lineScanner.next());
-                String rej_desc = lineScanner.next();
-                LocalDateTime timestamp = LocalDateTime.parse(lineScanner.next());
-
-                Transaction t = new Transaction(bank, transActionId, sourceId, receiverId, currency, amount, description, status, rej_desc, timestamp);
-                transactionMap.put(transActionId, t);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return transactionMap;
-    }
-
-    @Override
     public ArrayList<Transaction> loadWithList(Bank bank) {
         File toRead = new File(getPath()+"transactions.txt");
-        System.out.println(getPath()+"transactions.txt");
         try {
             Scanner sc = new Scanner(toRead);
             while (sc.hasNextLine()) {
@@ -83,13 +55,14 @@ public class TransactionTextLoadSave extends LoadSaveTemplate{
     }
 
     @Override
-    public void saveWithList(ArrayList<Transaction> transactions) {
+    public void saveWithList(ArrayList transactions) {
         try {
             FileWriter fileWriter = new FileWriter(file);
             StringBuilder data = new StringBuilder();
 
-            for (Transaction t : transactions) {
-                data.append(t.saveToString()).append("\n");
+            for (Object t : transactions) {
+                Transaction tt = (Transaction) t;
+                data.append(tt.saveToString()).append("\n");
             }
             fileWriter.write(data.toString());
             fileWriter.close();
@@ -100,13 +73,14 @@ public class TransactionTextLoadSave extends LoadSaveTemplate{
     }
 
     @Override
-    public void saveWithMap(HashMap<String, Transaction> transactions) {
+    public void saveWithMap(HashMap transactions) {
         try {
             FileWriter fileWriter = new FileWriter(file);
             StringBuilder data = new StringBuilder();
 
-            for (Transaction t : transactions.values()) {
-                data.append(t.saveToString()).append("\n");
+            for (Object t : transactions.values()) {
+                Transaction tt = (Transaction) t;
+                data.append(tt.saveToString()).append("\n");
             }
             fileWriter.write(data.toString());
             fileWriter.close();

@@ -16,29 +16,31 @@ public class Bank {
     private final Datastore database;
 
     public Bank() {
-        this.customers = new ArrayList<>();
+        theBanksAccount = new Account(this);
+        theBanksAccount.setBalance(69420.00);
+        this.database = new Datastore("src/main/java/files/", this);
         this.admins = new ArrayList<>();
 
-        this.transactions = new ArrayList<>();
-        this.accounts = new ArrayList<>();
+        this.customers = database.getAllCustomers();
+
+
+        this.transactions = database.getAllTransactions();
+        this.accounts = database.getAllAccounts();
         this.traces = new ArrayList<>();
 
         this.customerMap = new HashMap<>();
         this.accountsMap = new HashMap<>();
 
-        theBanksAccount = new Account(this);
-        theBanksAccount.setBalance(69420.00);
         accounts.add(theBanksAccount);
         accountsMap.put(theBanksAccount.getId(), theBanksAccount);
-
-        this.database = new Datastore("src/main/java/files/", this);
-//        this.database.
-
-
     }
     // TODO This can be shielded from the outside. but for now leave it at this.
     public void saveData() {
         this.database.save();
+    }
+
+    public ArrayList<Transaction> getTransActions() {
+        return database.getAllTransactions();
     }
 
     public List<Trace> getTraces() {
@@ -73,7 +75,7 @@ public class Bank {
 
     public Bank addTransaction(Transaction transaction) {
         transactions.add(transaction);
-        database.add(transaction);
+        database.addTransaction(transaction);
         return this;
     }
 

@@ -38,6 +38,16 @@ public class Account {
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
     }
+    // for LoadSaveAccount
+    public Account(Bank bank,String id, Customer customer, Currency currency, Double balance) {
+        this.bank = bank;
+        this.id = id;
+        this.customer = customer;
+        this.currency = currency;
+        this.balance = balance;
+        this.sent = new HashMap<>();
+        this.received = new HashMap<>();
+    }
 
     public void addSentTransaction(Transaction transaction) {
         this.sent.put(transaction.getId(), transaction);

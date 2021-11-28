@@ -1,7 +1,9 @@
 package database;
 
+import model.Account;
 import model.Bank;
 import model.Transaction;
+import model.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,21 +13,27 @@ public abstract class LoadSaveTemplate implements LoadSaveStrategy {
     private String path;
     public File file;
     public ArrayList<Transaction> transactions;
+    public ArrayList<User> users;
+    public ArrayList<Account> accounts;
     public HashMap<String, Transaction> transactionMap;
+    public HashMap<String, User> userHashMap;
+    public HashMap<String, Account> accountHashMap;
 
-    public abstract ArrayList<Transaction> loadWithList(Bank b);
+    public abstract ArrayList loadWithList(Bank b);
 
-    public abstract HashMap<String, Transaction> loadWithMap(Bank b);
+    public abstract void saveWithList(ArrayList transactions);
 
-    public abstract void saveWithList(ArrayList<Transaction> transactions);
-
-    public abstract void saveWithMap(HashMap<String, Transaction> transactions);
+    public abstract void saveWithMap(HashMap transactions);
 
     LoadSaveTemplate() {
         this.path = "src/main/java/files/";
 
         transactions = new ArrayList<>();
         transactionMap = new HashMap<>();
+        users = new ArrayList<>();
+        userHashMap = new HashMap<>();
+        accounts = new ArrayList<>();
+        accountHashMap = new HashMap<>();
     }
 
     LoadSaveTemplate(String path) {
