@@ -127,4 +127,10 @@ public class Account {
         }
         return false;
     }
+
+    public String saveToString() {
+        String out = "";
+        out += getId() + "," + getOwner().getId() + "," + getCurrency() + "," + getBalance();
+        return out;
+    }
 }

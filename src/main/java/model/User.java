@@ -4,17 +4,18 @@ import java.beans.PropertyChangeSupport;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User {
+public abstract class User {
 
     public static final String PROPERTY_FNAME = "fname";
     public static final String PROPERTY_LNAME = "lname";
     public static final String PROPERTY_EMAIL = "email";
     public static final String PROPERTY_PASSWORD = "pword";
+    public static final String PROPERTY_id = "ID";
 
     protected PropertyChangeSupport listeners;
 
     private final Bank bank;
-    private final String id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -58,6 +59,16 @@ public class User {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public User setId(String uid) {
+        if (Objects.equals(uid, this.id)) {
+            return this;
+        }
+        final String oldId = this.id;
+        this.id = uid;
+        this.firePropertyChange(PROPERTY_LNAME, oldId, uid);
+        return this;
     }
 
     public User setLastName(String lname) {

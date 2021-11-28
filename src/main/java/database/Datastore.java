@@ -5,67 +5,60 @@ import model.Bank;
 import model.Transaction;
 import model.Customer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 public class Datastore {
     private final String path;
-    private TransactionDbInMemory transactionDB;
-    private CustomerDbInMemory CustomerDb;
-    private AccountDbInMemory accountDb;
+    private DbInMemory DbInMemory;
 
     public Datastore(String path, Bank b) {
         this.path = path;
-        System.out.println(path);
-        this.transactionDB = new TransactionDbInMemory(b);
-        this.CustomerDb = new CustomerDbInMemory(b);
-        this.accountDb = new AccountDbInMemory(b);
+        this.DbInMemory = new DbInMemory(b);
     }
 
-    public void save() {
-        transactionDB.save();
+    public void save(List<Customer> customerMap, List<Account> accountsMap, List<Transaction> transactionsMap ) {
+        DbInMemory.save(customerMap,accountsMap,transactionsMap);
     }
 
     public void addTransaction(Transaction t) {
-        transactionDB.add(t);
+        DbInMemory.addTransaction(t);
     }
     public void addTransaction(Collection<Transaction> transactions) {
-        transactionDB.add(transactions);
+        DbInMemory.addTransaction(transactions);
     }
 
     public void addCustomer(Customer u) {
-        CustomerDb.add(u);
+        DbInMemory.addCustomer(u);
     }
     public void addCustomer(Collection<Customer> Customers) {
-        CustomerDb.add(Customers);
+        DbInMemory.addCustomer(Customers);
     }
 
     public void addAccount(Account a) {
-        accountDb.add(a);
+        DbInMemory.addAccount(a);
     }
     public void addAccount(Collection<Account> accounts) {
-        accountDb.add(accounts);
+        DbInMemory.addAccount(accounts);
     }
 
     public Customer getCustomer(String CustomerId) {
-        return CustomerDb.getCustomer(CustomerId);
+        return DbInMemory.getCustomer(CustomerId);
     }
     public Account getAccount(String accId) {
-        return accountDb.getAccount(accId);
+        return DbInMemory.getAccount(accId);
     }
     public Transaction getTransaction(String tId) {
-        return transactionDB.getTransaction(tId);
+        return DbInMemory.getTransaction(tId);
     }
 
     public ArrayList<Transaction> getAllTransactions() {
-        return transactionDB.getAll();
+        return DbInMemory.getAllTransactions();
     }
     public ArrayList<Customer> getAllCustomers() {
-        return CustomerDb.getAll();
+        return DbInMemory.getAllCustomers();
     }
     public ArrayList<Account> getAllAccounts() {
-        return accountDb.getAll();
+        return DbInMemory.getAllAccounts();
     }
     public HashMap<String, Transaction> returnTransactionDb() {
         return returnTransactionDb();
@@ -78,6 +71,6 @@ public class Datastore {
     }
 
     public String toString() {
-        return transactionDB.toString();
+        return "";
     }
 }

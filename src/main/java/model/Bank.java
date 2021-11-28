@@ -9,6 +9,7 @@ public class Bank {
     private final Map<String,Customer> customerMap;
     private final List<Administrator> admins;
     private final List<Transaction> transactions;
+    private final Map<String,Transaction> transactionsMap;
     private final List<Account> accounts;
     private final Map<String,Account> accountsMap;
     private final List<Trace> traces;
@@ -18,25 +19,37 @@ public class Bank {
     public Bank() {
         theBanksAccount = new Account(this);
         theBanksAccount.setBalance(69420.00);
-        this.database = new Datastore("src/main/java/files/", this);
         this.admins = new ArrayList<>();
-
-        this.customers = database.getAllCustomers();
-
-
-        this.transactions = database.getAllTransactions();
-        this.accounts = database.getAllAccounts();
-        this.traces = new ArrayList<>();
-
         this.customerMap = new HashMap<>();
         this.accountsMap = new HashMap<>();
+        this.transactionsMap = new HashMap<>();
 
-        accounts.add(theBanksAccount);
-        accountsMap.put(theBanksAccount.getId(), theBanksAccount);
+        this.database = new Datastore("src/main/java/files/", this);
+
+        this.customers = database.getAllCustomers();
+        this.transactions = database.getAllTransactions();
+        this.accounts = database.getAllAccounts();
+
+        for (Customer c : customers
+        ) {
+            customerMap.put(c.getId(), c);
+        }
+        for (Account a : accounts
+        ) {
+            accountsMap.put(a.getId(), a);
+        }
+        for (Transaction t : transactions
+        ) {
+            transactionsMap.put(t.getId(), t);
+        }
+        this.traces = new ArrayList<>();
+
+//        accounts.add(theBanksAccount);
+//        accountsMap.put(theBanksAccount.getId(), theBanksAccount);
     }
     // TODO This can be shielded from the outside. but for now leave it at this.
     public void saveData() {
-        this.database.save();
+        this.database.save(customers,accounts,transactions);
     }
 
     public ArrayList<Transaction> getTransActions() {

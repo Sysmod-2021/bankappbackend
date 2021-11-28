@@ -2,8 +2,8 @@ package database;
 
 public enum LoadSaveStrategyEnum {
 //    EXCEL(TransactionExcelLoadSave.class),
-    TEXT(TransactionTextLoadSave.class),
-    CSV(TransactionCSVLoadSave.class);
+    TEXT(DatabaseTextLoadSave.class);
+//    CSV(TransactionCSVLoadSave.class);
 
     private final Class<? extends LoadSaveStrategy> loadSaveClass;
 
