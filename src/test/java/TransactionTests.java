@@ -27,29 +27,20 @@ public class TransactionTests {
         Transaction transfer = bank.createTransaction(customer1.getAccount(), customer2.getAccount(), Currency.EUR, 25.5, TRANS_DESC);
         transfer.execute();
 
-        assertEquals(customer2.getAccount().getBalance(), 25.5, 0.0);
+                assertEquals(customer2.getAccount().getBalance(), 25.5, 0.0);
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/tranfermoney_objects.svg", transfer);
     }
 
-    //	Scenario 1: Customer A initiates money transfer to a friend (Customer B)
-    //	Given Customer A is registered in the system
-    //	And his user account is approved
-    //	And a bank account has been assigned to his user accounts
-    //	And Customer A is logged in
-    //	Then Customer A can create a new transaction
-    //	And can specify the beneficiary
-    //	And can specify the amount of money to be transferred from Customer A to Customer B
-    //	And can specify the description of the transaction
-    //	And can confirm the transaction
+    // initiate by bank
     @Test
     public void shouldInitiateMoneyTransferSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException {
         Bank bank = new Bank();
         Double balance = 100.0;
         Double amount = 25.0;
-
         Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.USD);
         Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.USD);
+        
         Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.USD, amount, TRANS_DESC);
 
         Customer beneficiaryAcc = transfer.getDestination().getOwner();
@@ -60,25 +51,17 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_1.svg", transfer);
     }
 
-    //	Scenario 2: Customer A transfers money to a friend (Customer B) successfully
-    //	Given Customer A is registered and has a bank account
-    //	And he created a transaction and confirmed it
-    //	And Customer B is registered and has a bank account
-    //	Then the transaction is executed
-    //	And money has been charged from the Customer's A bank account
-    //	And the Customer' B bank account balanced has been increased accordingly
-    //	And the Customer B now can see the updated balance on his profile page
+    // Scenario 1: Successful - 2 valid users
     @Test
-    public void shouldTransferMoneySuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
+    public void shouldTransferMoneySuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.AdministratorExistsException {
         Bank bank = new Bank();
+        Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
         Double balance = 100.0;
         Double amount = 25.0;
-
         Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
         Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
 
-        Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
-        transfer.execute();
+        Transaction transfer = admin.createTransactionTwoCustomers(customer.getAccount().getId(), beneficiary.getAccount().getId(), amount, "reference");
 
         assertEquals(75.0, customer.getAccount().getBalance(), 0.0);
         assertEquals(25.0, beneficiary.getAccount().getBalance(), 0.0);
@@ -86,49 +69,36 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_2.svg", transfer);
     }
 
-    //	Scenario 3: Customer A transfers money to a friend (Customer B) unsuccessfully
-    //	Given Customer A is registered and has a bank account
-    //	And he created a transaction
-    //	And Customer B has not been found in the bank system
-    //	Then the transaction is rejected
-    //	And Customer A can see the status of the transaction on a page with transactions in his user profile
+    //	Scenario 4: Unsuccessful - invalid account
     @Test
-    public void shouldTransferMoneyUnsuccessfully_WhenBeneficiaryNotExists() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
+    public void shouldTransferMoneyUnsuccessfully_WhenBeneficiaryNotExists() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.AdministratorExistsException {
         Bank bank = new Bank();
         Bank internationalBank = new Bank();
         Double balance = 100.0;
         Double amount = 25.0;
-
         Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
         Customer beneficiary = internationalBank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
 
+        Transaction transfer = new Transaction(bank, customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
         assertThrows(Bank.AccountDoesNotExistException.class, () -> {
-            Transaction transfer = new Transaction(bank, customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
             transfer.execute();
         });
+        assertEquals(Transaction.Status.ABORTED, transfer.getStatus());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_3.svg", bank, internationalBank);
     }
 
-    //	Scenario 4: A bank administrator charges a customer some fee
-    //	Given the bank admin has an admin account
-    //	And he is logged in
-    //	And the customer, who will be charged with a fee, exists in the system
-    //	And he has a bank account assigned
-    //	Then the bank admin can create a transaction to charge the customer's bank account
-    //	And can specify an amount to charge
-    //	And description of the transaction
+    //	Scenario 2: Successful - user to bank
     @Test
-    public void shouldChargeCustomerFeeSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
+    public void shouldChargeCustomerFeeSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.AdministratorExistsException {
         Bank bank = new Bank();
+        Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
         Double bankBalance = bank.getBankAccount().getBalance();
-
         Double balance = 100.0;
         Double fee = 10.0;
-
         Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
-        Transaction transfer = bank.createTransaction(customer.getAccount(), bank.getBankAccount(), Currency.EUR, fee, "Fee");
-        transfer.execute();
+        
+        Transaction transfer = admin.createTransactionToBank(customer.getAccount().getId(), fee, "Fee");
 
         assertEquals("", transfer.getRejectionDescription());
         assertEquals(bankBalance + fee, bank.getBankAccount().getBalance(), 0.0);
@@ -136,36 +106,49 @@ public class TransactionTests {
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_4.svg", transfer);
     }
-
-    // FR #2. Scenario 5
+    
+    //	Scenario 3: Successful - bank to user
     @Test
-    public void shouldChargeCustomerFeeSuccessfully_WhenBalanceNotEnough() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
+    public void shouldTransferMoneyToCustomerSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.AdministratorExistsException {
         Bank bank = new Bank();
+        Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
+        Double bankBalance = bank.getBankAccount().getBalance();
+        Double balance = 100.0;
+        Double deposit_interest = 5.5;
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        
+        Transaction transfer = admin.createTransactionFromBank(customer.getAccount().getId(), deposit_interest, "Accummulated deposit interest");
+
+        assertEquals("", transfer.getRejectionDescription());
+        assertEquals(bankBalance - deposit_interest, bank.getBankAccount().getBalance(), 0.0);
+        assertEquals(105.5, customer.getAccount().getBalance(), 0.0);
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_4.svg", transfer);
+    }
+
+    // Scenario 5
+    @Test
+    public void shouldTransferMoneyUnsuccessfully_WhenBalanceNotEnough() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.AdministratorExistsException {
+        Bank bank = new Bank();
+        Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
         Account bankAccount = bank.getBankAccount();
         Double bankBalance = bankAccount.getBalance();
-
         Double balance = 10.0;
         Double fee = 50.0;
-
         Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
-        Transaction transfer = bank.createTransaction(customer.getAccount(), bankAccount, Currency.EUR, fee, "Expensive fee");
-        transfer.execute();
+        
+        Transaction transfer = admin.createTransactionTwoCustomers(customer.getAccount().getId(), bankAccount.getId(), fee, "Expensive fee");
 
         assertEquals("Not enough money on the source account", transfer.getRejectionDescription());
         assertEquals(bankBalance, bankAccount.getBalance(), 0.0);
         assertEquals(balance, customer.getAccount().getBalance(), 0.0);
+        assertEquals(Transaction.Status.ABORTED, transfer.getStatus());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_5.svg", transfer);
     }
+    
 
-    //	Scenario 6: A bank administrator revokes a transaction
-    //	Given an existing and logged in customer has created a transaction
-    //	And the transaction has been successfully executed
-    //	And it appeared that the transaction is incorrect
-    //	Then the bank admin revokes the transaction
-    //	And money are withdrawn from the receiver's bank account
-    //	And money are returned to the sender
-    //	And an additional trace about revoked account is created
+// FR #3. Transaction modification    
    @Test
    public void shouldRevokeTransactionSuccessfully() throws Exception {
         // Arrange
@@ -189,7 +172,9 @@ public class TransactionTests {
         // Assert
         assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
         assertEquals(balanceOfBeneficiary, beneficiary.getAccount().getBalance(), 0.0);
+        assertEquals(Transaction.Status.REVOKED, transaction.getStatus());
 
+        
         List<Trace> traces = bank.getTraces();
         assertEquals(2, traces.size());
         // TODO: add detailed asserts for verifying the traces correctness

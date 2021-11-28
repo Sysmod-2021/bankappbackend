@@ -14,7 +14,7 @@ public class AccountTests {
     @Test
     public void testCreateAdministrator() throws Bank.AdministratorExistsException {
         Bank bank = new Bank();
-        Administrator admin = bank.createAdministrator("Admin", "Alice", ADMIN_EMAIL, "secure_p@ssw0|2d"); // NOTE: Factory pattern
+        bank.createAdministrator("Admin", "Alice", ADMIN_EMAIL, "secure_p@ssw0|2d"); // NOTE: Factory pattern
         assertEquals(ADMIN_EMAIL, bank.getAdministrators().get(0).getEmail());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_1.svg", bank);
@@ -23,7 +23,7 @@ public class AccountTests {
     @Test
     public void testCreateAdministratorFailure() throws Bank.AdministratorExistsException {
         Bank bank = new Bank();
-        Administrator admin1 = bank.createAdministrator("Alice", "Brown", ADMIN_EMAIL, "secure_p@ssw0|2d");
+        bank.createAdministrator("Alice", "Brown", ADMIN_EMAIL, "secure_p@ssw0|2d");
         assertThrows(Bank.AdministratorExistsException.class, () -> {
             bank.createAdministrator("Alice", "Peterson", ADMIN_EMAIL, "I-forgot");
         });
@@ -37,7 +37,7 @@ public class AccountTests {
         Double initial_balance = 100.0;
         // NOTE: Factory pattern
         // bank.createCustomer creates a customer and an account
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", initial_balance, Currency.EUR);
+        bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", initial_balance, Currency.EUR);
         assertEquals("john@doe.ee", bank.getCustomerByEmail("john@doe.ee").getEmail());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_3.svg", bank);
