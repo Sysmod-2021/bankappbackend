@@ -22,3 +22,16 @@ Currently working on backend:
 ## Event storming
 
 The link to the board with the event storming and user stories: https://miro.com/app/board/o9J_lk2Oh94=/
+
+
+### Administrator console
+
+#### Revoke the transaction
+
+```bash
+# template
+$ curl -d "reason=<your_reason>" -X PUT http://localhost:40080/<your_transactionId>/revocation
+
+# example
+$ curl -d "reason=Test" -X PUT http://localhost:40080/fe452f48-3304-4063-903a-9f922b5cc372/revocation
+```

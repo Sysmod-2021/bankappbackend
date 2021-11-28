@@ -13,9 +13,9 @@ public class WebConnector {
         });
 
         // Administrator
-        post("/revokeTransaction", (request, response) -> {
+        put("/transactions/:transactionId/revocation", (request, response) -> {
             try {
-                String transactionId = request.queryParams("transactionId");
+                String transactionId = request.params(":transactionId");
                 String reason = request.queryParams("reason");
                 root.getAdministrator().revokeTransaction(transactionId, reason);
 
