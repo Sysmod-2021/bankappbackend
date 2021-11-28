@@ -3,6 +3,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+import exceptions.TransactionExceptions;
+
 public class Transaction {
     public enum Status {
         REVOKED,
@@ -279,7 +281,11 @@ public class Transaction {
         return this;
     }
 
-    public Transaction revoke(String reason) {
+    public Transaction revoke(String reason) throws TransactionExceptions.TransactionCanNotBeRevoked {
+        if (this.status == Status.ABORTED || this.status == Status.REVOKED) {
+            throw new TransactionExceptions.TransactionCanNotBeRevoked("Denied to revoke, transaction status is not EXECUTED");
+        }
+
         Double newSourceBalance = this.source.getBalance() + amount;
         this.source.setBalance(newSourceBalance);
 
