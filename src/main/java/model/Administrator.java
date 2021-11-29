@@ -6,7 +6,7 @@ import exceptions.TransactionExceptions;
 public class Administrator extends User {
     public Administrator(Bank bank, String firstName, String lastName, String email, String password) {
         super(bank, firstName, lastName, email, password);
-        bank.getAdmins().add(this);
+        bank.getAdministrators().add(this);
     }
 
     public Transaction createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
