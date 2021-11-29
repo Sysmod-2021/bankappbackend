@@ -7,7 +7,7 @@ public class Administrator extends User {
         super(bank, firstName, lastName, email, password);
     }
 
-    public Transaction createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         // TODO Are we using map or list? Currently both are written.
         // Setup fake account at this point, senderAccountId / receiverAccountId could be invalid
         // Validation happens during the execution
@@ -20,7 +20,7 @@ public class Administrator extends User {
         return performTransaction(sender, receiver, amount, description);
     }
 
-    public Transaction createTransactionToBank (String senderAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createTransactionToBank (String senderAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account sender = new Account(this.getBank())
@@ -31,7 +31,7 @@ public class Administrator extends User {
         return performTransaction(sender, receiver, amount, description);
     }
 
-    public Transaction createTransactionFromBank (String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createTransactionFromBank (String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account receiver = new Account(this.getBank())
@@ -52,7 +52,7 @@ public class Administrator extends User {
         return performSeedTransaction(receiver, amount, currency, description);
     }
 
-    private Transaction performTransaction(Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException {
+    private Transaction performTransaction(Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         Transaction transaction = getBank().createTransaction(sender, receiver, Currency.EUR, amount, description).execute();
         getBank().createTrace(transaction, this);
         return transaction;
@@ -61,6 +61,11 @@ public class Administrator extends User {
     public void revokeTransaction(String transactionId, String reason) throws Bank.TransactionDoesNotExistException, TransactionExceptions.TransactionCanNotBeRevoked {
         Transaction revokedTransaction = getBank().getTransactionById(transactionId);
         getBank().revokeTransaction(this, revokedTransaction, reason);
+    }
+
+    public void setAccountStatus(String accountId, String status) throws Bank.AccountDoesNotExistException {
+        Account customerAccount = getBank().getAccountById(accountId);
+        customerAccount.setStatus(status);
     }
 
     private Transaction performSeedTransaction(Account receiver, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
