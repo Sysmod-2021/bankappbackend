@@ -28,6 +28,20 @@ public class Account {
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
     }
+    // Bank account loadsave
+    public Account(Bank b, String id) {
+        this.bank = b;
+        this.id = id;
+        this.currency = Currency.EUR;
+        this.status = "ACTIVE";
+        this.sent = new HashMap<>();
+        this.received = new HashMap<>();
+    }
+
+    private void addToBank(Account account) {
+        account.getBank().getAccountsMap().put(account.getId(), account);
+        account.getBank().getAccounts().add(account);
+    }
 
     public Account(Bank bank, Customer customer, Currency currency, Double balance) {
         this.id = UUID.randomUUID().toString();
@@ -38,6 +52,18 @@ public class Account {
         this.status = "ACTIVE";
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
+//        addToBank(this);
+    }
+    // for LoadSaveAccount
+    public Account(Bank bank,String id, Customer customer, Currency currency, Double balance) {
+        this.bank = bank;
+        this.id = id;
+        this.customer = customer;
+        this.currency = currency;
+        this.balance = balance;
+        this.sent = new HashMap<>();
+        this.received = new HashMap<>();
+        addToBank(this);
     }
 
     public void addSentTransaction(Transaction transaction) {
@@ -129,5 +155,17 @@ public class Account {
             return true;
         }
         return false;
+    }
+    public String saveToString() {
+        String out = "";
+        try {
+            out += getId() + "," + getOwner().getId() + "," + getCurrency() + "," + getBalance();
+            return out;
+        } catch (NullPointerException e) {
+            // owner id is empty because its the banks account.
+            out += getId() + ",," + getCurrency() + "," + getBalance();
+            return out;
+        }
+
     }
 }

@@ -4,16 +4,18 @@ import java.beans.PropertyChangeSupport;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User {
+public abstract class User {
+
     public static final String PROPERTY_FNAME = "fname";
     public static final String PROPERTY_LNAME = "lname";
     public static final String PROPERTY_EMAIL = "email";
     public static final String PROPERTY_PASSWORD = "pword";
+    public static final String PROPERTY_ID = "ID";
 
     protected PropertyChangeSupport listeners;
 
     private final Bank bank;
-    private final String id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -22,6 +24,15 @@ public class User {
     public User(Bank bank, String firstName, String lastName, String email, String password) {
         this.bank = bank;
         this.id = UUID.randomUUID().toString();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+    // for LoadSaveData
+    public User(Bank bank,String id, String firstName, String lastName, String email, String password) {
+        this.bank = bank;
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -48,6 +59,16 @@ public class User {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public User setId(String uid) {
+        if (Objects.equals(uid, this.id)) {
+            return this;
+        }
+        final String oldId = this.id;
+        this.id = uid;
+        this.firePropertyChange(PROPERTY_ID, oldId, uid);
+        return this;
     }
 
     public User setLastName(String lname) {
@@ -101,4 +122,10 @@ public class User {
     public Bank getBank() {
         return this.bank;
     }
+    public String saveToString() {
+        String out = "";
+        out += getId() + "," + getFirstName() + "," + getLastName() + "," + getEmail() + "," + getPassword();
+        return out;
+    }
+
 }

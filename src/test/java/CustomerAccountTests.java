@@ -1,3 +1,7 @@
+import model.Account;
+import model.Bank;
+import model.Currency;
+import model.Customer;
 import org.fulib.FulibTools;
 import org.junit.Test;
 

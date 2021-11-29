@@ -1,10 +1,12 @@
 package model;
 
+import java.time.LocalDateTime;
 import exceptions.TransactionExceptions;
 
 public class Administrator extends User {
     public Administrator(Bank bank, String firstName, String lastName, String email, String password) {
         super(bank, firstName, lastName, email, password);
+//        bank.getAdministrators().add(this);
     }
 
     public Transaction createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
@@ -16,7 +18,7 @@ public class Administrator extends User {
 
         Account receiver = new Account(this.getBank())
             .setId(receiverAccountId);
-        
+       
         return performTransaction(sender, receiver, amount, description);
     }
 

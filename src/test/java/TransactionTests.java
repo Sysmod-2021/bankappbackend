@@ -11,7 +11,7 @@ import java.util.*;
 
 import org.fulib.FulibTools;
 
-// Full Bank specification is available at
+// Full model.Bank specification is available at
 // https://docs.google.com/document/d/1AjevAXSdgcHC6yfwMc1QbsvFRuz3pfRowHIOu4XMXEU/edit#
 
 public class TransactionTests {
@@ -20,7 +20,7 @@ public class TransactionTests {
     static final String REJECTION_DESC = "Destination account is invalid";
     static final String REVOKE_DESC = "Made a mistake in the sent amount";
 
-    // FR #2. Transaction creation
+    // FR #2. model.Transaction creation
     @Test
     public void testCreateTransaction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         Bank bank = new Bank();
@@ -36,14 +36,14 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/tranfermoney_objects.svg", transfer);
     }
 
-    //	Scenario 1: Customer A initiates money transfer to a friend (Customer B)
-    //	Given Customer A is registered in the system
+    //	Scenario 1: model.Customer A initiates money transfer to a friend (model.Customer B)
+    //	Given model.Customer A is registered in the system
     //	And his user account is approved
     //	And a bank account has been assigned to his user accounts
-    //	And Customer A is logged in
-    //	Then Customer A can create a new transaction
+    //	And model.Customer A is logged in
+    //	Then model.Customer A can create a new transaction
     //	And can specify the beneficiary
-    //	And can specify the amount of money to be transferred from Customer A to Customer B
+    //	And can specify the amount of money to be transferred from model.Customer A to model.Customer B
     //	And can specify the description of the transaction
     //	And can confirm the transaction
     @Test
@@ -60,18 +60,27 @@ public class TransactionTests {
         assertEquals(BENEFICIARY_NAME, beneficiaryAcc.getFirstName() + " " + beneficiaryAcc.getLastName());
         assertEquals(25f, transfer.getAmount(), 0f);
         assertEquals(TRANS_DESC, transfer.getDescription());
+        // assertEquals("", ""); can confirm transaction
+
+
+        // FAIL
+        // - login not implemented
+        // - model.Transaction confirm() not implemented
+
+        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_1.svg", transfer);
     }
 
-    //	Scenario 2: Customer A transfers money to a friend (Customer B) successfully
-    //	Given Customer A is registered and has a bank account
+
+    //	Scenario 2: model.Customer A transfers money to a friend (model.Customer B) successfully
+    //	Given model.Customer A is registered and has a bank account
     //	And he created a transaction and confirmed it
-    //	And Customer B is registered and has a bank account
+    //	And model.Customer B is registered and has a bank account
     //	Then the transaction is executed
-    //	And money has been charged from the Customer's A bank account
-    //	And the Customer' B bank account balanced has been increased accordingly
-    //	And the Customer B now can see the updated balance on his profile page
+    //	And money has been charged from the model.Customer's A bank account
+    //	And the model.Customer' B bank account balanced has been increased accordingly
+    //	And the model.Customer B now can see the updated balance on his profile page
     @Test
     public void shouldTransferMoneySuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         Bank bank = new Bank();
@@ -90,12 +99,12 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_2.svg", transfer);
     }
 
-    //	Scenario 3: Customer A transfers money to a friend (Customer B) unsuccessfully
-    //	Given Customer A is registered and has a bank account
+    //	Scenario 3: model.Customer A transfers money to a friend (model.Customer B) unsuccessfully
+    //	Given model.Customer A is registered and has a bank account
     //	And he created a transaction
-    //	And Customer B has not been found in the bank system
+    //	And model.Customer B has not been found in the bank system
     //	Then the transaction is rejected
-    //	And Customer A can see the status of the transaction on a page with transactions in his user profile
+    //	And model.Customer A can see the status of the transaction on a page with transactions in his user profile
     @Test
     public void shouldTransferMoneyUnsuccessfully_WhenBeneficiaryNotExists() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();

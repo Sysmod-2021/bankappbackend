@@ -1,4 +1,5 @@
 package model;
+import database.Datastore;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,28 +57,69 @@ public class Bank {
     private final List<Transaction> transactions;
     private final List<Account> accounts;
     private final List<Trace> traces;
-    private final Account bankAccount;
+    private final Account theBanksAccount;
+    private final Datastore database;
 
     // Maps below are for faster access (might be irrelevant for our toy use case with 2 customers demonstration)
     private final Map<String, Customer> customerMap;
     private final Map<String, Account> accountsMap;
-
+    private final Map<String,Transaction> transactionsMap;
+  
     public Bank() {
+      
         this.customers = new ArrayList<>();
         this.administrators = new ArrayList<>();
         this.transactions = new ArrayList<>();
         this.accounts = new ArrayList<>();
-        this.traces = new ArrayList<>();
-
+      
         this.customerMap = new HashMap<>();
         this.accountsMap = new HashMap<>();
+        this.transactionsMap = new HashMap<>();
+      
+        this.database = new Datastore("src/main/java/files/", this);
 
-        bankAccount = new Account(this);
-        bankAccount.setBalance(69420.0);
+        theBanksAccount = new Account(this, "sendItToTheBank");
+        theBanksAccount.setBalance(69420.00);
         try {
-            addAccount(bankAccount);
-        } catch (Exception ignored) { // at this moment it can't throw anything here, as everything has just been initialized to empty lists
+            if (!getAccounts().contains(theBanksAccount)) {
+                addAccount(theBanksAccount);
+            }
+        } catch (AccountExistsException e) {
+            // Bank account already exists so were not going to add it again
         }
+
+        transactions.addAll(database.getAllTransactions());
+        customers.addAll(database.getAllCustomers());
+        accounts.addAll(database.getAllAccounts());
+      
+        for (Customer c : customers
+        ) {
+            customerMap.put(c.getId(), c);
+        }
+        for (Account a : accounts
+        ) {
+            accountsMap.put(a.getId(), a);
+        }
+        for (Transaction t : transactions
+        ) {
+            transactionsMap.put(t.getId(), t);
+        }
+      
+        
+        this.traces = new ArrayList<>();
+//       TODO Need to figure some things out for data persistence with bank account.
+//         try {
+//             addAccount(bankAccount);
+//         } catch (Exception ignored) { // at this moment it can't throw anything here, as everything has just been initialized to empty lists
+//         }
+    }
+  
+    // TODO This can be shielded from the outside. but for now leave it at this.
+    //  VERY IMPORTANT - ALWAYS CLEAR file contents when testing manually. overwrite of document is a bit wonky.
+    public void saveData() {
+        System.out.println(customers);
+        System.out.println(accounts);
+        this.database.save(customers,accounts,transactions);
     }
 
     public List<Administrator> getAdministrators() {
@@ -85,7 +127,7 @@ public class Bank {
     }
 
     public Account getBankAccount() {
-        return this.bankAccount;
+        return this.theBanksAccount;
     }
 
     // Administrator management
@@ -114,7 +156,7 @@ public class Bank {
 
     // Customer management
 
-    private Map<String, Customer> getCustomerMap() {
+    public Map<String, Customer> getCustomerMap() {
         return this.customerMap;
     }
 
@@ -141,7 +183,7 @@ public class Bank {
     }
 
     public Customer createCustomer(String firstName, String lastName, String email, String password, Double initial_balance, Currency currency) throws CustomerExistsException, AccountExistsException {
-        Customer customer = new Customer(this, firstName, lastName, email, password);
+        Customer customer = new Customer(this,UUID.randomUUID().toString(), firstName, lastName, email, password);
         addCustomer(customer);
 
         createAccount(customer, currency, initial_balance);
@@ -230,7 +272,7 @@ public class Bank {
         return this.accounts;
     }
 
-    private Map<String, Account> getAccountsMap() {
+    public Map<String, Account> getAccountsMap() {
         return this.accountsMap;
     }
 
