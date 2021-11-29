@@ -25,6 +25,14 @@ public class Account {
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
     }
+    // Bank account loadsave
+    public Account(Bank b, String id) {
+        this.bank = b;
+        this.id = id;
+        this.currency = Currency.EUR;
+        this.sent = new HashMap<>();
+        this.received = new HashMap<>();
+    }
 
     private void addToBank(Account account) {
         account.getBank().getAccountsMap().put(account.getId(), account);
@@ -39,7 +47,7 @@ public class Account {
         this.balance = balance;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
-        addToBank(this);
+//        addToBank(this);
     }
     // for LoadSaveAccount
     public Account(Bank bank,String id, Customer customer, Currency currency, Double balance) {
@@ -133,7 +141,14 @@ public class Account {
     }
     public String saveToString() {
         String out = "";
-        out += getId() + "," + getOwner().getId() + "," + getCurrency() + "," + getBalance();
-        return out;
+        try {
+            out += getId() + "," + getOwner().getId() + "," + getCurrency() + "," + getBalance();
+            return out;
+        } catch (NullPointerException e) {
+            // owner id is empty because its the banks account.
+            out += getId() + ",," + getCurrency() + "," + getBalance();
+            return out;
+        }
+
     }
 }

@@ -1,0 +1,3 @@
+sendItToTheBank,,EUR,69420.0
+9873d62b-c6cf-4894-a61a-741ef7e5afde,,EUR,100.0
+eca86457-4a9e-4754-b3b0-f669483e95ba,,EUR,0.0

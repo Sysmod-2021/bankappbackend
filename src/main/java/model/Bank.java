@@ -77,10 +77,17 @@ public class Bank {
         this.transactionsMap = new HashMap<>();
       
         this.database = new Datastore("src/main/java/files/", this);
-      
-        theBanksAccount = new Account(this);
+
+        theBanksAccount = new Account(this, "sendItToTheBank");
         theBanksAccount.setBalance(69420.00);
-      
+        try {
+            if (!getAccounts().contains(theBanksAccount)) {
+                addAccount(theBanksAccount);
+            }
+        } catch (AccountExistsException e) {
+            // Bank account already exists so were not going to add it again
+        }
+
         transactions.addAll(database.getAllTransactions());
         customers.addAll(database.getAllCustomers());
         accounts.addAll(database.getAllAccounts());
@@ -110,6 +117,8 @@ public class Bank {
     // TODO This can be shielded from the outside. but for now leave it at this.
     //  VERY IMPORTANT - ALWAYS CLEAR file contents when testing manually. overwrite of document is a bit wonky.
     public void saveData() {
+        System.out.println(customers);
+        System.out.println(accounts);
         this.database.save(customers,accounts,transactions);
     }
 
@@ -174,7 +183,7 @@ public class Bank {
     }
 
     public Customer createCustomer(String firstName, String lastName, String email, String password, Double initial_balance, Currency currency) throws CustomerExistsException, AccountExistsException {
-        Customer customer = new Customer(this, firstName, lastName, email, password, "00000");
+        Customer customer = new Customer(this,UUID.randomUUID().toString(), firstName, lastName, email, password);
         addCustomer(customer);
 
         createAccount(customer, currency, initial_balance);
