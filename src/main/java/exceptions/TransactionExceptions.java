@@ -6,4 +6,8 @@ public class TransactionExceptions {
             super(message);
         }
     }
+
+    public static class TransactionRestrictionException extends Exception {
+        public TransactionRestrictionException(String message) { super(message); }
+    }
 }
