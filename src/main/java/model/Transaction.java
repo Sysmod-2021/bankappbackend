@@ -103,6 +103,7 @@ public class Transaction {
         this.id = id;
         this.firePropertyChange(PROPERTY_ID, oldSource, id);
         return this;
+    }
     // shallow copy constructor
     public Transaction(Transaction transaction) {
         this.bank = transaction.bank;

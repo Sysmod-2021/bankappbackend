@@ -118,7 +118,7 @@ public class Bank {
     }
 
     public Account getBankAccount() {
-        return this.bankAccount;
+        return this.theBanksAccount;
     }
 
     // Administrator management
@@ -147,7 +147,7 @@ public class Bank {
 
     // Customer management
 
-    private Map<String, Customer> getCustomerMap() {
+    public Map<String, Customer> getCustomerMap() {
         return this.customerMap;
     }
 
@@ -174,7 +174,7 @@ public class Bank {
     }
 
     public Customer createCustomer(String firstName, String lastName, String email, String password, Double initial_balance, Currency currency) throws CustomerExistsException, AccountExistsException {
-        Customer customer = new Customer(this, firstName, lastName, email, password);
+        Customer customer = new Customer(this, firstName, lastName, email, password, "00000");
         addCustomer(customer);
 
         createAccount(customer, currency, initial_balance);
@@ -263,7 +263,7 @@ public class Bank {
         return this.accounts;
     }
 
-    private Map<String, Account> getAccountsMap() {
+    public Map<String, Account> getAccountsMap() {
         return this.accountsMap;
     }
 

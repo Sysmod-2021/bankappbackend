@@ -10,12 +10,12 @@ public abstract class User {
     public static final String PROPERTY_LNAME = "lname";
     public static final String PROPERTY_EMAIL = "email";
     public static final String PROPERTY_PASSWORD = "pword";
-    public static final String PROPERTY_id = "ID";
+    public static final String PROPERTY_ID = "ID";
 
     protected PropertyChangeSupport listeners;
 
     private final Bank bank;
-    private final String id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -67,7 +67,7 @@ public abstract class User {
         }
         final String oldId = this.id;
         this.id = uid;
-        this.firePropertyChange(PROPERTY_LNAME, oldId, uid);
+        this.firePropertyChange(PROPERTY_ID, oldId, uid);
         return this;
     }
 
