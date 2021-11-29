@@ -1,3 +1,4 @@
+package database;
 public class Datastore {
     private final String path;
 
