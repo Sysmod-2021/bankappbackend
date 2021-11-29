@@ -1,2 +1,0 @@
-d6ee12e1-0b01-43f4-aa45-a64e95d18697,John,Doe,john@doe.ee,pass1234
-6c2df6a0-aeff-41fe-a1c2-a47f1c8580b8,Bob,Jackson,bobby@tt.ee,secret
