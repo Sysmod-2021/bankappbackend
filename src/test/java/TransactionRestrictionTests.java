@@ -2,6 +2,9 @@ import exceptions.TransactionExceptions;
 import org.fulib.FulibTools;
 import org.junit.Test;
 
+import model.*;
+import model.Currency;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
