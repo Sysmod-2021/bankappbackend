@@ -12,7 +12,6 @@ import static org.junit.Assert.assertThrows;
 
 public class TransactionRestrictionTests {
     static final String TRANS_DESC = "Transaction test";
-    static final String REJECTION_DESC = "Source account is frozen";
 
     //  Scenario 1: Successful transaction restriction
     //
