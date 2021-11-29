@@ -1,5 +1,8 @@
 import org.fulib.FulibTools;
 import org.junit.Test;
+
+import model.*;
+
 import static org.junit.Assert.assertEquals;
 
 public class CustomerAccountTests {

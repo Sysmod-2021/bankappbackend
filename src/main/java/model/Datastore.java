@@ -1,3 +1,4 @@
+package model;
 public class Datastore {
     private final String path;
 
