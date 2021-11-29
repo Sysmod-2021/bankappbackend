@@ -1,3 +1,4 @@
+package model;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,6 +16,12 @@ public class Bank {
 
     public static class AccountDoesNotExistException extends Exception {
         public AccountDoesNotExistException(String message) {
+            super(message);
+        }
+    }
+
+    public static class CustomerDoesNotExistException extends Exception {
+        public CustomerDoesNotExistException(String message) {
             super(message);
         }
     }
@@ -92,13 +99,13 @@ public class Bank {
         administrators.add(administrator);
     }
 
-    Administrator createAdministrator(String firstName, String lastName, String email, String password) throws AdministratorExistsException {
+    public Administrator createAdministrator(String firstName, String lastName, String email, String password) throws AdministratorExistsException {
         Administrator administrator = new Administrator(this, firstName, lastName, email, password);
         addAdministrator(administrator);
         return administrator;
     }
 
-    Administrator getAdministrator() { // let's say here we don't care about any particular administrator at the moment
+    public Administrator getAdministrator() { // let's say here we don't care about any particular administrator at the moment
         if (administrators.size() > 0) {
             return administrators.get(0);
         }
@@ -125,11 +132,15 @@ public class Bank {
         return this.customers;
     }
 
-    public Customer getCustomerByEmail(String email) {
-        return getCustomerMap().get(email);
+    public Customer getCustomerByEmail(String email) throws CustomerDoesNotExistException {
+        Customer customer =  getCustomerMap().get(email);
+        if (customer == null) {
+            throw new CustomerDoesNotExistException("Account does not exist: " + email);
+        }
+        return customer;
     }
 
-    Customer createCustomer(String firstName, String lastName, String email, String password, Double initial_balance, Currency currency) throws CustomerExistsException, AccountExistsException {
+    public Customer createCustomer(String firstName, String lastName, String email, String password, Double initial_balance, Currency currency) throws CustomerExistsException, AccountExistsException {
         Customer customer = new Customer(this, firstName, lastName, email, password);
         addCustomer(customer);
 
@@ -181,7 +192,7 @@ public class Bank {
         return existingTransaction;
     }
 
-    Transaction createTransaction(Account source, Account destination, Currency currency, Double amount, String description) {
+    public Transaction createTransaction(Account source, Account destination, Currency currency, Double amount, String description) {
         Transaction transaction = new Transaction(this, source, destination, currency, amount, description);
         try {
             addTransaction(transaction);

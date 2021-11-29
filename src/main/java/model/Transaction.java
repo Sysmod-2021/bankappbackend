@@ -1,3 +1,5 @@
+package model;
+
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
 import java.util.Objects;

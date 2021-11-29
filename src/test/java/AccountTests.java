@@ -1,6 +1,8 @@
 import org.fulib.FulibTools;
 import org.junit.Test;
 
+import model.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
@@ -32,7 +34,7 @@ public class AccountTests {
     }
 
     @Test
-    public void testCreateCustomer() throws Bank.CustomerExistsException, Bank.AccountExistsException {
+    public void testCreateCustomer() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.CustomerDoesNotExistException {
         Bank bank = new Bank();
         Double initial_balance = 100.0;
         // NOTE: Factory pattern

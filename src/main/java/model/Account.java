@@ -1,3 +1,4 @@
+package model;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
 

@@ -29,6 +29,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
     testImplementation group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.30'
 
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
     implementation 'com.sparkjava:spark-core:2.9.3'
     implementation group: 'org.json', name: 'json', version: '20210307'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
