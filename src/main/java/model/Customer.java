@@ -6,4 +6,7 @@ public class Customer extends User {
         bank.getCustomers().add(this);
         bank.getCustomerMap().put(this.getId(), this);
     }
+    public Account getAccount() {
+        return getBank().getAccountByEmail(getEmail());
+    }
 }

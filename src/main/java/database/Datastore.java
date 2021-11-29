@@ -1,5 +1,4 @@
 package database;
-
 import model.Account;
 import model.Bank;
 import model.Transaction;
@@ -72,5 +71,4 @@ public class Datastore {
 
     public String toString() {
         return "";
-    }
 }

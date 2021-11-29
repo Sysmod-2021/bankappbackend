@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import exceptions.TransactionExceptions;
 
 public class Administrator extends User {
     public Administrator(Bank bank, String firstName, String lastName, String email, String password) {
@@ -8,7 +9,7 @@ public class Administrator extends User {
         bank.getAdmins().add(this);
     }
 
-    public void createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) {
+    public Transaction createTransactionTwoCustomers (String senderAccountId, String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
         // TODO Are we using map or list? Currently both are written.
         // Setup fake account at this point, senderAccountId / receiverAccountId could be invalid
         // Validation happens during the execution
@@ -17,11 +18,11 @@ public class Administrator extends User {
 
         Account receiver = new Account(this.getBank())
             .setId(receiverAccountId);
-        
-        performTransaction(sender, receiver, amount, description);
+       
+        return performTransaction(sender, receiver, amount, description);
     }
 
-    public void createTransactionToBank (String senderAccountId, Double amount, String description) {
+    public Transaction createTransactionToBank (String senderAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account sender = new Account(this.getBank())
@@ -29,10 +30,10 @@ public class Administrator extends User {
 
         Account receiver = getBank().getBankAccount();
 
-        performTransaction(sender, receiver, amount, description);
+        return performTransaction(sender, receiver, amount, description);
     }
 
-    public void createTransactionFromBank (String receiverAccountId, Double amount, String description) {
+    public Transaction createTransactionFromBank (String receiverAccountId, Double amount, String description) throws Bank.AccountDoesNotExistException {
         // Setup fake account at this point, senderAccountId could be invalid
         // Validation happens during the execution
         Account receiver = new Account(this.getBank())
@@ -40,42 +41,33 @@ public class Administrator extends User {
 
         Account sender = getBank().getBankAccount();
 
-        performTransaction(sender, receiver, amount, description);
+        return performTransaction(sender, receiver, amount, description);
     }
 
-    public Transaction createSeedTransactionToCustomer(String receiverAccountId, Double amount, Currency currency, String description) {
-        Account receiver = this.getBank().getBankAccountById(receiverAccountId);
+    public Transaction createSeedTransactionToCustomer(String receiverAccountId, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
+        Account receiver = this.getBank().getAccountById(receiverAccountId);
         return performSeedTransaction(receiver, amount, currency, description);
     }
 
-    public Transaction createSeedTransactionToBank(Double amount, Currency currency, String description) {
+    public Transaction createSeedTransactionToBank(Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
         Account receiver = getBank().getBankAccount();
         return performSeedTransaction(receiver, amount, currency, description);
     }
 
-    private void performTransaction(Account sender, Account receiver, Double amount, String description) {
-        Transaction transaction = new Transaction(this.getBank(), sender, receiver, Currency.EUR, amount, description)
-        .execute();
-        if (!transaction.getStatus().equals(Transaction.Status.ABORTED)) {
-            // Check if the status is aborted. if it's not then we add the transaction to the list.
-            getBank().addTransaction(transaction);
-        }
-
-        Trace trace = new Trace(this.getBank(), transaction, this, LocalDateTime.now());
-        this.getBank().addTrace(trace);
+    private Transaction performTransaction(Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException {
+        Transaction transaction = getBank().createTransaction(sender, receiver, Currency.EUR, amount, description).execute();
+        getBank().createTrace(transaction, this);
+        return transaction;
     }
 
-    private Transaction performSeedTransaction(Account receiver, Double amount, Currency currency, String description) {
-        Transaction transaction = new Transaction(this.getBank(), receiver, currency, amount, description)
-                .seed();
+    public void revokeTransaction(String transactionId, String reason) throws Bank.TransactionDoesNotExistException, TransactionExceptions.TransactionCanNotBeRevoked {
+        Transaction revokedTransaction = getBank().getTransactionById(transactionId);
+        getBank().revokeTransaction(this, revokedTransaction, reason);
+    }
 
-        if (!transaction.getStatus().equals(Transaction.Status.ABORTED)) {
-            getBank().addTransaction(transaction);
-        }
-
-        Trace trace = new Trace(this.getBank(), transaction, this, LocalDateTime.now());
-        this.getBank().addTrace(trace);
-
+    private Transaction performSeedTransaction(Account receiver, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
+        Transaction transaction = getBank().createTransaction(null, receiver, currency, amount, description).seed();
+        getBank().createTrace(transaction, this);
         return transaction;
     }
 }

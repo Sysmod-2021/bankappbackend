@@ -1,7 +1,13 @@
 import model.*;
 import org.junit.Test;
 
+import model.*;
+import model.Currency;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
+import java.util.*;
 
 import org.fulib.FulibTools;
 
@@ -12,17 +18,20 @@ public class TransactionTests {
     static final String BENEFICIARY_NAME = "Bob Jackson";
     static final String TRANS_DESC = "Ref: concert ticket";
     static final String REJECTION_DESC = "Destination account is invalid";
+    static final String REVOKE_DESC = "Made a mistake in the sent amount";
 
     // FR #2. model.Transaction creation
     @Test
-    public void testCreateTransaction() {
+    public void testCreateTransaction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
         bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
-        Customer customer1 = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", "400000000001", 100.0, Currency.EUR);
-        Customer customer2 = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002", 0.0, Currency.EUR);
+        Customer customer1 = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", 100.0, Currency.EUR);
+        Customer customer2 = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
 
-        transfer = bank.createTransaction(customer1, customer2, 25.5, Currency.EUR, TRANS_DESC);
+        Transaction transfer = bank.createTransaction(customer1.getAccount(), customer2.getAccount(), Currency.EUR, 25.5, TRANS_DESC);
         transfer.execute();
+
+        assertEquals(customer2.getAccount().getBalance(), 25.5, 0.0);
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/tranfermoney_objects.svg", transfer);
     }
@@ -38,20 +47,16 @@ public class TransactionTests {
     //	And can specify the description of the transaction
     //	And can confirm the transaction
     @Test
-    public void shouldInitiateMoneyTransferSuccessfully() {
+    public void shouldInitiateMoneyTransferSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException {
         Bank bank = new Bank();
         Double balance = 100.0;
         Double amount = 25.0;
-        java.util.Currency eur = java.util.Currency.getInstance("EUR");
 
-        Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account sourceBankAccount = new Account(bank, customer, eur, balance);
-        Customer beneficiary = new Customer(bank, "Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002");
-        Account destinationBankAccount = new Account(bank, beneficiary, eur, 0f);
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.USD);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.USD);
+        Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.USD, amount, TRANS_DESC);
 
-        Transaction transfer = new Transaction(bank, sourceBankAccount, destinationBankAccount, Currency.EUR, amount, TRANS_DESC);
-
-        var beneficiaryAcc = transfer.getDestination().getOwner();
+        Customer beneficiaryAcc = transfer.getDestination().getOwner();
         assertEquals(BENEFICIARY_NAME, beneficiaryAcc.getFirstName() + " " + beneficiaryAcc.getLastName());
         assertEquals(25f, transfer.getAmount(), 0f);
         assertEquals(TRANS_DESC, transfer.getDescription());
@@ -64,7 +69,7 @@ public class TransactionTests {
 
         // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
 
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s1.svg", transfer);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_1.svg", transfer);
     }
 
 
@@ -77,34 +82,22 @@ public class TransactionTests {
     //	And the model.Customer' B bank account balanced has been increased accordingly
     //	And the model.Customer B now can see the updated balance on his profile page
     @Test
-    public void shouldTransferMoneySuccessfully() {
+    public void shouldTransferMoneySuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
         Double balance = 100.0;
         Double amount = 25.0;
 
-        Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account sourceBankAccount = new Account(bank, customer, Currency.EUR, balance);
-        Customer beneficiary = new Customer(bank, "Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002");
-        Account destinationBankAccount = new Account(bank, beneficiary, Currency.EUR, 0.0);
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
 
-        Transaction transfer = new Transaction(bank, sourceBankAccount, destinationBankAccount, Currency.EUR, amount, TRANS_DESC);
+        Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
         transfer.execute();
 
-        assertEquals(75f, sourceBankAccount.getBalance(), 0f);
-        assertEquals(25f, destinationBankAccount.getBalance(), 0f);
-        // assertEquals("", ""); balance on his profile page
+        assertEquals(75.0, customer.getAccount().getBalance(), 0.0);
+        assertEquals(25.0, beneficiary.getAccount().getBalance(), 0.0);
 
-        // FAIL
-        // - login not implemented
-        // - model.Bank accounts not add to the model.Bank
-        // - Transfer fail; sender = null
-        // - profile page not implemented
-
-        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
-
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s2.svg", transfer);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_2.svg", transfer);
     }
-
 
     //	Scenario 3: model.Customer A transfers money to a friend (model.Customer B) unsuccessfully
     //	Given model.Customer A is registered and has a bank account
@@ -113,34 +106,22 @@ public class TransactionTests {
     //	Then the transaction is rejected
     //	And model.Customer A can see the status of the transaction on a page with transactions in his user profile
     @Test
-    public void shouldTransferMoneyUnsuccessfully_WhenBeneficiaryNotExists() {
+    public void shouldTransferMoneyUnsuccessfully_WhenBeneficiaryNotExists() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
         Bank internationalBank = new Bank();
         Double balance = 100.0;
         Double amount = 25.0;
 
-        Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account sourceBankAccount = new Account(bank, customer, Currency.EUR, balance);
-        Customer beneficiary = new Customer(internationalBank, "Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002");
-        Account destinationBankAccount = new Account(bank, beneficiary, Currency.EUR, 0.0);
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Customer beneficiary = internationalBank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
 
-        Transaction transfer = new Transaction(bank, sourceBankAccount, destinationBankAccount, Currency.EUR, amount, TRANS_DESC);
-        transfer.execute();
+        assertThrows(Bank.AccountDoesNotExistException.class, () -> {
+            Transaction transfer = new Transaction(bank, customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
+            transfer.execute();
+        });
 
-        assertEquals(REJECTION_DESC, transfer.getRejectionDescription());
-        // assertEquals("REJECTED", ""); transaction's status on his profile page
-
-        // FAIL
-        // - model.Bank accounts not add to the model.Bank
-        // - Transfer fail; sender = null
-        // - profile page not implemented
-
-        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
-        // [!] Transfer cannot make between different bank?
-
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s3.svg", transfer);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_3.svg", bank, internationalBank);
     }
-
 
     //	Scenario 4: A bank administrator charges a customer some fee
     //	Given the bank admin has an admin account
@@ -151,47 +132,27 @@ public class TransactionTests {
     //	And can specify an amount to charge
     //	And description of the transaction
     @Test
-    public void shouldChargeCustomerFeeSuccessfully() {
+    public void shouldChargeCustomerFeeSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
-        Account bankAccount = bank.getBankAccount();
-        Double bankBalance = bankAccount.getBalance();
+        Double bankBalance = bank.getBankAccount().getBalance();
 
         Double balance = 100.0;
         Double fee = 10.0;
 
-        Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account customerBankAccount = new Account(bank, customer, Currency.EUR, balance);
-
-
-        Transaction transfer = new Transaction(bank, customerBankAccount, bankAccount, Currency.EUR, fee, "Fee");
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Transaction transfer = bank.createTransaction(customer.getAccount(), bank.getBankAccount(), Currency.EUR, fee, "Fee");
         transfer.execute();
 
         assertEquals("", transfer.getRejectionDescription());
-        assertEquals(bankBalance + fee, bankAccount.getBalance(), 0f);
-        assertEquals(90f, customerBankAccount.getBalance(), 0f);
+        assertEquals(bankBalance + fee, bank.getBankAccount().getBalance(), 0.0);
+        assertEquals(90.0, customer.getAccount().getBalance(), 0.0);
 
-        // FAIL
-        // - login not implemented
-        // - model.Bank accounts not add to the model.Bank
-        // - Transfer fail; sender = null
-
-        // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
-
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s4.svg", transfer);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_4.svg", transfer);
     }
 
-
-//	Scenario 5: A bank administrator charges a customer some fee which is bigger than the customer's balance
-//	Given the bank admin has an admin account
-//	And he is logged in
-//	And he has charged the customer some amount
-//	And there was not enough money on the customer's account
-//	Then the customer's account is charged anyway
-//	And the customer's balance then is negative
-
+    // FR #2. Scenario 5
     @Test
-    public void shouldChargeCustomerFeeSuccessfully_WhenBalanceNotEnough() {
+    public void shouldChargeCustomerFeeSuccessfully_WhenBalanceNotEnough() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
         Account bankAccount = bank.getBankAccount();
         Double bankBalance = bankAccount.getBalance();
@@ -199,116 +160,77 @@ public class TransactionTests {
         Double balance = 10.0;
         Double fee = 50.0;
 
-        Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account customerBankAccount = new Account(bank, customer, Currency.EUR, balance);
-
-        Transaction transfer = new Transaction(bank, customerBankAccount, bankAccount, Currency.EUR, fee, "Expensive fee");
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Transaction transfer = bank.createTransaction(customer.getAccount(), bankAccount, Currency.EUR, fee, "Expensive fee");
         transfer.execute();
 
-        assertEquals("", transfer.getRejectionDescription());
-        assertEquals(bankBalance + fee, bankAccount.getBalance(), 0f);
-        assertEquals(-40f, customerBankAccount.getBalance(), 0f);
+        assertEquals("Not enough money on the source account", transfer.getRejectionDescription());
+        assertEquals(bankBalance, bankAccount.getBalance(), 0.0);
+        assertEquals(balance, customer.getAccount().getBalance(), 0.0);
 
-        // FAIL
-        // - login not implemented
-        // - model.Bank accounts not add to the model.Bank
-        // - Transfer fail; sender = null
-
-        // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
-
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s5.svg", transfer);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_5.svg", transfer);
     }
 
-
-//	Scenario 6: A bank administrator revokes a transaction
-//	Given an existing and logged in customer has created a transaction
-//	And the transaction has been successfully executed
-//	And it appeared that the transaction is incorrect
-//	Then the bank admin revokes the transaction
-//	And money are withdrawn from the receiver's bank account
-//	And money are returned to the sender
-//	And an additional trace about revoked account is created
-
-    @Test
-    public void shouldRevokeTransactionSuccessfully() {
-
+    //	Scenario 6: A bank administrator revokes a transaction
+    //	Given an existing and logged in customer has created a transaction
+    //	And the transaction has been successfully executed
+    //	And it appeared that the transaction is incorrect
+    //	Then the bank admin revokes the transaction
+    //	And money are withdrawn from the receiver's bank account
+    //	And money are returned to the sender
+    //	And an additional trace about revoked account is created
+   @Test
+   public void shouldRevokeTransactionSuccessfully() throws Exception {
         // Arrange
         Bank bank = new Bank();
+        bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
 
         Double balanceOfCustomer = 200.0;
         Double balanceOfBeneficiary = 300.0;
         Double amount = 50.0;
 
-        Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account sourceBankAccount = new Account(bank, customer, Currency.EUR, balanceOfCustomer);
-        Customer beneficiary = new Customer(bank, "Bob", "Jackson", "bobby@tt.ee", "secret", "400000000002");
-        Account destinationBankAccount = new Account(bank, beneficiary, Currency.EUR, balanceOfBeneficiary);
-
-        Transaction transferMade = new Transaction(bank, sourceBankAccount, destinationBankAccount, Currency.EUR, amount, TRANS_DESC);
-        transferMade.execute();
-
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
+        Transaction transaction = bank.getAdministrator().createTransactionTwoCustomers(
+            customer.getAccount().getId(),
+            beneficiary.getAccount().getId(),
+            amount, TRANS_DESC);
+        
         // Act
-
-        // transferMade.Revoke(); <- Some method like this
-
+        bank.getAdministrator().revokeTransaction(transaction.getId(), REVOKE_DESC);
 
         // Assert
-        assertEquals(balanceOfCustomer, sourceBankAccount.getBalance(), 0f);
-        assertEquals(balanceOfBeneficiary, destinationBankAccount.getBalance(), 0f);
-        // trace
+        assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
+        assertEquals(balanceOfBeneficiary, beneficiary.getAccount().getBalance(), 0.0);
 
-        // FAIL
-        // - login not implemented
-        // - model.Bank accounts not add to the model.Bank
-        // - Transfer fail; sender = null
-        // - rovoke not implemented
-        // - trace is not create automatically
+        List<Trace> traces = bank.getTraces();
+        assertEquals(2, traces.size());
+        // TODO: add detailed asserts for verifying the traces correctness
 
-        // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_6.svg", bank);
+   }
 
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s6.svg", bank);
-    }
-
-
-//	Scenario 7: Seed transaction is created by a bank administrator
-//	Given a bank admin exists and logged in
-//	And there is at least one customer in a system
-//	And he has an assigned balance account
-//	Then the bank admin can create a seed transaction
-//	And specifies the amount of money to be generated
-//	And specifies the recipient of the sum
-//	And specifies a description of the transaction
-
+    //	Scenario 7: Seed transaction is created by a bank administrator
+    //	Given a bank admin exists and logged in
+    //	And there is at least one customer in a system
+    //	And he has an assigned balance account
+    //	Then the bank admin can create a seed transaction
+    //	And specifies the amount of money to be generated
+    //	And specifies the recipient of the sum
+    //	And specifies a description of the transaction
     @Test
-    public void shouldCreateSeedTransactionSuccessfully() {
+    public void shouldCreateSeedTransactionSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
-
         Double balance = 10.0;
         Double amount = 250.0;
 
-        Customer customer = new Customer(bank, "John", "Doe", "john@doe.ee", "pass1234", "400000000001");
-        Account customerBankAccount = new Account(bank, customer, Currency.EUR, balance);
-
-        Transaction deposit = new Transaction(bank, null, customerBankAccount, Currency.EUR, amount, "Salary");
+        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Transaction deposit = bank.createTransaction(bank.getBankAccount(), customer.getAccount(), Currency.EUR, amount, "Salary");
         deposit.execute();
 
         assertEquals("", deposit.getRejectionDescription());
-        assertEquals(260f, customerBankAccount.getBalance(), 0f);
+        assertEquals(260.0, customer.getAccount().getBalance(), 0.0);
 
-        // FAIL
-        // - login not implemented
-        // - model.Bank accounts not add to the model.Bank
-        // - Transfer fail; sender = null
-
-        // [!] There is no distinguish between transaction by admin or by customer, I don't even need to put admin here
-        // [!] model.Currency as Enum in model.Transaction, mismatch type with java.util.model.Currency in model.Account
-
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/test/trans_s7.svg", deposit);
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_7.svg", deposit);
     }
 }
-
-	
-
-

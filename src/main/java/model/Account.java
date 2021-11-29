@@ -1,5 +1,4 @@
 package model;
-
 import java.beans.PropertyChangeSupport;
 import java.util.*;
 
@@ -14,7 +13,6 @@ public class Account {
     private Customer customer;
     private Currency currency;
     private Double balance;
-    // TODO do we keep 2 separate lists or 2 separate maps? (map increases performance but overview might be scuffed)
     private Map<String, Transaction> sent;
     private Map<String, Transaction> received;
 
@@ -133,7 +131,6 @@ public class Account {
         }
         return false;
     }
-
     public String saveToString() {
         String out = "";
         out += getId() + "," + getOwner().getId() + "," + getCurrency() + "," + getBalance();

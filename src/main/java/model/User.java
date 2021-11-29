@@ -15,7 +15,7 @@ public abstract class User {
     protected PropertyChangeSupport listeners;
 
     private final Bank bank;
-    private String id;
+    private final String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -122,10 +122,10 @@ public abstract class User {
     public Bank getBank() {
         return this.bank;
     }
-
     public String saveToString() {
         String out = "";
         out += getId() + "," + getFirstName() + "," + getLastName() + "," + getEmail() + "," + getPassword();
         return out;
     }
+
 }
