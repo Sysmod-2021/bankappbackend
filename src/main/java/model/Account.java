@@ -33,6 +33,7 @@ public class Account {
         this.bank = b;
         this.id = id;
         this.currency = Currency.EUR;
+        this.status = "ACTIVE";
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
     }
