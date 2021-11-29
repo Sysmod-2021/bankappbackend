@@ -201,7 +201,7 @@ public class Transaction {
         return false;
     }
 
-    public Transaction execute() throws Bank.AccountDoesNotExistException {
+    public Transaction execute() throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         Account sender = getBank().getAccountById(this.source.getId());
 
         if (sender == null) {
@@ -209,9 +209,7 @@ public class Transaction {
             this.rejectionDescription = "Source account is invalid";
             return this;
         } else if (!Objects.equals(sender.getStatus(), "ACTIVE")) {
-            this.status = Status.ABORTED;
-            this.rejectionDescription = "Source account is frozen";
-            return this;
+            throw new TransactionExceptions.TransactionRestrictionException("Source account is frozen");
         } else {
             this.source = sender;
         }
@@ -223,9 +221,7 @@ public class Transaction {
             this.rejectionDescription = "Destination account is invalid";
             return this;
         } else if (!Objects.equals(receiver.getStatus(), "ACTIVE")) {
-            this.status = Status.ABORTED;
-            this.rejectionDescription = "Destination account is frozen";
-            return this;
+            throw new TransactionExceptions.TransactionRestrictionException("Destination account is frozen");
         } else {
             this.destination = receiver;
         }
