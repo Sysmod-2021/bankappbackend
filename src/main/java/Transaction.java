@@ -208,6 +208,10 @@ public class Transaction {
             this.status = Status.ABORTED;
             this.rejectionDescription = "Source account is invalid";
             return this;
+        } else if (!Objects.equals(sender.getStatus(), "ACTIVE")) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Source account is frozen";
+            return this;
         } else {
             this.source = sender;
         }
@@ -217,6 +221,10 @@ public class Transaction {
         if (receiver == null) {
             this.status = Status.ABORTED;
             this.rejectionDescription = "Destination account is invalid";
+            return this;
+        } else if (!Objects.equals(receiver.getStatus(), "ACTIVE")) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Destination account is frozen";
             return this;
         } else {
             this.destination = receiver;
