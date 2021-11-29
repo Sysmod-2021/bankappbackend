@@ -17,19 +17,19 @@ public class Bank {
     private final Datastore database;
 
     public Bank() {
-        theBanksAccount = new Account(this);
-        theBanksAccount.setBalance(69420.00);
         this.admins = new ArrayList<>();
         this.customerMap = new HashMap<>();
         this.accountsMap = new HashMap<>();
         this.transactionsMap = new HashMap<>();
-
+        this.customers = new ArrayList<>();
+        this.transactions = new ArrayList<>();
+        this.accounts = new ArrayList<>();
         this.database = new Datastore("src/main/java/files/", this);
-
-        this.customers = database.getAllCustomers();
-        this.transactions = database.getAllTransactions();
-        this.accounts = database.getAllAccounts();
-
+        theBanksAccount = new Account(this);
+        theBanksAccount.setBalance(69420.00);
+        transactions.addAll(database.getAllTransactions());
+        customers.addAll(database.getAllCustomers());
+        accounts.addAll(database.getAllAccounts());
         for (Customer c : customers
         ) {
             customerMap.put(c.getId(), c);
@@ -48,6 +48,7 @@ public class Bank {
 //        accountsMap.put(theBanksAccount.getId(), theBanksAccount);
     }
     // TODO This can be shielded from the outside. but for now leave it at this.
+    //  VERY IMPORTANT - ALWAYS CLEAR file contents when testing manually. overwrite of document is a bit wonky.
     public void saveData() {
         this.database.save(customers,accounts,transactions);
     }

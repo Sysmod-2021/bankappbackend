@@ -26,7 +26,11 @@ public class Account {
         this.currency = Currency.EUR;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
+    }
 
+    private void addToBank(Account account) {
+        account.getBank().getAccountsMap().put(account.getId(), account);
+        account.getBank().getAccounts().add(account);
     }
 
     public Account(Bank bank, Customer customer, Currency currency, Double balance) {
@@ -37,6 +41,7 @@ public class Account {
         this.balance = balance;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
+        addToBank(this);
     }
     // for LoadSaveAccount
     public Account(Bank bank,String id, Customer customer, Currency currency, Double balance) {
@@ -47,6 +52,7 @@ public class Account {
         this.balance = balance;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
+        addToBank(this);
     }
 
     public void addSentTransaction(Transaction transaction) {
