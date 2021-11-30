@@ -61,28 +61,38 @@ public class WebConnector {
             }
         });
         
-        // Create account
-        post("/accounts/create", (request, response) -> {
+        // Administrator creates customer account
+        post("/administrators/:administratorId/accounts/create", (request, response) -> {
         	try {
-        		Administrator admin = root.getAdministrator();
+        		Administrator admin = root.getAdministrator(request.params(":administratorId"));
         		
         		Customer newCustomer = admin.createCustomer(
-        				request.queryParams("firstName"),
-        				request.queryParams("lastName"),
-        				request.queryParams("email"),
-        				request.queryParams("password"),
-        				Double.parseDouble(request.queryParams("amount")), // initial balance
-        				Currency.valueOf(request.queryParams("currency"))
+        			request.queryParams("firstName"),
+        			request.queryParams("lastName"),
+        			request.queryParams("email"),
+        			request.queryParams("password"),
+        			Double.parseDouble(request.queryParams("amount")), // initial balance
+        			Currency.valueOf(request.queryParams("currency"))
         		);
-        		
+    
         		if (!newCustomer) {
         			throw Exception("Unable to create account!");
         		} else {
-                    StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+            		ObjectMapper mapper = new ObjectMapper();
+
+                    SimpleModule module = new SimpleModule();
+                    module.addSerializer(Customer.class, new CustomerSerializer());
+                    mapper.registerModule(module);
+
+                    String serializedCustomer = mapper.writeValueAsString(newCustomer);
+                    
+                    StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
+
                     return new JSONObject(resp);
         		}
             } catch (Exception e) {
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+
                 return new JSONObject(resp);
             }
         });
