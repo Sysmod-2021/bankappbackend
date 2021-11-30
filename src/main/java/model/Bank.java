@@ -135,7 +135,7 @@ public class Bank {
 
     // Administrator management
 
-    public void addAdministrator(Administrator administrator) throws AdministratorExistsException {
+    private void addAdministrator(Administrator administrator) throws AdministratorExistsException {
         for (Administrator a : administrators) {
             if (a.getEmail().equals(administrator.getEmail())) {
                 throw new AdministratorExistsException("Administrator exists: " + administrator.getEmail());
