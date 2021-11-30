@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             Bank bank = new Bank();
-//            Administrator a = bank.createAdministrator("admin", "admin", "a@min.ee", "t");
+            Administrator a = bank.createAdministrator("admin", "admin", "a@min.ee", "t");
 //            System.out.println(bank.getCustomers());
 //            for (Account acc : bank.getAccounts()
 //                 ) {

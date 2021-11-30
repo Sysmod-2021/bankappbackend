@@ -3,6 +3,7 @@ import database.Datastore;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import exceptions.TransactionExceptions;
 
@@ -134,7 +135,7 @@ public class Bank {
 
     // Administrator management
 
-    private void addAdministrator(Administrator administrator) throws AdministratorExistsException {
+    public void addAdministrator(Administrator administrator) throws AdministratorExistsException {
         for (Administrator a : administrators) {
             if (a.getEmail().equals(administrator.getEmail())) {
                 throw new AdministratorExistsException("Administrator exists: " + administrator.getEmail());
@@ -152,6 +153,13 @@ public class Bank {
     public Administrator getAdministrator() { // let's say here we don't care about any particular administrator at the moment
         if (administrators.size() > 0) {
             return administrators.get(0);
+        }
+        return null;
+    }
+
+    public Administrator getAdministrator(String id) { // let's say here we don't care about any particular administrator at the moment
+        if (administrators.size() > 0) {
+            return administrators.stream().filter( a -> a.getId().equals(id)).findFirst().orElse(null);
         }
         return null;
     }
@@ -174,6 +182,14 @@ public class Bank {
 
     public List<Customer> getCustomers() {
         return this.customers;
+    }
+
+    public Customer getCustomer(String id) throws CustomerDoesNotExistException {
+        Customer customer =  getCustomerMap().get(id);
+        if (customer == null) {
+            throw new CustomerDoesNotExistException("Account does not exist: " + id);
+        }
+        return customer;
     }
 
     public Customer getCustomerByEmail(String email) throws CustomerDoesNotExistException {
@@ -245,6 +261,11 @@ public class Bank {
         return transaction;
     }
 
+    Transaction performTransaction(User user, Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+        Transaction transaction = this.createTransaction(sender, receiver, Currency.EUR, amount, description).execute();
+        this.createTrace(transaction, user);
+        return transaction;
+    }
     void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws TransactionExceptions.TransactionCanNotBeRevoked {
         Transaction revokedTransaction = transaction.revoke(reason);
         this.createTrace(revokedTransaction, administrator);

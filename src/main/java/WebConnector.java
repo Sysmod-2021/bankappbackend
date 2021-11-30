@@ -5,6 +5,7 @@ import static spark.Spark.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import model.serializer.TransactionSerializer;
 import org.json.JSONObject;
 
 import model.*;
@@ -62,6 +63,85 @@ public class WebConnector {
             }
         });
 
+        // Administator
+        post("/administrators/:administratorId/transactions/create", (request, response) -> {
+            try {
+                String administratorId = request.params(":administratorId");
+                String senderAccountId = request.queryParams("senderAccountId");
+                String receiverAccountId = request.queryParams("receiverAccountId");
+                double amount = Double.parseDouble(request.queryParams("amount"));
+                String description = request.queryParams("description");
+
+                Transaction transaction = root.getAdministrator(administratorId).createTransaction(senderAccountId, receiverAccountId, amount, description);
+
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(Transaction.class, new TransactionSerializer());
+                mapper.registerModule(module);
+
+                String serializedTransaction = mapper.writeValueAsString(transaction);
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(transaction));
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+
+        post("/administrators/:administratorId/transactions/seed", (request, response) -> {
+            try {
+                String administratorId = request.params(":administratorId");
+                String receiverAccountId = request.queryParams("receiverAccountId");
+                double amount = Double.parseDouble(request.queryParams("amount"));
+                String description = request.queryParams("description");
+                Currency currency = Currency.valueOf(request.queryParams("currency"));
+
+                Transaction transaction = root.getAdministrator(administratorId).createSeedTransaction(receiverAccountId, amount, currency, description);
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(Transaction.class, new TransactionSerializer());
+                mapper.registerModule(module);
+
+                String serializedTransaction = mapper.writeValueAsString(transaction);
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+
+
+        // Customer
+        post("/customers/:customerId/transactions/create", (request, response) -> {
+            try {
+                String customerId = request.params(":customerId");
+                String receiverAccountId = request.queryParams("receiverAccountId");
+                double amount = Double.parseDouble(request.queryParams("amount"));
+                String description = request.queryParams("description");
+
+                Transaction transaction = root.getCustomer(customerId).createTransaction(receiverAccountId, amount, description);
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(Transaction.class, new TransactionSerializer());
+                mapper.registerModule(module);
+
+                String serializedTransaction = mapper.writeValueAsString(transaction);
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
         // Customer
         get("/customers/:customerEmail/details", (request, response) -> {
             try {
