@@ -65,10 +65,8 @@ public class WebConnector {
         
         // Administrator creates customer account
         post("/administrators/:administratorId/accounts/create", (request, response) -> {
-        	try {
-        		Administrator admin = root.getAdministrator(request.params(":administratorId"));
-        		
-        		Customer newCustomer = admin.createCustomer(
+        	try {        		
+        		Customer newCustomer = root.getAdministrator(request.params(":administratorId")).createCustomer(
         			request.queryParams("firstName"),
         			request.queryParams("lastName"),
         			request.queryParams("email"),
@@ -77,21 +75,17 @@ public class WebConnector {
         			Currency.valueOf(request.queryParams("currency"))
         		);
     
-        		if (!newCustomer) {
-        			throw Exception("Unable to create account!");
-        		} else {
-            		ObjectMapper mapper = new ObjectMapper();
+        		ObjectMapper mapper = new ObjectMapper();
 
-                    SimpleModule module = new SimpleModule();
-                    module.addSerializer(Customer.class, new CustomerSerializer());
-                    mapper.registerModule(module);
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(Customer.class, new CustomerSerializer());
+                mapper.registerModule(module);
 
-                    String serializedCustomer = mapper.writeValueAsString(newCustomer);
-                    
-                    StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
+                String serializedCustomer = mapper.writeValueAsString(newCustomer);
+                
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
 
-                    return new JSONObject(resp);
-        		}
+                return new JSONObject(resp);
             } catch (Exception e) {
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
