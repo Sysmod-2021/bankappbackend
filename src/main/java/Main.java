@@ -7,7 +7,7 @@ public class Main {
             Bank bank = new Bank();
 //            Administrator a = bank.createAdministrator("admin", "admin", "a@min.ee", "t");
 //            System.out.println(bank.getCustomers());
-//            for (Account a : bank.getAccounts()
+//            for (Account acc : bank.getAccounts()
 //                 ) {
 //                System.out.println(a.saveToString());
 //            }
@@ -23,7 +23,7 @@ public class Main {
 //
 //            customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", 100.0, Currency.EUR);
 //            customer2 = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
-            bank.saveData();
+//            bank.saveData();
 //            a.createTransactionTwoCustomers(customer.getAccount().getId(), customer2.getAccount().getId(), 9.0, "trans1");
 //
 //            System.out.println(bank.getTransactions());

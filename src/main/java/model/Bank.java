@@ -88,18 +88,20 @@ public class Bank {
             // Bank account already exists so were not going to add it again
         }
 
-        transactions.addAll(database.getAllTransactions());
+
         customers.addAll(database.getAllCustomers());
-        accounts.addAll(database.getAllAccounts());
-      
         for (Customer c : customers
         ) {
             customerMap.put(c.getId(), c);
         }
+
+        accounts.addAll(database.getAllAccounts().stream().map(a -> a.setCustomer(customerMap.get(a.getCustomerId()))).collect(Collectors.toList()));
         for (Account a : accounts
         ) {
             accountsMap.put(a.getId(), a);
         }
+
+        transactions.addAll(database.getAllTransactions());
         for (Transaction t : transactions
         ) {
             transactionsMap.put(t.getId(), t);
