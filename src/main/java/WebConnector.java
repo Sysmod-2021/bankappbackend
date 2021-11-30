@@ -1,5 +1,3 @@
-import model.Bank;
-
 import static spark.Spark.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,6 +55,32 @@ public class WebConnector {
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+        
+        // Create account
+        post("/accounts/create", (request, response) -> {
+        	try {
+        		Administrator admin = root.getAdministrator();
+        		
+        		Customer newCustomer = admin.createCustomer(
+        				request.queryParams("firstName"),
+        				request.queryParams("lastName"),
+        				request.queryParams("email"),
+        				request.queryParams("password"),
+        				Double.parseDouble(request.queryParams("amount")), // initial balance
+        				Currency.valueOf(request.queryParams("currency"))
+        		);
+        		
+        		if (!newCustomer) {
+        			throw Exception("Unable to create account!");
+        		} else {
+                    StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+                    return new JSONObject(resp);
+        		}
             } catch (Exception e) {
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
