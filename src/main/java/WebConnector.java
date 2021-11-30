@@ -74,16 +74,8 @@ public class WebConnector {
         			Double.parseDouble(request.queryParams("amount")), // initial balance
         			Currency.valueOf(request.queryParams("currency"))
         		);
-    
-        		ObjectMapper mapper = new ObjectMapper();
-
-                SimpleModule module = new SimpleModule();
-                module.addSerializer(Customer.class, new CustomerSerializer());
-                mapper.registerModule(module);
-
-                String serializedCustomer = mapper.writeValueAsString(newCustomer);
                 
-                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
 
                 return new JSONObject(resp);
             } catch (Exception e) {
