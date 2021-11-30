@@ -64,9 +64,11 @@ public class WebConnector {
         });
         
         // Administrator creates customer account
-        post("/administrators/:administratorId/accounts/create", (request, response) -> {
+        post("/accounts/create", (request, response) -> {
         	try {        		
-        		Customer newCustomer = root.getAdministrator(request.params(":administratorId")).createCustomer(
+        		String administratorId = request.params(":administratorId");
+        		
+        		Customer newCustomer = root.createCustomer(
         			request.queryParams("firstName"),
         			request.queryParams("lastName"),
         			request.queryParams("email"),
