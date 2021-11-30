@@ -82,7 +82,7 @@ public class WebConnector {
                 mapper.registerModule(module);
 
                 String serializedTransaction = mapper.writeValueAsString(transaction);
-                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(transaction));
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
                 return new JSONObject(resp);
             } catch (Exception e) {
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());

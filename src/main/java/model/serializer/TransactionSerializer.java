@@ -26,7 +26,9 @@ public class TransactionSerializer extends StdSerializer<Transaction> {
         //TODO: add transaction list
 
         jgen.writeStartObject();
-        jgen.writeStringField("sourceID", value.getSource().getId());
+        if(value.getSource() != null) {
+            jgen.writeStringField("sourceID", value.getSource().getId());
+        }
         jgen.writeStringField("destId", value.getDestination().getId());
         jgen.writeNumberField("amount", value.getAmount());
         jgen.writeStringField("description", value.getDescription());
