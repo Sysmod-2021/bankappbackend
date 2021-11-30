@@ -11,6 +11,7 @@ public class Account {
 
     private final Bank bank;  // allows us to access the bank functionality, gives access to all the data
     private String id;
+    private String customerId;
     private Customer customer;
     private Currency currency;
     private Double balance;
@@ -55,15 +56,15 @@ public class Account {
 //        addToBank(this);
     }
     // for LoadSaveAccount
-    public Account(Bank bank,String id, Customer customer, Currency currency, Double balance) {
+    public Account(Bank bank,String id, String customerId, Currency currency, Double balance) {
         this.bank = bank;
         this.id = id;
-        this.customer = customer;
+        this.customerId = customerId;
         this.currency = currency;
         this.balance = balance;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
-        addToBank(this);
+        //addToBank(this);
     }
 
     public void addSentTransaction(Transaction transaction) {
@@ -87,7 +88,9 @@ public class Account {
         this.firePropertyChange(PROPERTY_ID, oldId, id);
         return this;
     }
-
+    public String getCustomerId(){
+        return  customerId;
+    }
     public Double getBalance() {
         return this.balance;
     }
