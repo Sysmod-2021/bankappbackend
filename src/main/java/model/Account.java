@@ -1,6 +1,8 @@
 package model;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Account {
     public static final String PROPERTY_ID = "id";
@@ -73,6 +75,22 @@ public class Account {
 
     public void addReceivedTransaction(Transaction transaction) {
         this.received.put(transaction.getId(), transaction);
+    }
+
+    public Map<String, Transaction> getSentTransaction() {
+        return this.sent;
+    }
+
+    public Map<String, Transaction> getReceivedTransaction() {
+        return this.received;
+    }
+
+    public List<Transaction> getAllTransactionsOrderedDesc() {
+        return Stream.of(this.received, this.sent)
+                .flatMap(map -> map.entrySet().stream())
+                .map(e -> e.getValue())
+                .sorted(Comparator.comparing(Transaction::getTimestamp, Comparator.reverseOrder()))
+                .collect(Collectors.toList());
     }
 
     public String getId() {

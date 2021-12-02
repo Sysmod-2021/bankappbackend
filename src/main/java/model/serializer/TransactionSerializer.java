@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import model.Customer;
 import model.Transaction;
 
 import java.io.IOException;
@@ -23,8 +22,6 @@ public class TransactionSerializer extends StdSerializer<Transaction> {
             Transaction value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException, JsonProcessingException {
 
-        //TODO: add transaction list
-
         jgen.writeStartObject();
         if(value.getSource() != null) {
             jgen.writeStringField("sourceID", value.getSource().getId());
@@ -35,6 +32,7 @@ public class TransactionSerializer extends StdSerializer<Transaction> {
         jgen.writeStringField("rejectionDescription", value.getRejectionDescription());
         jgen.writeStringField("status", value.getStatus().toString());
         jgen.writeStringField("currency", value.getCurrency().toString());
+        jgen.writeStringField("timestamp", value.getTimestamp().toString());
         jgen.writeEndObject();
     }
 }
