@@ -187,7 +187,7 @@ public class Bank {
     public Customer getCustomer(String id) throws CustomerDoesNotExistException {
         Customer customer =  getCustomerMap().get(id);
         if (customer == null) {
-            throw new CustomerDoesNotExistException("Account does not exist: " + id);
+            throw new CustomerDoesNotExistException("Customer does not exist: " + id);
         }
         return customer;
     }
@@ -195,7 +195,7 @@ public class Bank {
     public Customer getCustomerByEmail(String email) throws CustomerDoesNotExistException {
         Customer customer =  getCustomerMap().get(email);
         if (customer == null) {
-            throw new CustomerDoesNotExistException("Account does not exist: " + email);
+            throw new CustomerDoesNotExistException("Customer does not exist: " + email);
         }
         return customer;
     }
