@@ -2,6 +2,9 @@ import model.Bank;
 
 import static spark.Spark.*;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -23,8 +26,11 @@ public class WebConnector {
         // Administrator
         put("/transactions/:transactionId/revocation", (request, response) -> {
             try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> map = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String reason = map.get("reason");
                 String transactionId = request.params(":transactionId");
-                String reason = request.queryParams("reason");
                 root.getAdministrator().revokeTransaction(transactionId, reason);
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
