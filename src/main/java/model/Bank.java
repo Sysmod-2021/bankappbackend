@@ -177,7 +177,7 @@ public class Bank {
             }
         }
         customers.add(customer);
-        customerMap.put(customer.getEmail(), customer);
+        customerMap.put(customer.getId(), customer);
     }
 
     public List<Customer> getCustomers() {
@@ -193,11 +193,17 @@ public class Bank {
     }
 
     public Customer getCustomerByEmail(String email) throws CustomerDoesNotExistException {
-        Customer customer =  getCustomerMap().get(email);
-        if (customer == null) {
-            throw new CustomerDoesNotExistException("Customer does not exist: " + email);
+        Customer existingCustomer;
+        try {
+            existingCustomer = customers.stream()
+                                .filter(customer -> customer.getEmail().equals(email))
+                                .collect(Collectors.toList())
+                                .get(0);
+        } catch (Exception exception) {
+            throw new CustomerDoesNotExistException("Customer" + email + "does not exist in the bank");
         }
-        return customer;
+
+        return existingCustomer;
     }
 
     public Customer createCustomer(String firstName, String lastName, String email, String password, Double initial_balance, Currency currency) throws CustomerExistsException, AccountExistsException {

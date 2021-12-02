@@ -27,6 +27,7 @@ public class CustomerSerializer extends StdSerializer<Customer> {
         //TODO: add transaction list
     
         jgen.writeStartObject();
+        jgen.writeStringField("customerId", value.getId());
         jgen.writeStringField("accountId", value.getAccount().getId());
         jgen.writeStringField("firstName", value.getFirstName());
         jgen.writeStringField("lastName", value.getLastName());
