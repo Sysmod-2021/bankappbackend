@@ -3,11 +3,6 @@ import model.Bank;
 import static spark.Spark.*;
 import java.util.Map;
 
-<<<<<<< HEAD
-=======
-import java.util.Map;
-
->>>>>>> c0fbdc0383e2946388f30ec6b61bc8c11a403d76
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
