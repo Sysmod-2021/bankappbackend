@@ -3,6 +3,11 @@ import model.Bank;
 import static spark.Spark.*;
 import java.util.Map;
 
+<<<<<<< HEAD
+=======
+import java.util.Map;
+
+>>>>>>> c0fbdc0383e2946388f30ec6b61bc8c11a403d76
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -25,8 +30,11 @@ public class WebConnector {
         // Administrator
         put("/transactions/:transactionId/revocation", (request, response) -> {
             try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> map = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String reason = map.get("reason");
                 String transactionId = request.params(":transactionId");
-                String reason = request.queryParams("reason");
                 root.getAdministrator().revokeTransaction(transactionId, reason);
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
@@ -93,16 +101,19 @@ public class WebConnector {
         // Administator
         post("/administrators/:administratorId/transactions/create", (request, response) -> {
             try {
-                String administratorId = request.params(":administratorId");
-                String senderAccountId = request.queryParams("senderAccountId");
-                String receiverAccountId = request.queryParams("receiverAccountId");
-                double amount = Double.parseDouble(request.queryParams("amount"));
-                String description = request.queryParams("description");
-
-                Transaction transaction = root.getAdministrator(administratorId).createTransaction(senderAccountId, receiverAccountId, amount, description);
-
-
                 ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String senderAccountId = body.get("senderAccountId");
+                String receiverAccountId = body.get("receiverAccountId");
+                double amount = Double.parseDouble(body.get("amount"));
+                String description = body.get("description");
+
+                String administratorId = request.params(":administratorId");
+
+                Transaction transaction = root
+                    .getAdministrator(administratorId)
+                    .createTransaction(senderAccountId, receiverAccountId, amount, description);
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
@@ -119,15 +130,19 @@ public class WebConnector {
 
         post("/administrators/:administratorId/transactions/seed", (request, response) -> {
             try {
-                String administratorId = request.params(":administratorId");
-                String receiverAccountId = request.queryParams("receiverAccountId");
-                double amount = Double.parseDouble(request.queryParams("amount"));
-                String description = request.queryParams("description");
-                Currency currency = Currency.valueOf(request.queryParams("currency"));
-
-                Transaction transaction = root.getAdministrator(administratorId).createSeedTransaction(receiverAccountId, amount, currency, description);
-
                 ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String receiverAccountId = body.get("receiverAccountId");
+                double amount = Double.parseDouble(body.get("amount"));
+                String description = body.get("description");
+                Currency currency = Currency.valueOf(body.get("currency"));
+
+                String administratorId = request.params(":administratorId");
+
+                Transaction transaction = root
+                    .getAdministrator(administratorId)
+                    .createSeedTransaction(receiverAccountId, amount, currency, description);
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
@@ -147,14 +162,16 @@ public class WebConnector {
         // Customer
         post("/customers/:customerId/transactions/create", (request, response) -> {
             try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String receiverAccountId = body.get("receiverAccountId");
+                double amount = Double.parseDouble(body.get("amount"));
+                String description = body.get("description");
+
                 String customerId = request.params(":customerId");
-                String receiverAccountId = request.queryParams("receiverAccountId");
-                double amount = Double.parseDouble(request.queryParams("amount"));
-                String description = request.queryParams("description");
 
                 Transaction transaction = root.getCustomer(customerId).createTransaction(receiverAccountId, amount, description);
-
-                ObjectMapper mapper = new ObjectMapper();
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
