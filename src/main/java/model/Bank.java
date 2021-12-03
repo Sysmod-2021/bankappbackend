@@ -163,6 +163,13 @@ public class Bank {
         return null;
     }
 
+    public Administrator getAdministratorByEmail(String email) { // let's say here we don't care about any particular administrator at the moment
+        if (administrators.size() > 0) {
+            return administrators.stream().filter( a -> a.getEmail().equals(email)).findFirst().orElse(null);
+        }
+        return null;
+    }
+
     // Customer management
 
     public Map<String, Customer> getCustomerMap() {

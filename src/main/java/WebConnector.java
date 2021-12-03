@@ -22,6 +22,48 @@ public class WebConnector {
             return "Open Demo model.Bank".toString();
         });
 
+        //Auth
+        post("/authenticate", (request, response) -> {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+            String email = body.get("email");
+            String password = body.get("password");
+
+            String user_type = null;
+            User user = root.getAdministratorByEmail(email);
+            StandardResponse resp;
+            if(user!=null){
+                user_type="admin";
+            }
+            else{
+                user = root.getCustomerByEmail(email);
+                if(user != null){
+                    user_type = "customer";
+                }
+            }
+
+            if(user!=null && user.getPassword().equals(password)){
+                request.session(true).attribute("id", user.getId());
+                request.session(true).attribute("user_type", user_type);
+                resp = new StandardResponse(StatusResponse.SUCCESS);
+            }
+            else{
+                resp = new StandardResponse(StatusResponse.ERROR, "Wrong Credentials");
+            }
+            return new JSONObject(resp);
+        });
+
+        before("/administrators/*", (request, response) -> {
+            String user_type = request.session(true).attribute("user_type");
+            if ( user_type == null || !user_type.equals("admin"))
+                halt(401, "Access Denied");
+        });
+        before("/customers/*", (request, response) -> {
+            String user_type = request.session(true).attribute("user_type");
+            if ( user_type == null || !user_type.equals("customer"))
+                halt(401, "Access Denied");
+        });
         // Administrator
         put("/transactions/:transactionId/revocation", (request, response) -> {
             try {
