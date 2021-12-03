@@ -205,8 +205,17 @@ public class Bank {
         return existingCustomer;
     }
 
-    public Customer createCustomer(String firstName, String lastName, String email, String password, Double initial_balance, Currency currency) throws CustomerExistsException, AccountExistsException {
-        Customer customer = new Customer(this,UUID.randomUUID().toString(), firstName, lastName, email, password);
+    public Customer createCustomer(
+    		String firstName, 
+    		String lastName, 
+    		String email, 
+    		String password, 
+    		Double initial_balance, 
+    		Currency currency
+    ) throws CustomerExistsException, AccountExistsException {
+        Customer customer = new Customer(
+        		this,UUID.randomUUID().toString(), 
+        		firstName, lastName, email, password);
         addCustomer(customer);
 
         createAccount(customer, currency, initial_balance);

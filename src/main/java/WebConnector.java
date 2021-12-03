@@ -1,17 +1,16 @@
 import model.Bank;
 
 import static spark.Spark.*;
-
 import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import model.serializer.TransactionSerializer;
 import org.json.JSONObject;
 
 import model.*;
+import model.serializer.TransactionSerializer;
 import model.serializer.CustomerSerializer;
 import utils.StandardResponse;
 import utils.StatusResponse;
@@ -65,6 +64,31 @@ public class WebConnector {
                 return new JSONObject(resp);
             } catch (Exception e) {
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+        
+        // Administrator creates customer account
+        post("/accounts/create", (request, response) -> {
+        	try {
+        		ObjectMapper mapper = new ObjectMapper();
+        		Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+        		Customer newCustomer = root.createCustomer(
+        			requestBody.get("firstName"),
+        			requestBody.get("lastName"),
+        			requestBody.get("email"),
+        			requestBody.get("password"),
+        			Double.parseDouble(requestBody.get("amount")), // initial balance
+        			Currency.valueOf(requestBody.get("currency"))
+        		);
+                
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+
                 return new JSONObject(resp);
             }
         });
