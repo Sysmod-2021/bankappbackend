@@ -1,6 +1,5 @@
 package model;
 
-import java.time.LocalDateTime;
 import exceptions.TransactionExceptions;
 
 public class Administrator extends User {

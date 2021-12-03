@@ -72,16 +72,19 @@ public class WebConnector {
         // Administator
         post("/administrators/:administratorId/transactions/create", (request, response) -> {
             try {
-                String administratorId = request.params(":administratorId");
-                String senderAccountId = request.queryParams("senderAccountId");
-                String receiverAccountId = request.queryParams("receiverAccountId");
-                double amount = Double.parseDouble(request.queryParams("amount"));
-                String description = request.queryParams("description");
-
-                Transaction transaction = root.getAdministrator(administratorId).createTransaction(senderAccountId, receiverAccountId, amount, description);
-
-
                 ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String senderAccountId = body.get("senderAccountId");
+                String receiverAccountId = body.get("receiverAccountId");
+                double amount = Double.parseDouble(body.get("amount"));
+                String description = body.get("description");
+
+                String administratorId = request.params(":administratorId");
+
+                Transaction transaction = root
+                    .getAdministrator(administratorId)
+                    .createTransaction(senderAccountId, receiverAccountId, amount, description);
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
@@ -98,15 +101,19 @@ public class WebConnector {
 
         post("/administrators/:administratorId/transactions/seed", (request, response) -> {
             try {
-                String administratorId = request.params(":administratorId");
-                String receiverAccountId = request.queryParams("receiverAccountId");
-                double amount = Double.parseDouble(request.queryParams("amount"));
-                String description = request.queryParams("description");
-                Currency currency = Currency.valueOf(request.queryParams("currency"));
-
-                Transaction transaction = root.getAdministrator(administratorId).createSeedTransaction(receiverAccountId, amount, currency, description);
-
                 ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String receiverAccountId = body.get("receiverAccountId");
+                double amount = Double.parseDouble(body.get("amount"));
+                String description = body.get("description");
+                Currency currency = Currency.valueOf(body.get("currency"));
+
+                String administratorId = request.params(":administratorId");
+
+                Transaction transaction = root
+                    .getAdministrator(administratorId)
+                    .createSeedTransaction(receiverAccountId, amount, currency, description);
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
@@ -126,14 +133,16 @@ public class WebConnector {
         // Customer
         post("/customers/:customerId/transactions/create", (request, response) -> {
             try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String receiverAccountId = body.get("receiverAccountId");
+                double amount = Double.parseDouble(body.get("amount"));
+                String description = body.get("description");
+
                 String customerId = request.params(":customerId");
-                String receiverAccountId = request.queryParams("receiverAccountId");
-                double amount = Double.parseDouble(request.queryParams("amount"));
-                String description = request.queryParams("description");
 
                 Transaction transaction = root.getCustomer(customerId).createTransaction(receiverAccountId, amount, description);
-
-                ObjectMapper mapper = new ObjectMapper();
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
