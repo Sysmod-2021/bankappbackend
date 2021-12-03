@@ -1,7 +1,6 @@
 package model;
 
 import java.beans.PropertyChangeSupport;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
