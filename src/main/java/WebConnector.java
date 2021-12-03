@@ -65,14 +65,17 @@ public class WebConnector {
         
         // Administrator creates customer account
         post("/accounts/create", (request, response) -> {
-        	try {        		
+        	try {
+        		ObjectMapper mapper = new ObjectMapper();
+        		Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
         		Customer newCustomer = root.createCustomer(
-        			request.queryParams("firstName"),
-        			request.queryParams("lastName"),
-        			request.queryParams("email"),
-        			request.queryParams("password"),
-        			Double.parseDouble(request.queryParams("amount")), // initial balance
-        			Currency.valueOf(request.queryParams("currency"))
+        			requestBody.get("firstName"),
+        			requestBody.get("lastName"),
+        			requestBody.get("email"),
+        			requestBody.get("password"),
+        			Double.parseDouble(requestBody.get("amount")), // initial balance
+        			Currency.valueOf(requestBody.get("currency"))
         		);
                 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
