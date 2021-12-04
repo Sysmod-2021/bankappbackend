@@ -13,11 +13,24 @@ public class DatabaseTextLoadSave extends LoadSaveTemplate {
     private final File accountFile;
     private final File transactionFile;
 
+    private String getPathDelimiter() {
+        String pathDelimiter = "";
+
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            pathDelimiter = "\\";
+        } else {
+            pathDelimiter = "/";
+        }
+
+        return pathDelimiter;
+    }
+
     public DatabaseTextLoadSave() {
         super();
-        this.customerFile = new File(super.getPath()+"\\customers.txt");
-        this.accountFile = new File(super.getPath()+"\\accounts.txt");
-        this.transactionFile = new File(super.getPath()+"\\transactions.txt");
+        String pathDelimiter = getPathDelimiter();
+        this.customerFile = new File(super.getPath() + pathDelimiter + "customers.txt");
+        this.accountFile = new File(super.getPath() + pathDelimiter + "accounts.txt");
+        this.transactionFile = new File(super.getPath() + pathDelimiter + "transactions.txt");
     }
 
     public DatabaseTextLoadSave(String path) {
@@ -29,7 +42,8 @@ public class DatabaseTextLoadSave extends LoadSaveTemplate {
 
     @Override
     public ArrayList transactionLoadWithList(Bank b) {
-        File toRead = new File(getPath()+"\\transactions.txt");
+        String pathDelimiter = getPathDelimiter();
+        File toRead = new File(getPath() + pathDelimiter + "transactions.txt");
         try {
             Scanner sc = new Scanner(toRead);
             while (sc.hasNextLine()) {
@@ -56,7 +70,8 @@ public class DatabaseTextLoadSave extends LoadSaveTemplate {
 
     @Override
     public ArrayList customerLoadWithList(Bank b) {
-        File toRead = new File(getPath()+"\\customers.txt");
+        String pathDelimiter = getPathDelimiter();
+        File toRead = new File(getPath()+ pathDelimiter + "customers.txt");
         try {
             Scanner sc = new Scanner(toRead);;
             while (sc.hasNextLine()) {
@@ -79,7 +94,8 @@ public class DatabaseTextLoadSave extends LoadSaveTemplate {
 
     @Override
     public ArrayList accountLoadWithList(Bank b) {
-        File toRead = new File(getPath()+"\\accounts.txt");
+        String pathDelimiter = getPathDelimiter();
+        File toRead = new File(getPath() + pathDelimiter + "accounts.txt");
         try {
             Scanner sc = new Scanner(toRead);
             while (sc.hasNextLine()) {
