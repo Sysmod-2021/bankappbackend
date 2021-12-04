@@ -40,10 +40,30 @@ public class WebConnector {
             }
         });
 
-        // Administrator freeze account
-        post("/accounts/:accountId/frozen", (request, response) -> {
+        // Get account status
+        get("/accounts/:accountId/status", (request, response) -> {
             try {
                 String accountId = request.params(":accountId");
+                Account account = root.getAccountById(accountId);
+
+                String status = account.getStatus();
+                String message = "{'result':'" + status + "'}";
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, message);
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+
+        // Administrator freeze account
+        post("/accounts/frozen", (request, response) -> {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
+
+                String accountId = requestBody.get("accountId");
                 root.getAdministrator().setAccountStatus(accountId, "FROZEN");
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
@@ -55,9 +75,12 @@ public class WebConnector {
         });
 
         // Administrator activate account
-        post("/accounts/:accountId/active", (request, response) -> {
+        post("/accounts/active", (request, response) -> {
             try {
-                String accountId = request.params(":accountId");
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
+
+                String accountId = requestBody.get("accountId");
                 root.getAdministrator().setAccountStatus(accountId, "ACTIVE");
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
