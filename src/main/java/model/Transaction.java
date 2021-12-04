@@ -349,10 +349,14 @@ public class Transaction {
         }
 
         Double newSourceBalance = this.source.getBalance() + amount;
-        this.source.setBalance(newSourceBalance);
+        if (this.source != null) {
+            this.source.setBalance(newSourceBalance);
+        }
 
         Double newDestBalance = this.destination.getBalance() - amount;
-        this.destination.setBalance(newDestBalance);
+        if (this.destination != null) {
+            this.destination.setBalance(newDestBalance);
+        }
 
         this.status = Status.REVOKED;
         this.rejectionDescription = reason;
