@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.sparkjava:spark-core:2.9.3'
     implementation group: 'org.json', name: 'json', version: '20210307'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
+    implementation group: 'org.iban4j', name: 'iban4j', version: '3.2.3-RELEASE'
 }
 
 //test {

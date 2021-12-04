@@ -4,8 +4,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.iban4j.Iban;
+import org.iban4j.CountryCode;
+
 public class Account {
     public static final String PROPERTY_ID = "id";
+    public static final String PROPERTY_IBAN = "iban";
     public static final String PROPERTY_OWNER = "owner";
     public static final String PROPERTY_CURRENCY = "currency";
     public static final String PROPERTY_BALANCE = "balance";
@@ -13,6 +17,7 @@ public class Account {
 
     private final Bank bank;  // allows us to access the bank functionality, gives access to all the data
     private String id;
+    private String iban;
     private String customerId;
     private Customer customer;
     private Currency currency;
@@ -26,6 +31,8 @@ public class Account {
     public Account(Bank bank) {
         this.bank = bank;
         this.id = UUID.randomUUID().toString();
+        // TODO: ensure the iban number is unique
+        this.iban = Iban.random(CountryCode.EE).toString();
         this.currency = Currency.EUR;
         this.status = "ACTIVE";
         this.sent = new HashMap<>();
@@ -35,6 +42,8 @@ public class Account {
     public Account(Bank b, String id) {
         this.bank = b;
         this.id = id;
+        // TODO: ensure the iban number is unique
+        this.iban = Iban.random(CountryCode.EE).toString();
         this.currency = Currency.EUR;
         this.status = "ACTIVE";
         this.sent = new HashMap<>();
@@ -48,6 +57,8 @@ public class Account {
 
     public Account(Bank bank, Customer customer, Currency currency, Double balance) {
         this.id = UUID.randomUUID().toString();
+        // TODO: ensure the iban number is unique
+        this.iban = Iban.random(CountryCode.EE).toString();
         this.bank = bank;
         this.customer = customer;
         this.currency = currency;
@@ -58,12 +69,13 @@ public class Account {
 //        addToBank(this);
     }
     // for LoadSaveAccount
-    public Account(Bank bank,String id, String customerId, Currency currency, Double balance) {
+    public Account(Bank bank,String id, String customerId, Currency currency, Double balance, String status) {
         this.bank = bank;
         this.id = id;
         this.customerId = customerId;
         this.currency = currency;
         this.balance = balance;
+        this.status = status;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
         //addToBank(this);
@@ -106,6 +118,19 @@ public class Account {
         this.firePropertyChange(PROPERTY_ID, oldId, id);
         return this;
     }
+
+    public String getIban() { return this.iban; }
+
+    public Account setIban(String iban) {
+        if (Objects.equals(iban, this.iban)) {
+            return this;
+        }
+        final String oldIban = this.iban;
+        this.iban = iban;
+        this.firePropertyChange(PROPERTY_ID, oldIban, iban);
+        return this;
+    }
+
     public String getCustomerId(){
         return  customerId;
     }
