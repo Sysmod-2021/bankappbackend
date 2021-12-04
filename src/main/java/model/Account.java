@@ -69,12 +69,13 @@ public class Account {
 //        addToBank(this);
     }
     // for LoadSaveAccount
-    public Account(Bank bank,String id, String customerId, Currency currency, Double balance) {
+    public Account(Bank bank,String id, String customerId, Currency currency, Double balance, String status) {
         this.bank = bank;
         this.id = id;
         this.customerId = customerId;
         this.currency = currency;
         this.balance = balance;
+        this.status = status;
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
         //addToBank(this);

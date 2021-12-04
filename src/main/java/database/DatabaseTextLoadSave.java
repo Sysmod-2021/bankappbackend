@@ -106,11 +106,13 @@ public class DatabaseTextLoadSave extends LoadSaveTemplate {
                 String customerId = null;
                 Currency currency = null;
                 Double balance = null;
+                String status = null;
                 try {
                     customerId = lineScanner.next();
                     currency = Currency.valueOf(lineScanner.next());
                     balance = Double.parseDouble(lineScanner.next());
-                    Account a = new Account(b, accountId, customerId, currency, balance);
+                    status = String.valueOf(lineScanner.next());
+                    Account a = new Account(b, accountId, customerId, currency, balance, status);
                     accounts.add(a);
                 } catch (NullPointerException e) {
                     // nullpointer = bank's account. update existing banks account without customer param.
