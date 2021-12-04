@@ -322,10 +322,25 @@ public class Transaction {
     }
 
     public String saveToString() {
-        String out = "";
-        out += getId() + "," + getSource().getId() + "," + getDestination().getId() + "," + getCurrency() + "," +
-                getAmount() + "," + getDescription() + "," + getStatus() + "," + getRejectionDescription() + "," + getTimestamp().toString();
-        return out;
+        String sourceAndDestination = "";
+        if (getSource() == null) {
+            sourceAndDestination = "," + getDestination().getId();
+        } else if (getDestination() == null) {
+            sourceAndDestination = getSource().getId() + ",";
+        } else {
+            sourceAndDestination = getSource().getId() + "," + getDestination().getId();
+        }
+
+        return String.join(",",
+            getId(),
+            sourceAndDestination,
+            getCurrency().toString(),
+            getAmount().toString(),
+            getDescription(),
+            getStatus().toString(),
+            getRejectionDescription(),
+            getTimestamp().toString()
+        );
     }
 
     public Transaction revoke(String reason) throws TransactionExceptions.TransactionCanNotBeRevoked {

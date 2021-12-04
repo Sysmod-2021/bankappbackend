@@ -203,15 +203,18 @@ public class Account {
         return false;
     }
     public String saveToString() {
-        String out = "";
         try {
-            out += getId() + "," + getOwner().getId() + "," + getCurrency() + "," + getBalance();
-            return out;
+            return String.join(",",
+                getId(),
+                getOwner().getId(),
+                getCurrency().toString(),
+                getBalance().toString(),
+                getStatus()
+            );
         } catch (NullPointerException e) {
             // owner id is empty because its the banks account.
-            out += getId() + ",," + getCurrency() + "," + getBalance();
+            String out = getId() + ",," + getCurrency() + "," + getBalance() + "," + getStatus();
             return out;
         }
-
     }
 }
