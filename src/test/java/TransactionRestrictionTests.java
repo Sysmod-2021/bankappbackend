@@ -1,4 +1,3 @@
-import exceptions.TransactionExceptions;
 import org.fulib.FulibTools;
 import org.junit.Test;
 
@@ -37,7 +36,7 @@ public class TransactionRestrictionTests {
         assertEquals("FROZEN", customer.getAccount().getStatus());
 
         // Transaction
-        assertThrows(TransactionExceptions.TransactionRestrictionException.class, () -> {
+        assertThrows(Bank.TransactionRestrictionException.class, () -> {
             Transaction transfer = new Transaction(bank, customer.getAccount(), null, Currency.EUR, 20.0, TRANS_DESC);
             transfer.execute();
         });
@@ -53,7 +52,7 @@ public class TransactionRestrictionTests {
     //  Then    the account can perform transactions again
 
     @Test
-    public void testUndoRestriction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    public void testUndoRestriction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         // Init data
         Bank bank = new Bank();
         Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");

@@ -4,7 +4,6 @@ import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import exceptions.TransactionExceptions;
 
 public class Transaction {
     public enum Status {
@@ -237,7 +236,7 @@ public class Transaction {
         return false;
     }
 
-    public Transaction execute() throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    public Transaction execute() throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Account sender = getBank().getAccountById(this.source.getId());
 
         if (sender == null) {
@@ -245,7 +244,7 @@ public class Transaction {
             this.rejectionDescription = "Source account is invalid";
             return this;
         } else if (!Objects.equals(sender.getStatus(), "ACTIVE")) {
-            throw new TransactionExceptions.TransactionRestrictionException("Source account is frozen");
+            throw new Bank.TransactionRestrictionException("Source account is frozen");
         } else {
             this.source = sender;
         }
@@ -257,7 +256,7 @@ public class Transaction {
             this.rejectionDescription = "Destination account is invalid";
             return this;
         } else if (!Objects.equals(receiver.getStatus(), "ACTIVE")) {
-            throw new TransactionExceptions.TransactionRestrictionException("Destination account is frozen");
+            throw new Bank.TransactionRestrictionException("Destination account is frozen");
         } else {
             this.destination = receiver;
         }
@@ -343,9 +342,9 @@ public class Transaction {
         );
     }
 
-    public Transaction revoke(String reason) throws TransactionExceptions.TransactionCanNotBeRevoked {
+    public Transaction revoke(String reason) throws Bank.TransactionCanNotBeRevoked {
         if (this.status == Status.ABORTED || this.status == Status.REVOKED) {
-            throw new TransactionExceptions.TransactionCanNotBeRevoked("Denied to revoke, transaction status is not EXECUTED");
+            throw new Bank.TransactionCanNotBeRevoked("Denied to revoke, transaction status is not EXECUTED");
         }
 
         Double newSourceBalance = this.source.getBalance() + amount;
