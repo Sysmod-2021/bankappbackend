@@ -302,6 +302,19 @@ public class WebConnector {
             }
         });
 
+        // Administrator/customer saves bank
+        post("/administrators/bank/save", (request, response) -> {
+            try {
+                root.saveData();
+    
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+
         // CORS
         // https://gist.github.com/saeidzebardast/e375b7d17be3e0f4dddf
         options("/*",
