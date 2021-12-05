@@ -55,7 +55,7 @@ $ curl -d '{"accountId": <account_id_value>}' -H 'Content-Type: application/json
 $ curl -d '{"accountId": "8a633aa5-907c-4e57-a313-22e0adb2672e"}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/accounts/active
 ```
 
-#### Froze an account
+#### Freeze an account
 ```bash
 # template
 $ curl -d '{"accountId": <account_id_value>}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/accounts/frozen
