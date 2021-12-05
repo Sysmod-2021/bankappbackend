@@ -27,6 +27,11 @@ public class Bank {
         }
     }
 
+    public static class AdministratorDoesNotExistException extends Exception {
+        public AdministratorDoesNotExistException(String message) {
+            super(message);
+        }
+    }
     public static class CustomerExistsException extends Exception {
         public CustomerExistsException(String message) {
             super(message);
@@ -161,6 +166,20 @@ public class Bank {
             return administrators.stream().filter( a -> a.getId().equals(id)).findFirst().orElse(null);
         }
         return null;
+    }
+
+    public Administrator getAdministratorByEmail(String email) throws AdministratorDoesNotExistException {
+        Administrator existingAdministrator;
+        try {
+            existingAdministrator = administrators.stream()
+                    .filter(administrator -> administrator.getEmail().equals(email))
+                    .collect(Collectors.toList())
+                    .get(0);
+        } catch (Exception exception) {
+            throw new AdministratorDoesNotExistException("Administrator" + email + "does not exist in the bank");
+        }
+
+        return existingAdministrator;
     }
 
     // Customer management
@@ -343,5 +362,28 @@ public class Bank {
         Trace trace = new Trace(this, new Transaction(transaction), user, LocalDateTime.now());
         addTrace(trace);
         return trace;
+    }
+
+    // Auth
+
+    public AuthResponse authenticate(String email, String password) throws Exception {
+        User user = null;
+        String user_type;
+        try {
+            user = this.getAdministratorByEmail(email);
+
+            if (!user.getPassword().equals(password)) {
+                throw new Exception("Wrong Credentials");
+            }
+            user_type = "administrator";
+        }
+        catch (Bank.AdministratorDoesNotExistException e) {
+            user = this.getCustomerByEmail(email);
+            if (!user.getPassword().equals(password)) {
+                throw new Exception("Wrong Credentials");
+            }
+            user_type = "customer";
+        }
+        return new AuthResponse(user.getId(), user_type);
     }
 }
