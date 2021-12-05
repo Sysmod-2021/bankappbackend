@@ -97,8 +97,19 @@ public class Account {
         return this.received;
     }
 
-    public List<Transaction> getAllTransactionsOrderedDesc() {
-        return Stream.of(this.received, this.sent)
+    public List<Transaction> getAllTransactionsWithSignAndOrderedDesc() {
+        Map<String, Transaction> updatedSentTransactions = 
+            this.sent.entrySet()
+            .stream()
+            .collect(Collectors.toMap(
+                entry -> entry.getKey(),
+                entry -> {
+                    Transaction copiedTransaction = new Transaction(entry.getValue());
+                    return copiedTransaction.setAmount(-copiedTransaction.getAmount());
+                }
+            ));
+
+        return Stream.of(this.received, updatedSentTransactions)
                 .flatMap(map -> map.entrySet().stream())
                 .map(e -> e.getValue())
                 .sorted(Comparator.comparing(Transaction::getTimestamp, Comparator.reverseOrder()))
@@ -203,15 +214,18 @@ public class Account {
         return false;
     }
     public String saveToString() {
-        String out = "";
         try {
-            out += getId() + "," + getOwner().getId() + "," + getCurrency() + "," + getBalance();
-            return out;
+            return String.join(",",
+                getId(),
+                getOwner().getId(),
+                getCurrency().toString(),
+                getBalance().toString(),
+                getStatus()
+            );
         } catch (NullPointerException e) {
             // owner id is empty because its the banks account.
-            out += getId() + ",," + getCurrency() + "," + getBalance();
+            String out = getId() + ",," + getCurrency() + "," + getBalance() + "," + getStatus();
             return out;
         }
-
     }
 }

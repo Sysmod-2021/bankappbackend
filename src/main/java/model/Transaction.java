@@ -322,10 +322,25 @@ public class Transaction {
     }
 
     public String saveToString() {
-        String out = "";
-        out += getId() + "," + getSource().getId() + "," + getDestination().getId() + "," + getCurrency() + "," +
-                getAmount() + "," + getDescription() + "," + getStatus() + "," + getRejectionDescription() + "," + getTimestamp().toString();
-        return out;
+        String sourceAndDestination = "";
+        if (getSource() == null) {
+            sourceAndDestination = "," + getDestination().getId();
+        } else if (getDestination() == null) {
+            sourceAndDestination = getSource().getId() + ",";
+        } else {
+            sourceAndDestination = getSource().getId() + "," + getDestination().getId();
+        }
+
+        return String.join(",",
+            getId(),
+            sourceAndDestination,
+            getCurrency().toString(),
+            getAmount().toString(),
+            getDescription(),
+            getStatus().toString(),
+            getRejectionDescription(),
+            getTimestamp().toString()
+        );
     }
 
     public Transaction revoke(String reason) throws TransactionExceptions.TransactionCanNotBeRevoked {
@@ -334,10 +349,14 @@ public class Transaction {
         }
 
         Double newSourceBalance = this.source.getBalance() + amount;
-        this.source.setBalance(newSourceBalance);
+        if (this.source != null) {
+            this.source.setBalance(newSourceBalance);
+        }
 
         Double newDestBalance = this.destination.getBalance() - amount;
-        this.destination.setBalance(newDestBalance);
+        if (this.destination != null) {
+            this.destination.setBalance(newDestBalance);
+        }
 
         this.status = Status.REVOKED;
         this.rejectionDescription = reason;

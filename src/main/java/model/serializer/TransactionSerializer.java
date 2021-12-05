@@ -23,6 +23,7 @@ public class TransactionSerializer extends StdSerializer<Transaction> {
             throws IOException, JsonProcessingException {
 
         jgen.writeStartObject();
+        jgen.writeStringField("transactionId", value.getId());
         if(value.getSource() != null) {
             jgen.writeStringField("sourceID", value.getSource().getId());
         }

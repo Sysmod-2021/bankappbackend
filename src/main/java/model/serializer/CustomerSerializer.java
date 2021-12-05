@@ -34,7 +34,9 @@ public class CustomerSerializer extends StdSerializer<Customer> {
 
         jgen.writeStartObject();
             jgen.writeArrayFieldStart("transactions");
-                mapper.writeValue(jgen, value.getAccount().getAllTransactionsOrderedDesc());
+                for (Transaction t:value.getAccount().getAllTransactionsWithSignAndOrderedDesc()) {
+                    mapper.writeValue(jgen, t);
+                }
             jgen.writeEndArray();
 
             jgen.writeStringField("customerId", value.getId());
