@@ -61,7 +61,9 @@ public class Bank {
     }
 
     public static class TransactionRestrictionException extends Exception {
-        public TransactionRestrictionException(String message) { super(message); }
+        public TransactionRestrictionException(String message) {
+            super(message);
+        }
     }
 
     // Main in-memory storage of all the bank-related information
