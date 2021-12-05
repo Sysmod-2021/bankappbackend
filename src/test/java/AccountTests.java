@@ -43,8 +43,8 @@ public class AccountTests {
         Double initial_balance = 100.0;
         // NOTE: Factory pattern
         // bank.createCustomer creates a customer and an account
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", initial_balance, Currency.EUR);
-        assertEquals("john@doe.ee", bank.getCustomerByEmail("john@doe.ee").getEmail());
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", initial_balance, Currency.EUR);
+        assertEquals("johntest@doe.ee", bank.getCustomerByEmail("johntest@doe.ee").getEmail());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_3.svg", bank);
     }

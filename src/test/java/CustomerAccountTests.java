@@ -24,7 +24,7 @@ public class CustomerAccountTests {
 	public void shouldAssignBankAccountToCustomer() throws Bank.CustomerExistsException, Bank.AccountExistsException {
 		Bank bank = new Bank();
 		Double balance = 100.0;
-		Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+		Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
 
 		assertEquals(balance, customer.getAccount().getBalance());
 

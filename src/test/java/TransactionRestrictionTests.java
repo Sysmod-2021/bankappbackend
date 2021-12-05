@@ -28,7 +28,7 @@ public class TransactionRestrictionTests {
         // Init data
         Bank bank = new Bank();
         Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
-        Customer customer = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
+        Customer customer = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.EUR);
         Account account = customer.getAccount();
         String accountId = account.getId();
 
@@ -57,10 +57,10 @@ public class TransactionRestrictionTests {
         // Init data
         Bank bank = new Bank();
         Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
-        Customer customer = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 21.0, Currency.EUR);
+        Customer customer = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 21.0, Currency.EUR);
         Account account = customer.getAccount();
         String accountId = account.getId();
-        Customer receiver = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", 0.0, Currency.EUR);
+        Customer receiver = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", 0.0, Currency.EUR);
 
         // Activate account
         admin.setAccountStatus(accountId, "FROZEN");

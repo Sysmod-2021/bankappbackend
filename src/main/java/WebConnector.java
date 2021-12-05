@@ -69,6 +69,7 @@ public class WebConnector {
             if ( user_type == null || !user_type.equals("customer"))
                 halt(401, "Access Denied");
         });
+
         // Administrator
         put("/administrators/transactions/:transactionId/revocation", (request, response) -> {
             try {
@@ -89,12 +90,33 @@ public class WebConnector {
             }
         });
 
-        // Administrator freeze account
-        post("/administrators/accounts/:accountId/frozen", (request, response) -> {
+        // Get account status
+        get("/customers/accounts/status", (request, response) -> {
             try {
-                String accountId = request.params(":accountId");
+                String customerId = request.session().attribute("user_id");
+                Customer customer = root.getCustomer(customerId);
+                Account account = customer.getAccount();
 
+                String status = account.getStatus();
+                String message = "{'result':'" + status + "'}";
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, message);
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+
+        // Administrator freeze account
+        post("/administrators/accounts/frozen", (request, response) -> {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
+
+                String accountId = requestBody.get("accountId");
                 String administratorId = request.session().attribute("user_id");
+
                 root.getAdministrator(administratorId).setAccountStatus(accountId, "FROZEN");
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
@@ -108,7 +130,10 @@ public class WebConnector {
         // Administrator activate account
         post("/administrators/accounts/:accountId/active", (request, response) -> {
             try {
-                String accountId = request.params(":accountId");
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
+
+                String accountId = requestBody.get("accountId");
 
                 String administratorId = request.session().attribute("user_id");
                 root.getAdministrator(administratorId).setAccountStatus(accountId, "ACTIVE");

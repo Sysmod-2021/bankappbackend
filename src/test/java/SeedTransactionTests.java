@@ -28,7 +28,7 @@ public class SeedTransactionTests {
     public void testCreateSeedTransaction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException {
         Bank bank = new Bank();
         Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
-        Customer customer = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
+        Customer customer = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.EUR);
         Transaction transfer = admin.createSeedTransactionToCustomer(customer.getAccount().getId(), 30.0, Currency.EUR, TRANS_DESC);
         assertEquals(30.0, customer.getAccount().getBalance(), 0.0);
 
@@ -48,7 +48,7 @@ public class SeedTransactionTests {
         Administrator admin = bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
 
         Bank otherBank = new Bank();
-        Customer customer = otherBank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
+        Customer customer = otherBank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.EUR);
 
         assertThrows(Bank.AccountDoesNotExistException.class, () -> {
             Transaction transfer = admin.createSeedTransactionToCustomer(customer.getAccount().getId(), 30.0, Currency.EUR, TRANS_DESC);

@@ -19,7 +19,11 @@ public abstract class LoadSaveTemplate implements LoadSaveStrategy {
     public HashMap<String, Account> accountHashMap;
 
     LoadSaveTemplate() {
-        this.path = "src\\main\\java\\files";
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            this.path = "src\\main\\java\\files";
+        } else {
+            this.path = "src/main/java/files";
+        }
 
         transactions = new ArrayList<>();
         transactionMap = new HashMap<>();

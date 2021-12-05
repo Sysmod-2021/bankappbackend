@@ -25,8 +25,8 @@ public class TransactionTests {
     public void testCreateTransaction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
         Bank bank = new Bank();
         bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
-        Customer customer1 = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", 100.0, Currency.EUR);
-        Customer customer2 = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
+        Customer customer1 = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", 100.0, Currency.EUR);
+        Customer customer2 = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.EUR);
 
         Transaction transfer = bank.createTransaction(customer1.getAccount(), customer2.getAccount(), Currency.EUR, 25.5, TRANS_DESC);
         transfer.execute();
@@ -52,8 +52,8 @@ public class TransactionTests {
         Double balance = 100.0;
         Double amount = 25.0;
 
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.USD);
-        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.USD);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.USD);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.USD);
         Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.USD, amount, TRANS_DESC);
 
         Customer beneficiaryAcc = transfer.getDestination().getOwner();
@@ -87,8 +87,8 @@ public class TransactionTests {
         Double balance = 100.0;
         Double amount = 25.0;
 
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
-        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.EUR);
 
         Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
         transfer.execute();
@@ -112,8 +112,8 @@ public class TransactionTests {
         Double balance = 100.0;
         Double amount = 25.0;
 
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
-        Customer beneficiary = internationalBank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", 0.0, Currency.EUR);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
+        Customer beneficiary = internationalBank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.EUR);
 
         assertThrows(Bank.AccountDoesNotExistException.class, () -> {
             Transaction transfer = new Transaction(bank, customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
@@ -139,7 +139,7 @@ public class TransactionTests {
         Double balance = 100.0;
         Double fee = 10.0;
 
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
         Transaction transfer = bank.createTransaction(customer.getAccount(), bank.getBankAccount(), Currency.EUR, fee, "Fee");
         transfer.execute();
 
@@ -160,7 +160,7 @@ public class TransactionTests {
         Double balance = 10.0;
         Double fee = 50.0;
 
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
         Transaction transfer = bank.createTransaction(customer.getAccount(), bankAccount, Currency.EUR, fee, "Expensive fee");
         transfer.execute();
 
@@ -189,8 +189,8 @@ public class TransactionTests {
         Double balanceOfBeneficiary = 300.0;
         Double amount = 50.0;
 
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
-        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobby@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
         Transaction transaction = bank.getAdministrator().createTransactionTwoCustomers(
             customer.getAccount().getId(),
             beneficiary.getAccount().getId(),
@@ -224,7 +224,7 @@ public class TransactionTests {
         Double balance = 10.0;
         Double amount = 250.0;
 
-        Customer customer = bank.createCustomer("John", "Doe", "john@doe.ee", "pass1234", balance, Currency.EUR);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
         Transaction deposit = bank.createTransaction(bank.getBankAccount(), customer.getAccount(), Currency.EUR, amount, "Salary");
         deposit.execute();
 
