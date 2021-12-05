@@ -22,15 +22,65 @@ public class WebConnector {
             return "Open Demo model.Bank".toString();
         });
 
+        //Auth
+        post("/authenticate", (request, response) -> {
+            try{
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+
+                String email = body.get("email");
+                String password = body.get("password");
+                AuthResponse authResponse = root.authenticate(email, password);
+
+                request.session(true).attribute("user_id", authResponse.getUserId());
+                request.session(true).attribute("user_type", authResponse.getUserType());
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+
+                return new JSONObject(resp);
+            }
+            catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+
+                return new JSONObject(resp);
+            }
+            });
+        post("/logout", (request, response) -> {
+            try{
+            request.session().invalidate();
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+
+                return new JSONObject(resp);
+            }
+            catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+
+                return new JSONObject(resp);
+            }
+        });
+
+        before("/administrators/*", (request, response) -> {
+            String user_type = request.session(true).attribute("user_type");
+            if ( user_type == null || !user_type.equals("administrator"))
+                halt(401, "Access Denied");
+        });
+        before("/customers/*", (request, response) -> {
+            String user_type = request.session(true).attribute("user_type");
+            if ( user_type == null || !user_type.equals("customer"))
+                halt(401, "Access Denied");
+        });
+
         // Administrator
-        put("/transactions/:transactionId/revocation", (request, response) -> {
+        put("/administrators/transactions/:transactionId/revocation", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> map = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
 
                 String reason = map.get("reason");
                 String transactionId = request.params(":transactionId");
-                root.getAdministrator().revokeTransaction(transactionId, reason);
+
+                String administratorId = request.session().attribute("user_id");
+                root.getAdministrator(administratorId).revokeTransaction(transactionId, reason);
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
@@ -41,10 +91,11 @@ public class WebConnector {
         });
 
         // Get account status
-        get("/accounts/:accountId/status", (request, response) -> {
+        get("/customers/accounts/status", (request, response) -> {
             try {
-                String accountId = request.params(":accountId");
-                Account account = root.getAccountById(accountId);
+                String customerId = request.session().attribute("user_id");
+                Customer customer = root.getCustomer(customerId);
+                Account account = customer.getAccount();
 
                 String status = account.getStatus();
                 String message = "{'result':'" + status + "'}";
@@ -58,13 +109,15 @@ public class WebConnector {
         });
 
         // Administrator freeze account
-        post("/accounts/frozen", (request, response) -> {
+        post("/administrators/accounts/frozen", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
 
                 String accountId = requestBody.get("accountId");
-                root.getAdministrator().setAccountStatus(accountId, "FROZEN");
+                String administratorId = request.session().attribute("user_id");
+
+                root.getAdministrator(administratorId).setAccountStatus(accountId, "FROZEN");
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
@@ -75,13 +128,15 @@ public class WebConnector {
         });
 
         // Administrator activate account
-        post("/accounts/active", (request, response) -> {
+        post("/administrators/accounts/:accountId/active", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
 
                 String accountId = requestBody.get("accountId");
-                root.getAdministrator().setAccountStatus(accountId, "ACTIVE");
+
+                String administratorId = request.session().attribute("user_id");
+                root.getAdministrator(administratorId).setAccountStatus(accountId, "ACTIVE");
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
@@ -92,7 +147,7 @@ public class WebConnector {
         });
         
         // Administrator creates customer account
-        post("/accounts/create", (request, response) -> {
+        post("/administrators/accounts/create", (request, response) -> {
         	try {
         		ObjectMapper mapper = new ObjectMapper();
         		Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
@@ -117,7 +172,7 @@ public class WebConnector {
         });
 
         // Administator
-        post("/administrators/:administratorId/transactions/create", (request, response) -> {
+        post("/administrators/transactions/create", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
@@ -127,7 +182,7 @@ public class WebConnector {
                 double amount = Double.parseDouble(body.get("amount"));
                 String description = body.get("description");
 
-                String administratorId = request.params(":administratorId");
+                String administratorId = request.session().attribute("user_id");
 
                 Transaction transaction = root
                     .getAdministrator(administratorId)
@@ -146,7 +201,7 @@ public class WebConnector {
             }
         });
 
-        post("/administrators/:administratorId/transactions/seed", (request, response) -> {
+        post("/administrators/transactions/seed", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
@@ -156,7 +211,7 @@ public class WebConnector {
                 String description = body.get("description");
                 Currency currency = Currency.valueOf(body.get("currency"));
 
-                String administratorId = request.params(":administratorId");
+                String administratorId = request.session().attribute("user_id");
 
                 Transaction transaction = root
                     .getAdministrator(administratorId)
@@ -178,7 +233,7 @@ public class WebConnector {
 
 
         // Customer
-        post("/customers/:customerId/transactions/create", (request, response) -> {
+        post("/customers/transactions/create", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
@@ -187,7 +242,7 @@ public class WebConnector {
                 double amount = Double.parseDouble(body.get("amount"));
                 String description = body.get("description");
 
-                String customerId = request.params(":customerId");
+                String customerId = request.session().attribute("user_id");
 
                 Transaction transaction = root.getCustomer(customerId).createTransaction(receiverAccountId, amount, description);
 
@@ -218,6 +273,27 @@ public class WebConnector {
 
                 String serializedCustomer = mapper.writeValueAsString(customer);
     
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
+                return new JSONObject(resp);
+            } catch (Exception e) {
+                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                return new JSONObject(resp);
+            }
+        });
+        // Customer
+        get("/customers/details", (request, response) -> {
+            try {
+                String customerId = request.session().attribute("user_id");
+                Customer customer = root.getCustomer(customerId);
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(Customer.class, new CustomerSerializer());
+                mapper.registerModule(module);
+
+                String serializedCustomer = mapper.writeValueAsString(customer);
+
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
                 return new JSONObject(resp);
             } catch (Exception e) {
