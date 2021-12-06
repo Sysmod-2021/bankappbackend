@@ -1,5 +1,6 @@
 import model.*;
 import model.Currency;
+import web.WebConnector;
 
 public class Main {
     public static void main(String[] args) {
