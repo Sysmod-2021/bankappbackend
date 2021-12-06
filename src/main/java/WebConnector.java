@@ -1,19 +1,16 @@
-import model.Bank;
-
-import static spark.Spark.*;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-
-import org.json.JSONObject;
-
 import model.*;
-import model.serializer.TransactionSerializer;
 import model.serializer.CustomerSerializer;
+import model.serializer.TransactionSerializer;
+import org.json.JSONObject;
 import utils.StandardResponse;
 import utils.StatusResponse;
+
+import java.util.Map;
+
+import static spark.Spark.*;
 
 public class WebConnector {
     public static void run(Bank root) {
@@ -24,9 +21,10 @@ public class WebConnector {
 
         //Auth
         post("/authenticate", (request, response) -> {
-            try{
+            try {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
                 String email = body.get("email");
                 String password = body.get("password");
@@ -38,21 +36,19 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
 
                 return new JSONObject(resp);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
             }
-            });
+        });
         post("/logout", (request, response) -> {
-            try{
-            request.session().invalidate();
+            try {
+                request.session().invalidate();
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
 
                 return new JSONObject(resp);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
@@ -61,12 +57,12 @@ public class WebConnector {
 
         before("/administrators/*", (request, response) -> {
             String user_type = request.session(true).attribute("user_type");
-            if ( user_type == null || !user_type.equals("administrator"))
+            if (user_type == null || !user_type.equals("administrator"))
                 halt(401, "Access Denied");
         });
         before("/customers/*", (request, response) -> {
             String user_type = request.session(true).attribute("user_type");
-            if ( user_type == null || !user_type.equals("customer"))
+            if (user_type == null || !user_type.equals("customer"))
                 halt(401, "Access Denied");
         });
 
@@ -74,7 +70,8 @@ public class WebConnector {
         put("/administrators/transactions/:transactionId/revocation", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> map = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+                Map<String, String> map = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
                 String reason = map.get("reason");
                 String transactionId = request.params(":transactionId");
@@ -112,7 +109,8 @@ public class WebConnector {
         post("/administrators/accounts/frozen", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
+                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
                 String accountId = requestBody.get("accountId");
                 String administratorId = request.session().attribute("user_id");
@@ -131,7 +129,8 @@ public class WebConnector {
         post("/administrators/accounts/:accountId/active", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<>() {});
+                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
                 String accountId = requestBody.get("accountId");
 
@@ -145,22 +144,23 @@ public class WebConnector {
                 return new JSONObject(resp);
             }
         });
-        
+
         // Administrator creates customer account
         post("/administrators/accounts/create", (request, response) -> {
-        	try {
-        		ObjectMapper mapper = new ObjectMapper();
-        		Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
-        		Customer newCustomer = root.createCustomer(
-        			requestBody.get("firstName"),
-        			requestBody.get("lastName"),
-        			requestBody.get("email"),
-        			requestBody.get("password"),
-        			Double.parseDouble(requestBody.get("amount")), // initial balance
-        			Currency.valueOf(requestBody.get("currency"))
-        		);
-                
+                Customer newCustomer = root.createCustomer(
+                        requestBody.get("firstName"),
+                        requestBody.get("lastName"),
+                        requestBody.get("email"),
+                        requestBody.get("password"),
+                        Double.parseDouble(requestBody.get("amount")), // initial balance
+                        Currency.valueOf(requestBody.get("currency"))
+                );
+
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
 
                 return new JSONObject(resp);
@@ -175,7 +175,8 @@ public class WebConnector {
         post("/administrators/transactions/create", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
                 String senderAccountId = body.get("senderAccountId");
                 String receiverAccountId = body.get("receiverAccountId");
@@ -185,8 +186,8 @@ public class WebConnector {
                 String administratorId = request.session().attribute("user_id");
 
                 Transaction transaction = root
-                    .getAdministrator(administratorId)
-                    .createTransaction(senderAccountId, receiverAccountId, amount, description);
+                        .getAdministrator(administratorId)
+                        .createTransaction(senderAccountId, receiverAccountId, amount, description);
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
@@ -204,7 +205,8 @@ public class WebConnector {
         post("/administrators/transactions/seed", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
                 String receiverAccountId = body.get("receiverAccountId");
                 double amount = Double.parseDouble(body.get("amount"));
@@ -214,8 +216,8 @@ public class WebConnector {
                 String administratorId = request.session().attribute("user_id");
 
                 Transaction transaction = root
-                    .getAdministrator(administratorId)
-                    .createSeedTransaction(receiverAccountId, amount, currency, description);
+                        .getAdministrator(administratorId)
+                        .createSeedTransaction(receiverAccountId, amount, currency, description);
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
@@ -236,7 +238,8 @@ public class WebConnector {
         post("/customers/transactions/create", (request, response) -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>(){});
+                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                });
 
                 String receiverAccountId = body.get("receiverAccountId");
                 double amount = Double.parseDouble(body.get("amount"));
@@ -272,7 +275,7 @@ public class WebConnector {
                 mapper.registerModule(module);
 
                 String serializedCustomer = mapper.writeValueAsString(customer);
-    
+
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
                 return new JSONObject(resp);
             } catch (Exception e) {
@@ -306,7 +309,7 @@ public class WebConnector {
         post("/administrators/bank/save", (request, response) -> {
             try {
                 root.saveData();
-    
+
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
@@ -318,24 +321,24 @@ public class WebConnector {
         // CORS
         // https://gist.github.com/saeidzebardast/e375b7d17be3e0f4dddf
         options("/*",
-        (request, response) -> {
+                (request, response) -> {
 
-            String accessControlRequestHeaders = request
-                    .headers("Access-Control-Request-Headers");
-            if (accessControlRequestHeaders != null) {
-                response.header("Access-Control-Allow-Headers",
-                        accessControlRequestHeaders);
-            }
+                    String accessControlRequestHeaders = request
+                            .headers("Access-Control-Request-Headers");
+                    if (accessControlRequestHeaders != null) {
+                        response.header("Access-Control-Allow-Headers",
+                                accessControlRequestHeaders);
+                    }
 
-            String accessControlRequestMethod = request
-                    .headers("Access-Control-Request-Method");
-            if (accessControlRequestMethod != null) {
-                response.header("Access-Control-Allow-Methods",
-                        accessControlRequestMethod);
-            }
+                    String accessControlRequestMethod = request
+                            .headers("Access-Control-Request-Method");
+                    if (accessControlRequestMethod != null) {
+                        response.header("Access-Control-Allow-Methods",
+                                accessControlRequestMethod);
+                    }
 
-            return "OK";
-        });
+                    return "OK";
+                });
 
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 

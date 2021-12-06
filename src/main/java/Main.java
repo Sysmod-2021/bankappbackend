@@ -1,5 +1,5 @@
-import model.*;
-import model.Currency;
+import model.Administrator;
+import model.Bank;
 
 public class Main {
     public static void main(String[] args) {
@@ -27,10 +27,9 @@ public class Main {
 //            a.createTransactionTwoCustomers(customer.getAccount().getId(), customer2.getAccount().getId(), 9.0, "trans1");
 //
 //            System.out.println(bank.getTransactions());
-    
+
             WebConnector.run(bank);
-        }
-        catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
         }
     }
