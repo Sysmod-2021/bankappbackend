@@ -138,7 +138,7 @@ public class Account {
         }
         final String oldIban = this.iban;
         this.iban = iban;
-        this.firePropertyChange(PROPERTY_ID, oldIban, iban);
+        this.firePropertyChange(PROPERTY_IBAN, oldIban, iban);
         return this;
     }
 
