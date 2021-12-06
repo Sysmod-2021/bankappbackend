@@ -17,6 +17,7 @@ import model.serializer.CustomerAndAccountSerializer;
 import model.serializer.CustomerSerializer;
 
 public class WebConnector {
+    public static final int BAD_REQUEST = 400;
     private static ObjectMapper objMapper = new ObjectMapper();
 
     public static void run(Bank root) {
@@ -42,6 +43,7 @@ public class WebConnector {
                 return new JSONObject(resp);
             }
             catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
@@ -55,6 +57,7 @@ public class WebConnector {
                 return new JSONObject(resp);
             }
             catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
@@ -86,6 +89,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -104,6 +108,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, message);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -122,6 +127,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -140,6 +146,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -168,6 +175,7 @@ public class WebConnector {
 
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
@@ -196,6 +204,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -223,6 +232,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -249,6 +259,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -269,6 +280,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -282,6 +294,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
