@@ -1,4 +1,4 @@
-package database;
+package datastore;
 
 import model.Account;
 import model.Bank;

@@ -99,9 +99,13 @@ public class Administrator extends User {
     }
 
     public Customer createCustomerAndAccount(String firstName, String lastName, String email, Currency currency) throws Bank.CustomerExistsException, Bank.AccountExistsException {
-        String password = new Random().ints(10, 33, 122).collect(StringBuilder::new,
-                            StringBuilder::appendCodePoint, StringBuilder::append)
+        String password = new Random().ints(48, 122)
+                            .filter(i -> (i < 57 || i > 65) && (i < 90 || i > 97)) // exclude special characters
+                            .mapToObj(i -> (char) i)
+                            .limit(10)
+                            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                             .toString();
+
 
         return getBank().createCustomer(firstName, lastName, email, password, 0.0, currency);
     }
