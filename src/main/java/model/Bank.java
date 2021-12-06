@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import exceptions.TransactionExceptions;
-
 public class Bank {
     // Exceptions
 
@@ -52,6 +50,18 @@ public class Bank {
 
     public static class TransactionDoesNotExistException extends Exception {
         public TransactionDoesNotExistException(String message) {
+            super(message);
+        }
+    }
+
+    public static class TransactionCanNotBeRevoked extends Exception {
+        public TransactionCanNotBeRevoked(String message) {
+            super(message);
+        }
+    }
+
+    public static class TransactionRestrictionException extends Exception {
+        public TransactionRestrictionException(String message) {
             super(message);
         }
     }
@@ -294,12 +304,12 @@ public class Bank {
         return transaction;
     }
 
-    Transaction performTransaction(User user, Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    Transaction performTransaction(User user, Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Transaction transaction = this.createTransaction(sender, receiver, Currency.EUR, amount, description).execute();
         this.createTrace(transaction, user);
         return transaction;
     }
-    void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws TransactionExceptions.TransactionCanNotBeRevoked {
+    void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws Bank.TransactionCanNotBeRevoked {
         Transaction revokedTransaction = transaction.revoke(reason);
         this.createTrace(revokedTransaction, administrator);
     }

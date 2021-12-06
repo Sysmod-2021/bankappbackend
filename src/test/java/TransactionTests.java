@@ -1,4 +1,3 @@
-import exceptions.TransactionExceptions;
 import org.junit.Test;
 
 import model.*;
@@ -22,7 +21,7 @@ public class TransactionTests {
 
     // FR #2. model.Transaction creation
     @Test
-    public void testCreateTransaction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    public void testCreateTransaction() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AdministratorExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Bank bank = new Bank();
         bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
         Customer customer1 = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", 100.0, Currency.EUR);
@@ -82,7 +81,7 @@ public class TransactionTests {
     //	And the model.Customer' B bank account balanced has been increased accordingly
     //	And the model.Customer B now can see the updated balance on his profile page
     @Test
-    public void shouldTransferMoneySuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    public void shouldTransferMoneySuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Bank bank = new Bank();
         Double balance = 100.0;
         Double amount = 25.0;
@@ -132,7 +131,7 @@ public class TransactionTests {
     //	And can specify an amount to charge
     //	And description of the transaction
     @Test
-    public void shouldChargeCustomerFeeSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    public void shouldChargeCustomerFeeSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Bank bank = new Bank();
         Double bankBalance = bank.getBankAccount().getBalance();
 
@@ -152,7 +151,7 @@ public class TransactionTests {
 
     // FR #2. Scenario 5
     @Test
-    public void shouldChargeCustomerFeeSuccessfully_WhenBalanceNotEnough() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    public void shouldChargeCustomerFeeSuccessfully_WhenBalanceNotEnough() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Bank bank = new Bank();
         Account bankAccount = bank.getBankAccount();
         Double bankBalance = bankAccount.getBalance();
@@ -219,7 +218,7 @@ public class TransactionTests {
     //	And specifies the recipient of the sum
     //	And specifies a description of the transaction
     @Test
-    public void shouldCreateSeedTransactionSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, TransactionExceptions.TransactionRestrictionException {
+    public void shouldCreateSeedTransactionSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Bank bank = new Bank();
         Double balance = 10.0;
         Double amount = 250.0;
