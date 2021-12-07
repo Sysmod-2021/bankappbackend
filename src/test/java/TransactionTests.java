@@ -5,6 +5,7 @@ import model.Currency;
 import model.Transaction.Status;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 
 import java.util.*;
@@ -248,5 +249,25 @@ public class TransactionTests {
         assertEquals("Denied to revoke, transaction status is not EXECUTED", transactionAlreadyRevoked.getMessage());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_7.svg", bank);
+   }
+
+   @Test
+   @DisplayName("Must not allow transfer to account with different currency")
+   public void testUnsuccessfulTransaction_differentCurrencies() {
+	    Bank bank = new Bank();
+	    Double balance = 100.0;
+	    Double amount = 25.0;
+	
+	    Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
+	    Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.USD);
+	
+	    Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
+	    transfer.execute();
+	
+	    assertFalse(customer.getAccount().getCurrency().equals(beneficiary.getAccount().getCurrency()));
+	    assertEquals(transfer.getStatus(), Status.ABORTED);
+	    assertEquals(transfer.getRejectionDescription(), "Currency mismatch detected");
+	
+	    FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_8.svg", transfer);
    }
 }
