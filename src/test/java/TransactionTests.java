@@ -182,21 +182,22 @@ public class TransactionTests {
    public void shouldRevokeTransactionSuccessfully() throws Exception {
         // Arrange
         Bank bank = new Bank();
-        bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
+        Administrator admin = bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
 
         Double balanceOfCustomer = 200.0;
         Double balanceOfBeneficiary = 300.0;
         Double amount = 50.0;
+        String administratorId = admin.getId();
 
         Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
         Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
-        Transaction transaction = bank.getAdministrator().createTransactionTwoCustomers(
+        Transaction transaction = bank.getAdministrator(administratorId).createTransactionTwoCustomers(
             customer.getAccount().getId(),
             beneficiary.getAccount().getId(),
             amount, TRANS_DESC);
         
         // Act
-        bank.getAdministrator().revokeTransaction(transaction.getId(), REVOKE_DESC);
+        bank.getAdministrator(administratorId).revokeTransaction(transaction.getId(), REVOKE_DESC);
 
         // Assert
         assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
