@@ -1,4 +1,4 @@
-package database;
+package datastore;
 
 public abstract class LoadSaveFactory {
     public static LoadSaveStrategy fromType(LoadSaveStrategyEnum type) {

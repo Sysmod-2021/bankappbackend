@@ -1,4 +1,4 @@
-package utils;
+package web;
 
 public enum StatusResponse {
     SUCCESS("Success"), ERROR("Error");

@@ -40,10 +40,10 @@ $ curl -d '{"email": "a@min.ee", "password": "t"}' -H 'Content-Type: application
 
 ```bash
 # template
-$ curl -d '{"firstName": <first_name_value>, "lastName": <last_name_value>, "email": <email_value>, "password": <password_value>, "amount": <amount_value>, "currency": <currency_value>}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/accounts/create
+$ curl -d '{"firstName": <first_name_value>, "lastName": <last_name_value>, "email": <email_value>, "currency": <currency_value>}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/accounts/create
 
 # example
-$ curl -d '{"firstName": "John", "lastName": "Doe", "email": "johndoe@ut.ee", "password": "123", "amount": "40", "currency": "EUR"}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/accounts/create
+$ curl -d '{"firstName": "John", "lastName": "Doe", "email": "johndoe@ut.ee", "currency": "EUR"}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/accounts/create
 ```
 
 #### Activate an account

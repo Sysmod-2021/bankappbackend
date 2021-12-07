@@ -1,8 +1,9 @@
 package model;
-import database.Datastore;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import datastore.Datastore;
 
 public class Bank {
     // Exceptions
