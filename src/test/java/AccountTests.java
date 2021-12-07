@@ -65,7 +65,7 @@ public class AccountTests {
     }
 
     @Test
-    @DisplayName("Test for login with wrong password")
+    @DisplayName("Test for customer login with wrong password")
     public void testLoginWithWrongPassword() {
         Bank bank = new Bank();
         Customer customer = bank.createCustomer("johntest", "Doe", "johndoe@yopmail.com", "p@$$w0rd", 100.00, Currency.EUR);
