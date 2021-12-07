@@ -56,11 +56,17 @@ public class WebConnector {
         });
 
         before("/administrators/*", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+            response.header("Access-Control-Allow-Credentials", "true");
+
             String user_type = request.session(true).attribute("user_type");
             if (user_type == null || !user_type.equals("administrator"))
                 halt(401, "Access Denied");
         });
         before("/customers/*", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+            response.header("Access-Control-Allow-Credentials", "true");
+
             String user_type = request.session(true).attribute("user_type");
             if (user_type == null || !user_type.equals("customer"))
                 halt(401, "Access Denied");
@@ -340,7 +346,15 @@ public class WebConnector {
                     return "OK";
                 });
 
-        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+        before("/logout", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+            response.header("Access-Control-Allow-Credentials", "true");
+        });
+
+        before("/authenticate", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "http://localhost:3000");
+            response.header("Access-Control-Allow-Credentials", "true");
+        });
 
         after((req, res) -> {
             res.type("application/json");
