@@ -46,4 +46,24 @@ public class AccountTests {
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_3.svg", bank);
     }
+
+    @Test
+    @DisplayName("Test for already existing customer")
+    public void testCreateCustomerAlreadyExisting() {
+        String existing_email = "johntest@doe.ee";
+
+        Bank bank = new Bank();
+        Customer customer_1 = bank.createCustomer(
+        		"johntest", "Doe", 
+        		existing_email, "pass1234", 
+        		100.00, Currency.EUR);
+        
+        Throwable existing = assertThrows(Bank.CustomerExistsException.class, () -> {
+                    bank.createCustomer("Johnny", "Dude", existing_email, "I-forgot", 500.00, Currency.EUR);
+                });
+        
+        assertEquals("Customer exists: " + existing_email, existing.getMessage());
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_4.svg", bank);
+    }
 }
