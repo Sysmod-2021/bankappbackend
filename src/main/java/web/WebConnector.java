@@ -1,18 +1,23 @@
+package web;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import model.*;
+import web.dto.*;
 import model.serializer.CustomerSerializer;
+import model.serializer.CustomerAndAccountSerializer;
 import model.serializer.TransactionSerializer;
 import org.json.JSONObject;
-import utils.StandardResponse;
-import utils.StatusResponse;
 
 import java.util.Map;
 
 import static spark.Spark.*;
 
 public class WebConnector {
+    public static final int BAD_REQUEST = 400;
+    private static ObjectMapper objMapper = new ObjectMapper();
+
     public static void run(Bank root) {
         port(40080);
         get("/", (request, response) -> {
@@ -22,8 +27,7 @@ public class WebConnector {
         //Auth
         post("/authenticate", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                Map<String, String> body = objMapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
                 });
 
                 String email = body.get("email");
@@ -37,6 +41,7 @@ public class WebConnector {
 
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
@@ -49,6 +54,7 @@ public class WebConnector {
 
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
@@ -69,8 +75,7 @@ public class WebConnector {
         // Administrator
         put("/administrators/transactions/:transactionId/revocation", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> map = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                Map<String, String> map = objMapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
                 });
 
                 String reason = map.get("reason");
@@ -82,6 +87,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -100,6 +106,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, message);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -108,8 +115,7 @@ public class WebConnector {
         // Administrator freeze account
         post("/administrators/accounts/frozen", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                Map<String, String> requestBody = objMapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
                 });
 
                 String accountId = requestBody.get("accountId");
@@ -120,6 +126,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -128,8 +135,7 @@ public class WebConnector {
         // Administrator activate account
         post("/administrators/accounts/:accountId/active", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                Map<String, String> requestBody = objMapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
                 });
 
                 String accountId = requestBody.get("accountId");
@@ -140,6 +146,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -148,23 +155,28 @@ public class WebConnector {
         // Administrator creates customer account
         post("/administrators/accounts/create", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> requestBody = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
-                });
+                CreateAccountRequest accRequest = objMapper.readValue(request.body(), CreateAccountRequest.class);
+                String administratorId = request.session().attribute("user_id");
 
-                Customer newCustomer = root.createCustomer(
-                        requestBody.get("firstName"),
-                        requestBody.get("lastName"),
-                        requestBody.get("email"),
-                        requestBody.get("password"),
-                        Double.parseDouble(requestBody.get("amount")), // initial balance
-                        Currency.valueOf(requestBody.get("currency"))
-                );
+                Customer customer = root
+                    .getAdministrator(administratorId)
+                    .createCustomerAndAccount(
+                        accRequest.getFirstName(),
+                        accRequest.getLastName(),
+                        accRequest.getEmail(),
+                        accRequest.getCurrency());
 
-                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
+                SimpleModule module = new SimpleModule();
+                module.addSerializer(Customer.class, new CustomerAndAccountSerializer());
+                objMapper.registerModule(module);
+
+                String serializedCustomer = objMapper.writeValueAsString(customer);
+
+                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
 
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
 
                 return new JSONObject(resp);
@@ -174,29 +186,26 @@ public class WebConnector {
         // Administator
         post("/administrators/transactions/create", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
-                });
-
-                String senderAccountId = body.get("senderAccountId");
-                String receiverAccountId = body.get("receiverAccountId");
-                double amount = Double.parseDouble(body.get("amount"));
-                String description = body.get("description");
-
                 String administratorId = request.session().attribute("user_id");
 
+                CreateTransactionRequest transactionRequest = objMapper.readValue(request.body(), CreateTransactionRequest.class);
                 Transaction transaction = root
-                        .getAdministrator(administratorId)
-                        .createTransaction(senderAccountId, receiverAccountId, amount, description);
+                    .getAdministrator(administratorId)
+                    .createTransaction(
+                        transactionRequest.getSenderAccountId(),
+                        transactionRequest.getReceiverAccountId(), 
+                        transactionRequest.getAmount(),
+                        transactionRequest.getDescription());
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
-                mapper.registerModule(module);
+                objMapper.registerModule(module);
 
-                String serializedTransaction = mapper.writeValueAsString(transaction);
+                String serializedTransaction = objMapper.writeValueAsString(transaction);
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -204,30 +213,27 @@ public class WebConnector {
 
         post("/administrators/transactions/seed", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
-                });
-
-                String receiverAccountId = body.get("receiverAccountId");
-                double amount = Double.parseDouble(body.get("amount"));
-                String description = body.get("description");
-                Currency currency = Currency.valueOf(body.get("currency"));
-
                 String administratorId = request.session().attribute("user_id");
 
+                CreateTransactionRequest transactionRequest = objMapper.readValue(request.body(), CreateTransactionRequest.class);
                 Transaction transaction = root
-                        .getAdministrator(administratorId)
-                        .createSeedTransaction(receiverAccountId, amount, currency, description);
+                    .getAdministrator(administratorId)
+                    .createSeedTransaction(
+                        transactionRequest.getReceiverAccountId(),
+                        transactionRequest.getAmount(), 
+                        transactionRequest.getCurrency(),
+                        transactionRequest.getDescription());
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
-                mapper.registerModule(module);
+                objMapper.registerModule(module);
 
-                String serializedTransaction = mapper.writeValueAsString(transaction);
+                String serializedTransaction = objMapper.writeValueAsString(transaction);
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -237,69 +243,45 @@ public class WebConnector {
         // Customer
         post("/customers/transactions/create", (request, response) -> {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> body = mapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
-                });
-
-                String receiverAccountId = body.get("receiverAccountId");
-                double amount = Double.parseDouble(body.get("amount"));
-                String description = body.get("description");
-
                 String customerId = request.session().attribute("user_id");
 
-                Transaction transaction = root.getCustomer(customerId).createTransaction(receiverAccountId, amount, description);
+                CreateTransactionRequest transactionRequest = objMapper.readValue(request.body(), CreateTransactionRequest.class);
+                Transaction transaction = root.getCustomer(customerId).createTransaction(
+                    transactionRequest.getReceiverAccountId(),
+                    transactionRequest.getAmount(),
+                    transactionRequest.getDescription());
 
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Transaction.class, new TransactionSerializer());
-                mapper.registerModule(module);
+                objMapper.registerModule(module);
 
-                String serializedTransaction = mapper.writeValueAsString(transaction);
+                String serializedTransaction = objMapper.writeValueAsString(transaction);
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
         });
-        // Customer
-        get("/customers/:customerEmail/details", (request, response) -> {
-            try {
-                String customerEmail = request.params(":customerEmail");
-                Customer customer = root.getCustomerByEmail(customerEmail);
 
-                ObjectMapper mapper = new ObjectMapper();
-
-                SimpleModule module = new SimpleModule();
-                module.addSerializer(Customer.class, new CustomerSerializer());
-                mapper.registerModule(module);
-
-                String serializedCustomer = mapper.writeValueAsString(customer);
-
-                StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
-                return new JSONObject(resp);
-            } catch (Exception e) {
-                StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
-                return new JSONObject(resp);
-            }
-        });
         // Customer
         get("/customers/details", (request, response) -> {
             try {
                 String customerId = request.session().attribute("user_id");
                 Customer customer = root.getCustomer(customerId);
 
-                ObjectMapper mapper = new ObjectMapper();
-
                 SimpleModule module = new SimpleModule();
                 module.addSerializer(Customer.class, new CustomerSerializer());
-                mapper.registerModule(module);
+                objMapper.registerModule(module);
 
-                String serializedCustomer = mapper.writeValueAsString(customer);
+                String serializedCustomer = objMapper.writeValueAsString(customer);
 
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedCustomer));
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }
@@ -313,6 +295,7 @@ public class WebConnector {
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                 return new JSONObject(resp);
             } catch (Exception e) {
+                response.status(BAD_REQUEST);
                 StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
                 return new JSONObject(resp);
             }

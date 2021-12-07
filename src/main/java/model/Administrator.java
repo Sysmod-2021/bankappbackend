@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Random;
+
 public class Administrator extends User {
     public Administrator(Bank bank, String firstName, String lastName, String email, String password) {
         super(bank, firstName, lastName, email, password);
@@ -94,5 +96,17 @@ public class Administrator extends User {
         Transaction transaction = getBank().createTransaction(null, receiver, currency, amount, description).seed();
         getBank().createTrace(transaction, this);
         return transaction;
+    }
+
+    public Customer createCustomerAndAccount(String firstName, String lastName, String email, Currency currency) throws Bank.CustomerExistsException, Bank.AccountExistsException {
+        String password = new Random().ints(48, 122)
+                            .filter(i -> (i < 57 || i > 65) && (i < 90 || i > 97)) // exclude special characters
+                            .mapToObj(i -> (char) i)
+                            .limit(10)
+                            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                            .toString();
+
+
+        return getBank().createCustomer(firstName, lastName, email, password, 0.0, currency);
     }
 }
