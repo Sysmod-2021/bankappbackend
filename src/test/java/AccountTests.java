@@ -94,4 +94,5 @@ public class AccountTests {
         assertEquals("Customer" + not_existing_email + "does not exist in the bank", badCredentials.getMessage());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_6.svg", bank);
+    }
 }
