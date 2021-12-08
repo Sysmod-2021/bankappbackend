@@ -52,6 +52,11 @@ public class WebConnector {
         });
         post("/logout", (request, response) -> {
             try {
+                // save bank state
+                try {
+                    root.saveData();
+                } catch (Exception ignore) { } // we don't want user to see any exceptions about data save
+
                 request.session().invalidate();
                 StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
 
@@ -284,19 +289,6 @@ public class WebConnector {
                     String message = "{'result':'" + status + "'}";
 
                     StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, message);
-                    return new JSONObject(resp);
-                } catch (Exception e) {
-                    response.status(BAD_REQUEST);
-                    StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
-                    return new JSONObject(resp);
-                }
-            });
-
-            post("/bank/save", (request, response) -> {
-                try {
-                    root.saveData();
-
-                    StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS);
                     return new JSONObject(resp);
                 } catch (Exception e) {
                     response.status(BAD_REQUEST);
