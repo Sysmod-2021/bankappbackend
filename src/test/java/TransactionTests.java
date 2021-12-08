@@ -2,8 +2,10 @@ import org.junit.Test;
 
 import model.*;
 import model.Currency;
+import model.Transaction.Status;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 
 import java.util.*;
@@ -182,21 +184,22 @@ public class TransactionTests {
    public void shouldRevokeTransactionSuccessfully() throws Exception {
         // Arrange
         Bank bank = new Bank();
-        bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
+        Administrator admin = bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
 
         Double balanceOfCustomer = 200.0;
         Double balanceOfBeneficiary = 300.0;
         Double amount = 50.0;
+        String administratorId = admin.getId();
 
         Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
         Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
-        Transaction transaction = bank.getAdministrator().createTransactionTwoCustomers(
+        Transaction transaction = bank.getAdministrator(administratorId).createTransactionTwoCustomers(
             customer.getAccount().getId(),
             beneficiary.getAccount().getId(),
             amount, TRANS_DESC);
         
         // Act
-        bank.getAdministrator().revokeTransaction(transaction.getId(), REVOKE_DESC);
+        bank.getAdministrator(administratorId).revokeTransaction(transaction.getId(), REVOKE_DESC);
 
         // Assert
         assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
@@ -208,28 +211,61 @@ public class TransactionTests {
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_6.svg", bank);
    }
-
-    //	Scenario 7: Seed transaction is created by a bank administrator
-    //	Given a bank admin exists and logged in
-    //	And there is at least one customer in a system
-    //	And he has an assigned balance account
-    //	Then the bank admin can create a seed transaction
-    //	And specifies the amount of money to be generated
-    //	And specifies the recipient of the sum
-    //	And specifies a description of the transaction
-    @Test
-    public void shouldCreateSeedTransactionSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
+   
+   @Test
+   public void shouldDenyTransactionRevocation_alreadyRevoked() throws Exception {
+        // Arrange
         Bank bank = new Bank();
-        Double balance = 10.0;
-        Double amount = 250.0;
+        Administrator admin = bank.createAdministrator("Admin", "Alice", "admin@bank.ee", "secure_p@ssw0|2d");
 
-        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
-        Transaction deposit = bank.createTransaction(bank.getBankAccount(), customer.getAccount(), Currency.EUR, amount, "Salary");
-        deposit.execute();
+        Double balanceOfCustomer = 200.0;
+        Double balanceOfBeneficiary = 300.0;
+        Double amount = 50.0;
+        String administratorId = admin.getId();
 
-        assertEquals("", deposit.getRejectionDescription());
-        assertEquals(260.0, customer.getAccount().getBalance(), 0.0);
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balanceOfCustomer, Currency.EUR);
+        Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", balanceOfBeneficiary, Currency.EUR);
+        Transaction transaction = bank.getAdministrator(administratorId).createTransactionTwoCustomers(
+            customer.getAccount().getId(),
+            beneficiary.getAccount().getId(),
+            amount, TRANS_DESC);
+        
+        String transactionId = transaction.getId();
+        
+        // Act
+        bank.getAdministrator(administratorId).revokeTransaction(transactionId, REVOKE_DESC);
 
-        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_7.svg", deposit);
-    }
+        // Assert
+        assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
+        assertEquals(balanceOfBeneficiary, beneficiary.getAccount().getBalance(), 0.0);
+
+        // Execute revocation again, must throw exception
+        assertEquals(transaction.getStatus(), Status.REVOKED);
+        Throwable transactionAlreadyRevoked = assertThrows(Bank.TransactionCanNotBeRevoked.class, () -> {
+        	bank.getAdministrator(administratorId).revokeTransaction(transactionId, "Test if transaction has been revoked");
+        });
+
+        assertEquals("Denied to revoke, transaction status is not EXECUTED", transactionAlreadyRevoked.getMessage());
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_7.svg", bank);
+   }
+
+   @Test
+   public void testUnsuccessfulTransaction_differentCurrencies() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
+	    Bank bank = new Bank();
+	    Double balance = 100.0;
+	    Double amount = 25.0;
+	
+	    Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
+	    Customer beneficiary = bank.createCustomer("Bob", "Jackson", "bobbytest@tt.ee", "secret", 0.0, Currency.USD);
+	
+	    Transaction transfer = bank.createTransaction(customer.getAccount(), beneficiary.getAccount(), Currency.EUR, amount, TRANS_DESC);
+	    transfer.execute();
+	
+	    assertFalse(customer.getAccount().getCurrency().equals(beneficiary.getAccount().getCurrency()));
+	    assertEquals(transfer.getStatus(), Status.ABORTED);
+	    assertEquals(transfer.getRejectionDescription(), "Currency mismatch detected");
+	
+	    FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_8.svg", transfer);
+   }
 }
