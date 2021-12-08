@@ -72,7 +72,7 @@ public class AccountTests {
             bank.authenticate("johndoe@yopmail.com", "password1");
         });
 
-        assertEquals("Wrong credentials", badCredentials.getMessage());
+        assertEquals("Wrong Credentials", badCredentials.getMessage());
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_5.svg", bank);
     }
