@@ -18,7 +18,7 @@ Currently working on backend:
 - Ihar Suvorau
 - Worraanong (jtm)
 - Ramil Huseynov
-- Joanna Mae Cabuyadai
+- Joanna Mae Cabuyadao
 
 ## Event storming
 
