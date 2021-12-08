@@ -48,7 +48,6 @@ public class AccountTests {
     }
 
     @Test
-    @DisplayName("Test for creating already existing customer")
     public void testCreateCustomerAlreadyExisting() {
         String existing_email = "johntest@doe.ee";
 
@@ -65,7 +64,6 @@ public class AccountTests {
     }
 
     @Test
-    @DisplayName("Test for customer login with wrong password")
     public void testLoginWithWrongPassword() {
         Bank bank = new Bank();
         Customer customer = bank.createCustomer("johntest", "Doe", "johndoe@yopmail.com", "p@$$w0rd", 100.00, Currency.EUR);
@@ -80,7 +78,6 @@ public class AccountTests {
     }
 
     @Test
-    @DisplayName("Test for customer login with not existing email")
     public void testLoginWithNotExistingEmail() {
     	String not_existing_email = "johndoe_abc@yopmail.com";
 

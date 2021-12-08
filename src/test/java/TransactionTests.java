@@ -213,7 +213,6 @@ public class TransactionTests {
    }
    
    @Test
-   @DisplayName("Must not revoke transaction in REVOKED status")
    public void shouldDenyTransactionRevocation_alreadyRevoked() throws Exception {
         // Arrange
         Bank bank = new Bank();
@@ -252,7 +251,6 @@ public class TransactionTests {
    }
 
    @Test
-   @DisplayName("Must not allow transfer to account with different currency")
    public void testUnsuccessfulTransaction_differentCurrencies() {
 	    Bank bank = new Bank();
 	    Double balance = 100.0;
