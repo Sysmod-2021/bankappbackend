@@ -125,6 +125,7 @@ public class Bank {
       
         
         this.traces = new ArrayList<>();
+        counterRoutine();
 //       TODO Need to figure some things out for data persistence with bank account.
 //         try {
 //             addAccount(bankAccount);
@@ -135,8 +136,6 @@ public class Bank {
     // TODO This can be shielded from the outside. but for now leave it at this.
     //  VERY IMPORTANT - ALWAYS CLEAR file contents when testing manually. overwrite of document is a bit wonky.
     public void saveData() {
-        System.out.println(customers);
-        System.out.println(accounts);
         this.database.save(customers,accounts,transactions);
     }
 
@@ -396,5 +395,30 @@ public class Bank {
             user_type = "customer";
         }
         return new AuthResponse(user.getId(), user_type);
+    }
+
+    // Extra feature : Cashback on transactions if done 3 times per hour. -> 5€ per 3 transactions cashback (see Transaction.java)
+    // Automatic reset of counter for each account after each hour. -> Routine call starting after bank is launched.
+    public void counterRoutine() {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                // 1 Hour has passed
+                resetCounters();
+            }
+        };
+        Timer timer = new Timer();
+        long delay = 0;
+        long intervalPeriod = 60 * 60 * 1000;
+        // schedules the task to be run in an interval
+        timer.scheduleAtFixedRate(task, delay,
+                intervalPeriod);
+    }
+    private void resetCounters() {
+        for (Account a : getAccounts()
+        ) {
+            // for each account reset the counter back to 0. So we can count the next interval hour.
+            a.resetTransactionCounter();
+        }
     }
 }

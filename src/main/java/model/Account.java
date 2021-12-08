@@ -25,6 +25,7 @@ public class Account {
     private String status;
     private Map<String, Transaction> sent;
     private Map<String, Transaction> received;
+    private int count = 0;
 
     protected PropertyChangeSupport listeners;
 
@@ -227,5 +228,17 @@ public class Account {
             String out = getId() + ",," + getCurrency() + "," + getBalance() + "," + getStatus();
             return out;
         }
+    }
+
+    public void addCount() {
+        this.count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void resetTransactionCounter() {
+        this.count = 0;
     }
 }
