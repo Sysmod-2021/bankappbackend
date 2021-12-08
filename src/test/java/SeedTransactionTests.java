@@ -58,4 +58,28 @@ public class SeedTransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/seed_transfer_2_bank_1.svg", bank);
         FulibTools.objectDiagrams().dumpSVG("docs/objects/seed_transfer_2_bank_2.svg", otherBank);
     }
+ 
+    //	Scenario 7: Seed transaction is created by a bank administrator
+    //	Given a bank admin exists and logged in
+    //	And there is at least one customer in a system
+    //	And he has an assigned balance account
+    //	Then the bank admin can create a seed transaction
+    //	And specifies the amount of money to be generated
+    //	And specifies the recipient of the sum
+    //	And specifies a description of the transaction
+    @Test
+    public void shouldCreateSeedTransactionSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
+        Bank bank = new Bank();
+        Double balance = 10.0;
+        Double amount = 250.0;
+
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
+        Transaction deposit = bank.createTransaction(bank.getBankAccount(), customer.getAccount(), Currency.EUR, amount, "Salary");
+        deposit.execute();
+
+        assertEquals("", deposit.getRejectionDescription());
+        assertEquals(260.0, customer.getAccount().getBalance(), 0.0);
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/seed_transfer_3.svg", deposit);
+    }
 }

@@ -164,13 +164,6 @@ public class Bank {
         return administrator;
     }
 
-    public Administrator getAdministrator() { // let's say here we don't care about any particular administrator at the moment
-        if (administrators.size() > 0) {
-            return administrators.get(0);
-        }
-        return null;
-    }
-
     public Administrator getAdministrator(String id) { // let's say here we don't care about any particular administrator at the moment
         if (administrators.size() > 0) {
             return administrators.stream().filter( a -> a.getId().equals(id)).findFirst().orElse(null);

@@ -1,5 +1,9 @@
 package model;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,8 +36,7 @@ public class Account {
     public Account(Bank bank) {
         this.bank = bank;
         this.id = UUID.randomUUID().toString();
-        // TODO: ensure the iban number is unique
-        this.iban = Iban.random(CountryCode.EE).toString();
+        this.iban = getUniqueIban();
         this.currency = Currency.EUR;
         this.status = "ACTIVE";
         this.sent = new HashMap<>();
@@ -43,8 +46,7 @@ public class Account {
     public Account(Bank b, String id) {
         this.bank = b;
         this.id = id;
-        // TODO: ensure the iban number is unique
-        this.iban = Iban.random(CountryCode.EE).toString();
+        this.iban = getUniqueIban();
         this.currency = Currency.EUR;
         this.status = "ACTIVE";
         this.sent = new HashMap<>();
@@ -58,8 +60,7 @@ public class Account {
 
     public Account(Bank bank, Customer customer, Currency currency, Double balance) {
         this.id = UUID.randomUUID().toString();
-        // TODO: ensure the iban number is unique
-        this.iban = Iban.random(CountryCode.EE).toString();
+        this.iban = getUniqueIban();
         this.bank = bank;
         this.customer = customer;
         this.currency = currency;
@@ -70,9 +71,10 @@ public class Account {
 //        addToBank(this);
     }
     // for LoadSaveAccount
-    public Account(Bank bank,String id, String customerId, Currency currency, Double balance, String status) {
+    public Account(Bank bank, String id, String iban, String customerId, Currency currency, Double balance, String status) {
         this.bank = bank;
         this.id = id;
+        this.iban = iban;
         this.customerId = customerId;
         this.currency = currency;
         this.balance = balance;
@@ -80,6 +82,26 @@ public class Account {
         this.sent = new HashMap<>();
         this.received = new HashMap<>();
         //addToBank(this);
+    }
+
+    private String getUniqueIban() {
+        Path accountRecordPath = Paths.get("src", "main", "java", "files", "accounts.txt");
+        String accountRecord = null;
+
+        try {
+            accountRecord = Files.readString(accountRecordPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed-to-Read-Accounts-TXT";
+        }
+
+        String iban = Iban.random(CountryCode.EE).toString();
+
+        while (accountRecord.contains(iban)) {
+            iban = Iban.random(CountryCode.EE).toString();
+        }
+
+        return iban;
     }
 
     public void addSentTransaction(Transaction transaction) {
@@ -139,7 +161,7 @@ public class Account {
         }
         final String oldIban = this.iban;
         this.iban = iban;
-        this.firePropertyChange(PROPERTY_ID, oldIban, iban);
+        this.firePropertyChange(PROPERTY_IBAN, oldIban, iban);
         return this;
     }
 
