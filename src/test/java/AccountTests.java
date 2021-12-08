@@ -48,7 +48,7 @@ public class AccountTests {
     }
 
     @Test
-    public void testCreateCustomerAlreadyExisting() {
+    public void testCreateCustomerAlreadyExisting() throws CustomerExistsException, AccountExistsException {
         String existing_email = "johntest@doe.ee";
 
         Bank bank = new Bank();
@@ -64,7 +64,7 @@ public class AccountTests {
     }
 
     @Test
-    public void testLoginWithWrongPassword() {
+    public void testLoginWithWrongPassword() throws CustomerExistsException, AccountExistsException {
         Bank bank = new Bank();
         Customer customer = bank.createCustomer("johntest", "Doe", "johndoe@yopmail.com", "p@$$w0rd", 100.00, Currency.EUR);
         
@@ -78,7 +78,7 @@ public class AccountTests {
     }
 
     @Test
-    public void testLoginWithNotExistingEmail() {
+    public void testLoginWithNotExistingEmail() throws CustomerExistsException, AccountExistsException {
     	String not_existing_email = "johndoe_abc@yopmail.com";
 
         Bank bank = new Bank();
