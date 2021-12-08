@@ -48,7 +48,7 @@ public class AccountTests {
     }
 
     @Test
-    @DisplayName("Test for already existing customer")
+    @DisplayName("Test for creating already existing customer")
     public void testCreateCustomerAlreadyExisting() {
         String existing_email = "johntest@doe.ee";
 
@@ -78,4 +78,20 @@ public class AccountTests {
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_5.svg", bank);
     }
+
+    @Test
+    @DisplayName("Test for customer login with not existing email")
+    public void testLoginWithNotExistingEmail() {
+    	String not_existing_email = "johndoe_abc@yopmail.com";
+
+        Bank bank = new Bank();
+        Customer customer = bank.createCustomer("johntest", "Doe", "johndoe@yopmail.com", "p@$$w0rd", 100.00, Currency.EUR);
+
+        Throwable badCredentials = assertThrows(Bank.CustomerDoesNotExistException.class, () -> {
+            bank.authenticate(not_existing_email, "p@$$w0rd");
+        });
+
+        assertEquals("Customer" + not_existing_email + "does not exist in the bank", badCredentials.getMessage());
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_6.svg", bank);
 }
