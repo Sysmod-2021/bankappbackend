@@ -251,7 +251,7 @@ public class TransactionTests {
    }
 
    @Test
-   public void testUnsuccessfulTransaction_differentCurrencies() {
+   public void testUnsuccessfulTransaction_differentCurrencies() throws Bank.CustomerExistsException, Bank.AccountDoesNotExistException {
 	    Bank bank = new Bank();
 	    Double balance = 100.0;
 	    Double amount = 25.0;
