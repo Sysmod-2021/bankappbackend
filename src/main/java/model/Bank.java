@@ -230,12 +230,12 @@ public class Bank {
     }
 
     public Customer createCustomer(
-            String firstName,
-            String lastName,
-            String email,
-            String password,
-            Double initial_balance,
-            Currency currency
+        String firstName,
+        String lastName,
+        String email,
+        String password,
+        Double initial_balance,
+        Currency currency
     ) throws CustomerExistsException, AccountExistsException {
         Customer customer = new Customer(
                 this,UUID.randomUUID().toString(),
@@ -293,12 +293,12 @@ public class Bank {
     public Transaction createTransaction(Account source, Account destination,
                                          Currency currency, Double amount, String description) {
         Transaction transaction = new Transaction(
-                this,
-                source,
-                destination,
-                currency,
-                amount,
-                description
+            this,
+            source,
+            destination,
+            currency,
+            amount,
+            description
         );
 
         try {
@@ -314,11 +314,11 @@ public class Bank {
                                           Currency currency, Double amount, String description)
             throws AccountDoesNotExistException, TransactionRestrictionException {
         Transaction transaction = this.createTransaction(
-                source,
-                destination,
-                currency,
-                amount,
-                description
+            source,
+            destination,
+            currency,
+            amount,
+            description
         );
 
         try {
@@ -343,13 +343,13 @@ public class Bank {
                                    Double amount, String description)
             throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         return this.executeTransaction(
-                user,
-                Transaction.Type.CUSTOMER,
-                sender,
-                receiver,
-                Currency.EUR,
-                amount,
-                description
+            user,
+            Transaction.Type.CUSTOMER,
+            sender,
+            receiver,
+            Currency.EUR,
+            amount,
+            description
         );
     }
 
