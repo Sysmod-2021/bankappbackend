@@ -1,4 +1,6 @@
 package model;
+import java.io.File;
+import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -288,20 +290,69 @@ public class Bank {
         return existingTransaction;
     }
 
-    public Transaction createTransaction(Account source, Account destination, Currency currency, Double amount, String description) {
-        Transaction transaction = new Transaction(this, source, destination, currency, amount, description);
+    public Transaction createTransaction(Account source, Account destination,
+                                         Currency currency, Double amount, String description) {
+        Transaction transaction = new Transaction(
+                this,
+                source,
+                destination,
+                currency,
+                amount,
+                description
+        );
+
         try {
             addTransaction(transaction);
-        } catch (Exception ignored) {
         }
+        catch (Exception ignored) {}
+
         return transaction;
     }
 
-    Transaction performTransaction(User user, Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
-        Transaction transaction = this.createTransaction(sender, receiver, Currency.EUR, amount, description).execute();
-        this.createTrace(transaction, user);
+    public Transaction executeTransaction(User initiator, Transaction.Type type,
+                                          Account source, Account destination,
+                                          Currency currency, Double amount, String description)
+            throws AccountDoesNotExistException, TransactionRestrictionException {
+        Transaction transaction = this.createTransaction(
+                source,
+                destination,
+                currency,
+                amount,
+                description
+        );
+
+        try {
+            if (type == Transaction.Type.SEED) {
+                transaction = transaction.seed();
+            } else {
+                transaction = transaction.execute();
+            }
+        }
+        catch (Exception e) {
+            this.logTrace(transaction, initiator, e);
+            throw e;
+        }
+
+        this.logTrace(transaction, initiator, null);
+
         return transaction;
     }
+
+    Transaction performTransaction(User user,
+                                   Account sender, Account receiver,
+                                   Double amount, String description)
+            throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
+        return this.executeTransaction(
+                user,
+                Transaction.Type.CUSTOMER,
+                sender,
+                receiver,
+                Currency.EUR,
+                amount,
+                description
+        );
+    }
+
     void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws Bank.TransactionCanNotBeRevoked {
         Transaction revokedTransaction = transaction.revoke(reason);
         this.createTrace(revokedTransaction, administrator);
@@ -362,9 +413,37 @@ public class Bank {
     }
 
     public Trace createTrace(Transaction transaction, User user) {
-        Trace trace = new Trace(this, new Transaction(transaction), user, LocalDateTime.now());
+        return new Trace(this, new Transaction(transaction), user, LocalDateTime.now());
+    }
+
+    public void logTrace(Transaction transaction, User initiator, Exception e) {
+        transaction = getTraceTransaction(transaction, e);
+        Trace trace = createTrace(transaction, initiator);
         addTrace(trace);
-        return trace;
+        String logString = trace.getTraceString();
+        File file = new File("src/main/java/files/traces.log");
+
+        try {
+            FileWriter fr = new FileWriter(file, true);
+            fr.write(logString);
+            fr.close();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Transaction getTraceTransaction(Transaction transaction, Exception e) {
+        if (e == null) {
+            return transaction;
+        }
+
+        if (transaction.getStatus() != Transaction.Status.EXECUTED) {
+            transaction = transaction.setStatus(Transaction.Status.ABORTED);
+            transaction = transaction.setRejectionDescription(e.getMessage());
+        }
+
+        return transaction;
     }
 
     // Auth
