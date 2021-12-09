@@ -355,7 +355,7 @@ public class Bank {
 
     void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws Bank.TransactionCanNotBeRevoked {
         Transaction revokedTransaction = transaction.revoke(reason);
-        this.createTrace(revokedTransaction, administrator);
+        logTrace(revokedTransaction, administrator, null);
     }
 
     // Account management
