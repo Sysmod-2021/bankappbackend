@@ -333,7 +333,7 @@ public class Bank {
             throw e;
         }
 
-        this.logTrace(transaction, initiator, null);
+        logTrace(transaction, initiator, null);
 
         return transaction;
     }
@@ -354,8 +354,14 @@ public class Bank {
     }
 
     void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws Bank.TransactionCanNotBeRevoked {
-        Transaction revokedTransaction = transaction.revoke(reason);
-        logTrace(revokedTransaction, administrator, null);
+        try {
+            Transaction revokedTransaction = transaction.revoke(reason);
+            logTrace(revokedTransaction, administrator, null);
+        }
+        catch (Exception e) {
+            logTrace(transaction, administrator, e);
+            throw e;
+        }
     }
 
     // Account management
