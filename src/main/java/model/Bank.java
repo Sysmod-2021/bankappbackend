@@ -82,18 +82,18 @@ public class Bank {
     private final Map<String, Customer> customerMap;
     private final Map<String, Account> accountsMap;
     private final Map<String,Transaction> transactionsMap;
-  
+
     public Bank() {
-      
+
         this.customers = new ArrayList<>();
         this.administrators = new ArrayList<>();
         this.transactions = new ArrayList<>();
         this.accounts = new ArrayList<>();
-      
+
         this.customerMap = new HashMap<>();
         this.accountsMap = new HashMap<>();
         this.transactionsMap = new HashMap<>();
-      
+
         this.database = new Datastore("src/main/java/files/", this);
 
         theBanksAccount = new Account(this, "sendItToTheBank");
@@ -124,8 +124,8 @@ public class Bank {
         ) {
             transactionsMap.put(t.getId(), t);
         }
-      
-        
+
+
         this.traces = new ArrayList<>();
         counterRoutine();
 //       TODO Need to figure some things out for data persistence with bank account.
@@ -134,7 +134,7 @@ public class Bank {
 //         } catch (Exception ignored) { // at this moment it can't throw anything here, as everything has just been initialized to empty lists
 //         }
     }
-  
+
     // TODO This can be shielded from the outside. but for now leave it at this.
     //  VERY IMPORTANT - ALWAYS CLEAR file contents when testing manually. overwrite of document is a bit wonky.
     public void saveData() {
@@ -219,9 +219,9 @@ public class Bank {
         Customer existingCustomer;
         try {
             existingCustomer = customers.stream()
-                                .filter(customer -> customer.getEmail().equals(email))
-                                .collect(Collectors.toList())
-                                .get(0);
+                    .filter(customer -> customer.getEmail().equals(email))
+                    .collect(Collectors.toList())
+                    .get(0);
         } catch (Exception exception) {
             throw new CustomerDoesNotExistException("Customer" + email + "does not exist in the bank");
         }
@@ -230,16 +230,16 @@ public class Bank {
     }
 
     public Customer createCustomer(
-    		String firstName, 
-    		String lastName, 
-    		String email, 
-    		String password, 
-    		Double initial_balance, 
-    		Currency currency
+            String firstName,
+            String lastName,
+            String email,
+            String password,
+            Double initial_balance,
+            Currency currency
     ) throws CustomerExistsException, AccountExistsException {
         Customer customer = new Customer(
-        		this,UUID.randomUUID().toString(), 
-        		firstName, lastName, email, password);
+                this,UUID.randomUUID().toString(),
+                firstName, lastName, email, password);
         addCustomer(customer);
 
         createAccount(customer, currency, initial_balance);
@@ -280,9 +280,9 @@ public class Bank {
         Transaction existingTransaction;
         try {
             existingTransaction = transactions.stream()
-                                    .filter(transaction -> transaction.getId().equals(transactionId))
-                                    .collect(Collectors.toList())
-                                    .get(0);
+                    .filter(transaction -> transaction.getId().equals(transactionId))
+                    .collect(Collectors.toList())
+                    .get(0);
         } catch (Exception exception) {
             throw new TransactionDoesNotExistException("Transaction" + transactionId + "does not exist in the bank");
         }
@@ -329,11 +329,11 @@ public class Bank {
             }
         }
         catch (Exception e) {
-            this.logTrace(transaction, initiator, e);
+            logTrace(type, transaction, initiator, e);
             throw e;
         }
 
-        logTrace(transaction, initiator, null);
+        logTrace(type, transaction, initiator, null);
 
         return transaction;
     }
@@ -356,10 +356,10 @@ public class Bank {
     void revokeTransaction(Administrator administrator, Transaction transaction, String reason) throws Bank.TransactionCanNotBeRevoked {
         try {
             Transaction revokedTransaction = transaction.revoke(reason);
-            logTrace(revokedTransaction, administrator, null);
+            logTrace(Transaction.Type.CONSOLE, revokedTransaction, administrator, null);
         }
         catch (Exception e) {
-            logTrace(transaction, administrator, e);
+            logTrace(Transaction.Type.CONSOLE, transaction, administrator, e);
             throw e;
         }
     }
@@ -418,13 +418,13 @@ public class Bank {
         traces.add(trace);
     }
 
-    public Trace createTrace(Transaction transaction, User user) {
-        return new Trace(this, new Transaction(transaction), user, LocalDateTime.now());
+    public Trace createTrace(Transaction.Type type, Transaction transaction, User user) {
+        return new Trace(this, type, new Transaction(transaction), user, LocalDateTime.now());
     }
 
-    public void logTrace(Transaction transaction, User initiator, Exception e) {
+    public void logTrace(Transaction.Type type, Transaction transaction, User initiator, Exception e) {
         transaction = getTraceTransaction(transaction, e);
-        Trace trace = createTrace(transaction, initiator);
+        Trace trace = createTrace(type, transaction, initiator);
         addTrace(trace);
         String logString = trace.getTraceString();
         File file = new File("src/main/java/files/traces.log");

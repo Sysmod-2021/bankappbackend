@@ -8,13 +8,15 @@ import java.util.UUID;
 public class Trace {
     private final Bank bank;
     private final String id;
+    private final Transaction.Type type;
     private final Transaction transaction;
     private final User initiator;
     private final LocalDateTime timestamp;
 
-    public Trace(Bank bank, Transaction transaction, User initiator, LocalDateTime timestamp) {
+    public Trace(Bank bank, Transaction.Type type, Transaction transaction, User initiator, LocalDateTime timestamp) {
         this.bank = bank;
         this.id = UUID.randomUUID().toString();
+        this.type = type;
         this.transaction = transaction;
         this.initiator = initiator;
         this.timestamp = timestamp;
@@ -25,7 +27,7 @@ public class Trace {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
         result += String.format("Time:\t\t\t\t%s\n", timestamp.format(formatter));
-        result += String.format("Transaction Type:\t%s\n", Transaction.Type.CONSOLE);
+        result += String.format("Transaction Type:\t%s\n", type);
         result += String.format("Initiator:\t\t\t%s\n", initiator.getId());
         result += String.format("Transaction Status:\t%s\n", transaction.getStatus());
 
