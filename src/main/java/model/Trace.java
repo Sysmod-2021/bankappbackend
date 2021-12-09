@@ -24,18 +24,18 @@ public class Trace {
         String result = "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-        result += String.format("Time:\t%s\n", timestamp.format(formatter));
-        result += String.format("Transaction Type:\t%s\n", Transaction.Type.CONSOLE);
-        result += String.format("Initiator:\t%s\n", initiator.getId());
-        result += String.format("Transaction Status:\t%s\n", transaction.getStatus());
+        result += String.format("Time: %s\n", timestamp.format(formatter));
+        result += String.format("Transaction Type: %s\n", Transaction.Type.CONSOLE);
+        result += String.format("Initiator: %s\n", initiator.getId());
+        result += String.format("Transaction Status: %s\n", transaction.getStatus());
 
         if (!Objects.equals(transaction.getRejectionDescription(), "")) {
-            result += String.format("Rejection Reason:\t%s\n", transaction.getRejectionDescription());
+            result += String.format("Rejection Reason: %s\n", transaction.getRejectionDescription());
         }
 
-        result += String.format("Bank ID:\t%s\n", bank.getBankAccount());
-        result += String.format("Transaction ID:\t%s\n", transaction.getId());
-        result += String.format("Trace Reference ID:\t%s\n", id);
+        result += String.format("Bank ID: %s\n", bank.getBankAccount());
+        result += String.format("Transaction ID: %s\n", transaction.getId());
+        result += String.format("Trace Reference ID: %s\n", id);
         result += "-".repeat(24) + "\n";
 
         return result;
