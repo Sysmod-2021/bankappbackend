@@ -21,7 +21,7 @@ Open Bank must contain the following features to be considered MVP:
 - Console endpoint for administrators
 - Web client for customers
 - Mobile client for fast p2p transactions
-- A distinguishing feature (voice recognition for transactions)
+- A distinguishing feature (cash-back: if a customer performs at least 3 transactions per hour, she will receive a 5€ cash-back)
 
 After discussing the implementation with our team we concluded that the following features are nice to haves and can be considered part of the MVP:
 
