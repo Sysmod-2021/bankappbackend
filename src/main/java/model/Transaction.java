@@ -11,6 +11,11 @@ public class Transaction {
         EXECUTED,
         ABORTED
     }
+    public enum Type {
+        CONSOLE,
+        SEED,
+        CUSTOMER
+    }
     public static final String PROPERTY_ID = "transaction_id";
     public static final String PROPERTY_SOURCE = "source";
     public static final String PROPERTY_DESTINATION = "destination";

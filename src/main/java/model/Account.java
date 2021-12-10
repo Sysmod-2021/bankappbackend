@@ -86,7 +86,7 @@ public class Account {
 
     private String getUniqueIban() {
         Path accountRecordPath = Paths.get("src", "main", "java", "files", "accounts.txt");
-        String accountRecord = null;
+        String accountRecord;
 
         try {
             accountRecord = Files.readString(accountRecordPath);
