@@ -1,4 +1,4 @@
-package database;
+package datastore;
 
 public enum LoadSaveStrategyEnum {
 //    EXCEL(TransactionExcelLoadSave.class),

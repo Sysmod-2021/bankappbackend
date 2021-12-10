@@ -46,4 +46,50 @@ public class AccountTests {
 
         FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_3.svg", bank);
     }
+
+    @Test
+    public void testCreateCustomerAlreadyExisting() throws Bank.CustomerExistsException, Bank.AccountExistsException {
+        String existing_email = "johntest@doe.ee";
+
+        Bank bank = new Bank();
+        bank.createCustomer("johntest", "Doe", existing_email, "pass1234", 100.00, Currency.EUR);
+        
+        Throwable existing = assertThrows(Bank.CustomerExistsException.class, () -> {
+                    bank.createCustomer("Johnny", "Dude", existing_email, "I-forgot", 500.00, Currency.EUR);
+                });
+        
+        assertEquals("Customer exists: " + existing_email, existing.getMessage());
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_4.svg", bank);
+    }
+
+    @Test
+    public void testLoginWithWrongPassword() throws Bank.CustomerExistsException, Bank.AccountExistsException {
+        Bank bank = new Bank();
+        Customer customer = bank.createCustomer("johntest", "Doe", "johndoe@yopmail.com", "p@$$w0rd", 100.00, Currency.EUR);
+        
+        Throwable badCredentials = assertThrows(Exception.class, () -> {
+            bank.authenticate("johndoe@yopmail.com", "password1");
+        });
+
+        assertEquals("Wrong Credentials", badCredentials.getMessage());
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_5.svg", bank);
+    }
+
+    @Test
+    public void testLoginWithNotExistingEmail() throws Bank.CustomerExistsException, Bank.AccountExistsException {
+    	String not_existing_email = "johndoe_abc@yopmail.com";
+
+        Bank bank = new Bank();
+        Customer customer = bank.createCustomer("johntest", "Doe", "johndoe@yopmail.com", "p@$$w0rd", 100.00, Currency.EUR);
+
+        Throwable badCredentials = assertThrows(Bank.CustomerDoesNotExistException.class, () -> {
+            bank.authenticate(not_existing_email, "p@$$w0rd");
+        });
+
+        assertEquals("Customer" + not_existing_email + "does not exist in the bank", badCredentials.getMessage());
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/account_tests_6.svg", bank);
+    }
 }

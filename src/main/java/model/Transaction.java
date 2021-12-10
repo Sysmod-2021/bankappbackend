@@ -11,6 +11,11 @@ public class Transaction {
         EXECUTED,
         ABORTED
     }
+    public enum Type {
+        CONSOLE,
+        SEED,
+        CUSTOMER
+    }
     public static final String PROPERTY_ID = "transaction_id";
     public static final String PROPERTY_SOURCE = "source";
     public static final String PROPERTY_DESTINATION = "destination";
@@ -286,6 +291,10 @@ public class Transaction {
         this.source.addSentTransaction(this);
         this.destination.addReceivedTransaction(this);
 
+        this.source.addCount();
+        if (this.source.getCount() == 3) {
+            this.source.setBalance(this.source.getBalance() + 5.0);
+        }
         return this;
     }
 
