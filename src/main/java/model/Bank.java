@@ -94,15 +94,6 @@ public class Bank {
       
         this.database = new Datastore("src/main/java/files/", this);
 
-        theBanksAccount = new Account(this, "sendItToTheBank");
-        theBanksAccount.setBalance(69420.00);
-        try {
-            if (!getAccounts().contains(theBanksAccount)) {
-                addAccount(theBanksAccount);
-            }
-        } catch (AccountExistsException e) {
-            // Bank account already exists so were not going to add it again
-        }
 
 
         customers.addAll(database.getAllCustomers());
@@ -115,6 +106,16 @@ public class Bank {
         for (Account a : accounts
         ) {
             accountsMap.put(a.getId(), a);
+        }
+
+        theBanksAccount = new Account(this, "sendItToTheBank");
+        theBanksAccount.setBalance(69420.00);
+        try {
+            if (!getAccounts().contains(theBanksAccount)) {
+                addAccount(theBanksAccount);
+            }
+        } catch (AccountExistsException e) {
+            // Bank account already exists so were not going to add it again
         }
 
         transactions.addAll(database.getAllTransactions());
