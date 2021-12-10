@@ -101,6 +101,25 @@ public class TransactionTests {
         FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_3.svg", bank, internationalBank);
     }
 
+    //	Scenario 3: Successful - bank to user
+    @Test
+    public void shouldTransferMoneyToCustomerSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.AdministratorExistsException, Bank.TransactionRestrictionException {
+        Bank bank = new Bank();
+        Administrator admin = bank.createAdministrator("Admin", "ALice", "admin@bank.ee", "secure_p@ssw0|2d");
+        Double bankBalance = bank.getBankAccount().getBalance();
+        Double balance = 100.0;
+        Double deposit_interest = 5.5;
+        Customer customer = bank.createCustomer("johntest", "Doe", "johntest@doe.ee", "pass1234", balance, Currency.EUR);
+
+        Transaction transfer = admin.createTransactionFromBank(customer.getAccount().getId(), deposit_interest, "Accummulated deposit interest");
+
+        assertEquals("", transfer.getRejectionDescription());
+        assertEquals(bankBalance - deposit_interest, bank.getBankAccount().getBalance(), 0.0);
+        assertEquals(105.5, customer.getAccount().getBalance(), 0.0);
+
+        FulibTools.objectDiagrams().dumpSVG("docs/objects/transaction_4.svg", transfer);
+    }
+
     // Scenario 2: Successful - user to bank
     @Test
     public void shouldChargeCustomerFeeSuccessfully() throws Bank.CustomerExistsException, Bank.AccountExistsException, Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException, Bank.AdministratorExistsException {
@@ -166,6 +185,7 @@ public class TransactionTests {
         // Assert
         assertEquals(balanceOfCustomer, customer.getAccount().getBalance(), 0.0);
         assertEquals(balanceOfBeneficiary, beneficiary.getAccount().getBalance(), 0.0);
+        assertEquals(Transaction.Status.REVOKED, transaction.getStatus());
 
         List<Trace> traces = bank.getTraces();
         assertEquals(2, traces.size());
