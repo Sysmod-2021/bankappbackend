@@ -82,7 +82,7 @@ public class Bank {
     private final Map<String,Transaction> transactionsMap;
   
     public Bank() {
-      
+
         this.customers = new ArrayList<>();
         this.administrators = new ArrayList<>();
         this.transactions = new ArrayList<>();
@@ -108,15 +108,20 @@ public class Bank {
             accountsMap.put(a.getId(), a);
         }
 
-        theBanksAccount = new Account(this, "sendItToTheBank");
-        theBanksAccount.setBalance(69420.00);
+        String bankAccountId = "sendItToTheBank";
+        Account bankAccount;
         try {
-            if (!getAccounts().contains(theBanksAccount)) {
-                addAccount(theBanksAccount);
+            bankAccount = getAccountById(bankAccountId);
             }
-        } catch (AccountExistsException e) {
-            // Bank account already exists so were not going to add it again
+        catch (AccountDoesNotExistException accountDoesNotExistException) {
+            bankAccount = new Account(this, bankAccountId);
+            bankAccount.setBalance(69420.00);
+            try {
+                addAccount(bankAccount);
+            } catch (AccountExistsException ignored) {
+            }
         }
+        theBanksAccount = bankAccount;
 
         transactions.addAll(database.getAllTransactions());
         for (Transaction t : transactions
