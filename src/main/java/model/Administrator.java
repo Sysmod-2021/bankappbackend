@@ -43,21 +43,28 @@ public class Administrator extends User {
         return performTransaction(sender, receiver, amount, description);
     }
 
-    public Transaction createSeedTransactionToCustomer(String receiverAccountId, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createSeedTransactionToCustomer(String receiverAccountId,
+                                                       Double amount, Currency currency, String description)
+            throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Account receiver = this.getBank().getAccountById(receiverAccountId);
         return performSeedTransaction(receiver, amount, currency, description);
     }
 
-    public Transaction createSeedTransactionToBank(Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createSeedTransactionToBank(Double amount, Currency currency, String description)
+            throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         Account receiver = getBank().getBankAccount();
         return performSeedTransaction(receiver, amount, currency, description);
     }
 
-    public Transaction createSeedTransaction(String receiverAccountId, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
+    public Transaction createSeedTransaction(String receiverAccountId,
+                                             Double amount, Currency currency, String description)
+            throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
         String bankId = getBank().getBankAccount().getId();
-        if(bankId.equals(receiverAccountId)){
+
+        if (bankId.equals(receiverAccountId)) {
             return createSeedTransactionToBank(amount, currency, description);
         }
+
         return createSeedTransactionToCustomer(receiverAccountId, amount, currency, description);
     }
 
@@ -76,10 +83,18 @@ public class Administrator extends User {
 
     }
 
-    private Transaction performTransaction(Account sender, Account receiver, Double amount, String description) throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
-        Transaction transaction = getBank().createTransaction(sender, receiver, Currency.EUR, amount, description).execute();
-        getBank().createTrace(transaction, this);
-        return transaction;
+    private Transaction performTransaction(Account sender, Account receiver,
+                                           Double amount, String description)
+            throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
+        return getBank().executeTransaction(
+                this,
+                Transaction.Type.CONSOLE,
+                sender,
+                receiver,
+                Currency.EUR,
+                amount,
+                description
+        );
     }
 
     public void revokeTransaction(String transactionId, String reason) throws Bank.TransactionDoesNotExistException, Bank.TransactionCanNotBeRevoked {
@@ -92,10 +107,18 @@ public class Administrator extends User {
         customerAccount.setStatus(status);
     }
 
-    private Transaction performSeedTransaction(Account receiver, Double amount, Currency currency, String description) throws Bank.AccountDoesNotExistException {
-        Transaction transaction = getBank().createTransaction(null, receiver, currency, amount, description).seed();
-        getBank().createTrace(transaction, this);
-        return transaction;
+    private Transaction performSeedTransaction(Account receiver,
+                                               Double amount, Currency currency, String description)
+            throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
+        return getBank().executeTransaction(
+                this,
+                Transaction.Type.SEED,
+                null,
+                receiver,
+                currency,
+                amount,
+                description
+        );
     }
 
     public Customer createCustomerAndAccount(String firstName, String lastName, String email, Currency currency) throws Bank.CustomerExistsException, Bank.AccountExistsException {
