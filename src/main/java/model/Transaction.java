@@ -266,6 +266,13 @@ public class Transaction {
             this.destination = receiver;
         }
 
+        // transfer betweeen same accounts
+        if (this.destination.getId() == this.source.getId()) {
+            this.status = Status.ABORTED;
+            this.rejectionDescription = "Transfer between the same account is impossible";
+            return this;
+        }
+
         Double sourceBalance = this.source.getBalance();
         if (sourceBalance < this.amount) {
             this.status = Status.ABORTED;
