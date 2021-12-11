@@ -14,4 +14,11 @@ public class Customer extends User {
 
         return getBank().performTransaction(this, this.getAccount(), receiverAccount, amount, description);
     }
+
+    public Transaction createTransactionIban(String receiverIban, Double amount, String description) throws Bank.AccountDoesNotExistException, Bank.TransactionRestrictionException {
+
+        Account receiverAccount = getBank().getAccountByIban(receiverIban);
+
+        return getBank().performTransaction(this, this.getAccount(), receiverAccount, amount, description);
+    }
 }

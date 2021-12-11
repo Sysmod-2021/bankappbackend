@@ -237,17 +237,18 @@ public class Account {
         return false;
     }
     public String saveToString() {
-        try {
+        if(getOwner() != null)
             return String.join(",",
                 getId(),
+                getIban(),
                 getOwner().getId(),
                 getCurrency().toString(),
                 getBalance().toString(),
                 getStatus()
             );
-        } catch (NullPointerException e) {
+        else{
             // owner id is empty because its the banks account.
-            String out = getId() + ",," + getCurrency() + "," + getBalance() + "," + getStatus();
+            String out = getId() + ",,," + getCurrency() + "," + getBalance() + "," + getStatus();
             return out;
         }
     }

@@ -257,7 +257,31 @@ public class WebConnector {
                     return new JSONObject(resp);
                 }
             });
-    
+            post("/transactions/createWithIban", (request, response) -> {
+                try {
+                    String customerId = request.session().attribute("user_id");
+
+                    Map<String, String> map = objMapper.readValue(request.body(), new TypeReference<Map<String, String>>() {
+                    });
+                    Transaction transaction = root.getCustomer(customerId).createTransactionIban(
+                            map.get("receiverIban"),
+                            Double.parseDouble(map.get("amount")),
+                            map.get("description"));
+
+                    SimpleModule module = new SimpleModule();
+                    module.addSerializer(Transaction.class, new TransactionSerializer());
+                    objMapper.registerModule(module);
+
+                    String serializedTransaction = objMapper.writeValueAsString(transaction);
+
+                    StandardResponse resp = new StandardResponse(StatusResponse.SUCCESS, new JSONObject(serializedTransaction));
+                    return new JSONObject(resp);
+                } catch (Exception e) {
+                    response.status(BAD_REQUEST);
+                    StandardResponse resp = new StandardResponse(StatusResponse.ERROR, e.getMessage());
+                    return new JSONObject(resp);
+                }
+            });
             get("/details", (request, response) -> {
                 try {
                     String customerId = request.session().attribute("user_id");

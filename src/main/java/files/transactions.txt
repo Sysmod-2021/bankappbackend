@@ -1,0 +1,1 @@
+31cd47b0-c6a5-44bd-bd9d-9e520165d83f,,addbd8f9-c41c-4da5-af11-f45cb823e548,EUR,500.0,good transaction,EXECUTED,,2021-12-11T16:01:59.190414700

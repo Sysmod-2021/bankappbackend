@@ -96,15 +96,6 @@ public class Bank {
 
         this.database = new Datastore("src/main/java/files/", this);
 
-        theBanksAccount = new Account(this, "sendItToTheBank");
-        theBanksAccount.setBalance(69420.00);
-        try {
-            if (!getAccounts().contains(theBanksAccount)) {
-                addAccount(theBanksAccount);
-            }
-        } catch (AccountExistsException e) {
-            // Bank account already exists so were not going to add it again
-        }
 
 
         customers.addAll(database.getAllCustomers());
@@ -118,6 +109,21 @@ public class Bank {
         ) {
             accountsMap.put(a.getId(), a);
         }
+
+        String bankAccountId = "sendItToTheBank";
+        Account bankAccount;
+        try {
+            bankAccount = getAccountById(bankAccountId);
+            }
+        catch (AccountDoesNotExistException accountDoesNotExistException) {
+            bankAccount = new Account(this, bankAccountId);
+            bankAccount.setBalance(69420.00);
+            try {
+                addAccount(bankAccount);
+            } catch (AccountExistsException ignored) {
+            }
+        }
+        theBanksAccount = bankAccount;
 
         transactions.addAll(database.getAllTransactions());
         for (Transaction t : transactions
@@ -372,6 +378,14 @@ public class Bank {
             throw new AccountDoesNotExistException("Account does not exist: " + id);
         }
         return account;
+    }
+
+    public Account getAccountByIban(String iban) throws AccountDoesNotExistException {
+        Optional<Account> account = this.accounts.stream().filter(a -> a.getIban().equals(iban)).findFirst();
+        if (account.isEmpty()) {
+            throw new AccountDoesNotExistException("Account does not exist: " + iban);
+        }
+        return account.get();
     }
 
     public Account getAccountByEmail(String email) {

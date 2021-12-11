@@ -32,6 +32,7 @@ public class CustomerAndAccountSerializer extends StdSerializer<Customer> {
             jgen.writeStringField("accountId", value.getAccount().getId());
             jgen.writeNumberField("accountBalance", value.getAccount().getBalance());
             jgen.writeStringField("accountCurrency", value.getAccount().getCurrency().toString());
+            jgen.writeStringField("accountIban", value.getAccount().getIban());
         jgen.writeEndObject();
     }   
 }
