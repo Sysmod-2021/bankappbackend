@@ -26,8 +26,10 @@ public class TransactionSerializer extends StdSerializer<Transaction> {
         jgen.writeStringField("transactionId", value.getId());
         if(value.getSource() != null) {
             jgen.writeStringField("sourceID", value.getSource().getId());
+            jgen.writeStringField("sourceIban", value.getSource().getIban());
         }
         jgen.writeStringField("destId", value.getDestination().getId());
+        jgen.writeStringField("destIban", value.getDestination().getIban());
         jgen.writeNumberField("amount", value.getAmount());
         jgen.writeStringField("description", value.getDescription());
         jgen.writeStringField("rejectionDescription", value.getRejectionDescription());
