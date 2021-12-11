@@ -380,6 +380,14 @@ public class Bank {
         return account;
     }
 
+    public Account getAccountByIban(String iban) throws AccountDoesNotExistException {
+        Optional<Account> account = this.accounts.stream().filter(a -> a.getIban().equals(iban)).findFirst();
+        if (account.isEmpty()) {
+            throw new AccountDoesNotExistException("Account does not exist: " + iban);
+        }
+        return account.get();
+    }
+
     public Account getAccountByEmail(String email) {
         return getAccounts().stream()
                 .filter(account -> {
