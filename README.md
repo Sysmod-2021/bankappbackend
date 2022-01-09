@@ -34,7 +34,7 @@ After discussing the implementation with our team we concluded that the followin
 ## Project Management Setup
 
 The software development and most of the project management have been done using GitHub at [https://github.com/Sysmod-2021](https://github.com/Sysmod-2021). The organization has two repositories:
- 
+
 - [bankappbackend](https://github.com/Sysmod-2021/bankappbackend) for the back-end system (the current repository)
 - [bankappfrontend](https://github.com/Sysmod-2021/bankappfrontend) for the front-end
 
@@ -72,9 +72,9 @@ CI has been set up and [automated testing](https://github.com/Sysmod-2021/bankap
 
 ## Deliverables
 
-- [ ] Demonstration and development video
+- [x] [Demonstration video](https://www.youtube.com/watch?v=E2Xmcnkg-Rk)
 - [x] [Architecture report](https://docs.google.com/document/d/15j40WWla26fPynEhog2gMh3iJXjurKTBTgRmgNp90to/edit?usp=sharing)
-- [ ] Working open code repository
+- [x] Working open code repository
 - [x] Personal work logs (see personal portfolio)
 
 ## Usage manual
@@ -131,7 +131,7 @@ $ curl -d '{"accountId": <account_id_value>}' -H 'Content-Type: application/json
 $ curl -d '{"accountId": "8a633aa5-907c-4e57-a313-22e0adb2672e"}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/accounts/frozen
 ```
 
-Create the transaction 
+Create the transaction
 ```bash
 # template
 $ curl -d '{"senderAccountId": <sender_account_id_value>, "receiverAccountId": <receiver_account_id_value>, "amount": <amount_value>, "description": <description_value>}' -H 'Content-Type: application/json' -X POST -c session.txt -b session.txt http://localhost:40080/administrators/transactions/create
